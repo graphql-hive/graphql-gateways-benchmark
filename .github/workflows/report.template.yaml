@@ -24,6 +24,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: artifacts
+          pattern: federation-*
 
       - name: setup node
         uses: actions/setup-node@v4
