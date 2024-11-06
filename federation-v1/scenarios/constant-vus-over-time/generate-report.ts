@@ -73,6 +73,7 @@ async function generateReport(artifactsRootPath: string) {
   const reportsData = await Promise.all(
     foundDirectories.map(async (dirName) => {
       const fullPath = join(artifactsRootPath, dirName);
+      console.log(`Processing directory: ${fullPath}`);
       const jsonSummaryFilePath = join(fullPath, "./k6_summary.json");
 
       if (!existsSync(jsonSummaryFilePath)) {
@@ -135,6 +136,8 @@ async function generateReport(artifactsRootPath: string) {
     .filter(notEmpty)
     .sort((a, b) => b.rps - a.rps);
 
+  console.log(`Found ${validReportsData.length} valid reports`);
+
   const vega: vl.TopLevelSpec = {
     width: 600,
     height: 400,
@@ -196,7 +199,10 @@ async function generateReport(artifactsRootPath: string) {
           );
         }
 
-        const checks = v.jsonSummary.root_group.checks;
+        const checks: Array<{
+          fails: number;
+          name: string;
+        }> = v.jsonSummary.root_group.checks;
         const http200Check = checks.find(
           (c) => c.name === "response code was 200"
         );
@@ -206,6 +212,28 @@ async function generateReport(artifactsRootPath: string) {
         const responseStructure = checks.find(
           (c) => c.name === "valid response structure"
         );
+
+        function logRawReport() {
+          console.log("Raw report for:", v.name);
+          console.log("--");
+          console.log(JSON.stringify(checks, null, 2));
+          console.log("--");
+        }
+
+        if (!http200Check) {
+          logRawReport();
+          throw new Error("Could not find 'response code was 200' check!");
+        }
+
+        if (!graphqlErrors) {
+          logRawReport();
+          throw new Error("Could not find 'no graphql errors' check!");
+        }
+
+        if (!responseStructure) {
+          logRawReport();
+          throw new Error("Could not find 'valid response structure' check!");
+        }
 
         if (http200Check.fails > 0) {
           notes.push(`${http200Check.fails} non-200 responses`);
