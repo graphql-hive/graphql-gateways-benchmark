@@ -34,6 +34,7 @@ jobs:
           - cosmo
           - mercurius
           - grafbase
+          - inigo
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
