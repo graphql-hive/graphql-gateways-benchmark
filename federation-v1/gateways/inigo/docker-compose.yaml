@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  gateway:
+    image: gateway/inigo
+    container_name: gateway
+    build:
+      context: ${BASE_DIR:-.}/../../gateways/inigo
+      dockerfile: ./Dockerfile
+    networks:
+      - test
+    ports:
+      - "0.0.0.0:4000:4000"
+    depends_on:
+      accounts:
+        condition: service_healthy
+      inventory:
+        condition: service_healthy
+      products:
+        condition: service_healthy
+      reviews:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "-X", "GET", "http://localhost:4000/health"]
+      interval: 3s
+      timeout: 5s
+      retries: 10
+    deploy:
+      resources:
+        limits:
+          cpus: ${CPU_LIMIT:-1}
+          memory: ${MEM_LIMIT:-1gb}
+networks:
+  test:
+    name: test
