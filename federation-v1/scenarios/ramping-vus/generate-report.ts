@@ -29,7 +29,7 @@ async function uploadImageToCloudflare(filename: string, filePath: string) {
     },
   })
     .then((res) => res.json())
-    .then((r) => r.result.variants[0]);
+    .then((r) => r?.result?.variants?.[0]);
 }
 
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
