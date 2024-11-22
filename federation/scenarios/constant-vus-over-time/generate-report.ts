@@ -60,10 +60,7 @@ async function generateReport(artifactsRootPath: string) {
     .filter((r) => r.isDirectory() && !IGNORED_DIRS.includes(r.name))
     .filter(
       (r) =>
-        r.name.startsWith(process.env.SCENARIO_ARTIFACTS_PREFIX!) &&
-        // For each scenario there's an artifact being upload with some resources
-        // We need to exclude those to not mess up the report
-        !r.name.includes("-resources_")
+        r.name.startsWith(process.env.SCENARIO_ARTIFACTS_PREFIX!)
     )
     .map((r) => r.name);
 
@@ -220,27 +217,6 @@ async function generateReport(artifactsRootPath: string) {
           (c) => c.name === "valid response structure"
         );
 
-        function logRawReport() {
-          console.log("Raw report for:", v.name);
-          console.log("--");
-          console.log(JSON.stringify(checks, null, 2));
-          console.log("--");
-        }
-
-        if (!http200Check) {
-          logRawReport();
-          throw new Error("Could not find 'response code was 200' check!");
-        }
-
-        if (!graphqlErrors) {
-          logRawReport();
-          throw new Error("Could not find 'no graphql errors' check!");
-        }
-
-        if (!responseStructure) {
-          logRawReport();
-          throw new Error("Could not find 'valid response structure' check!");
-        }
 
         if (http200Check.fails > 0) {
           notes.push(`${http200Check.fails} non-200 responses`);
