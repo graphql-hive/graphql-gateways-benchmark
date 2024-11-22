@@ -14,29 +14,30 @@ const {
   GITHUB_RUN_ID = "local",
 } = process.env;
 
-async function uploadImageToCloudflare(
-  filename: string,
-  filePath: string
-): Promise<string | null> {
-  if (!CF_IMAGES_LINK || !CF_IMAGES_TOKEN) {
-    return null;
-  }
-
+async function uploadImageToCloudflare(filename: string, filePath: string) {
+  console.log("Uploading image to cloudflare");
   const buffer = readFileSync(filePath);
   const blob = new Blob([buffer], { type: "image/png" });
   const form = new FormData();
 
   form.append("file", blob, filename);
 
-  return fetch(CF_IMAGES_LINK!, {
+  const res = await fetch(CF_IMAGES_LINK!, {
     method: "POST",
     body: form,
     headers: {
       Authorization: `Bearer ${CF_IMAGES_TOKEN}`,
     },
-  })
-    .then((res) => res.json())
-    .then((r) => r.result.variants[0]);
+  });
+
+  console.log(`Got a response from cloudflare (status=${res.status})`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to upload image to Cloudflare: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data.result.variants[0];
 }
 
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {

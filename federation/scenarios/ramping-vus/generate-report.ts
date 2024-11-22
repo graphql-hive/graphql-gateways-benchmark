@@ -15,21 +15,29 @@ const {
 } = process.env;
 
 async function uploadImageToCloudflare(filename: string, filePath: string) {
+  console.log("Uploading image to cloudflare");
   const buffer = readFileSync(filePath);
   const blob = new Blob([buffer], { type: "image/png" });
   const form = new FormData();
 
   form.append("file", blob, filename);
 
-  return fetch(CF_IMAGES_LINK!, {
+  const res = await fetch(CF_IMAGES_LINK!, {
     method: "POST",
     body: form,
     headers: {
       Authorization: `Bearer ${CF_IMAGES_TOKEN}`,
     },
-  })
-    .then((res) => res.json())
-    .then((r) => r.result.variants[0]);
+  });
+
+  console.log(`Got a response from cloudflare (status=${res.status})`);
+
+  if (!res.ok) {
+    throw new Error(`Failed to upload image to Cloudflare: ${res.statusText}`);
+  }
+
+  const data = await res.json();
+  return data.result.variants[0];
 }
 
 function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
@@ -186,13 +194,21 @@ async function generateReport(artifactsRootPath: string) {
         const notes: string[] = [];
 
         if (v.jsonSummary.metrics.http_req_failed.values.passes > 0) {
-          notes.push(`${v.jsonSummary.metrics.http_req_failed.values.passes} failed requests`);
+          notes.push(
+            `${v.jsonSummary.metrics.http_req_failed.values.passes} failed requests`
+          );
         }
 
         const checks = v.jsonSummary.root_group.checks;
-        const http200Check = checks.find(c => c.name === 'response code was 200');
-        const graphqlErrors = checks.find(c => c.name === 'no graphql errors');
-        const responseStructure = checks.find(c => c.name === 'valid response structure');
+        const http200Check = checks.find(
+          (c) => c.name === "response code was 200"
+        );
+        const graphqlErrors = checks.find(
+          (c) => c.name === "no graphql errors"
+        );
+        const responseStructure = checks.find(
+          (c) => c.name === "valid response structure"
+        );
 
         if (http200Check.fails > 0) {
           notes.push(`${http200Check.fails} non-200 responses`);
@@ -203,7 +219,9 @@ async function generateReport(artifactsRootPath: string) {
         }
 
         if (responseStructure.fails > 0) {
-          notes.push(`non-compatible response structure (${responseStructure.fails})`);
+          notes.push(
+            `non-compatible response structure (${responseStructure.fails})`
+          );
         }
 
         return {
@@ -220,8 +238,8 @@ async function generateReport(artifactsRootPath: string) {
           )}ms, med: ${Math.round(
             v.jsonSummary.metrics.http_req_duration.values.med
           )}ms`,
-          notes: notes.length === 0 ? '✅' : '❌ ' + notes.join(', '),
-        }
+          notes: notes.length === 0 ? "✅" : "❌ " + notes.join(", "),
+        };
       }),
       {
         columns: [
