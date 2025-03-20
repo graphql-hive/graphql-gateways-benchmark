@@ -1,14 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "github>the-guild-org/shared-config:renovate"
   ],
   "lockFileMaintenance": {
     "enabled": true
-  },
-  "automerge": true,
-  "major": {
-    "automerge": false
   },
   "ignoreDeps": [
     "axum",
