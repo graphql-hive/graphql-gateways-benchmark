@@ -17,19 +17,19 @@ jobs:
     name: report
     steps:
       - name: checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: download artifacts
         id: download
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4
         with:
           path: artifacts
           pattern: federation-*
 
       - name: setup node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@cdca7365b2dadb8aad0a33bc7601856ffabcc48e # v4
         with:
           node-version: 21
 
@@ -47,7 +47,7 @@ jobs:
           CF_IMAGES_TOKEN: ${{ secrets.CF_IMAGES_TOKEN }}
 
       - name: publish report (pull_request)
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@52423e01640425a022ef5fd42c6fb5f633a02728 # v2
         if: github.event_name == 'pull_request'
         with:
           header: ${{ inputs.scenarioName }}
@@ -68,7 +68,7 @@ jobs:
           git config user.email github-actions@github.com
 
       - name: publish report (workflow_dispatch/push)
-        uses: EndBug/add-and-commit@v9
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         with:
           add: ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioName }}/README.md
@@ -78,7 +78,7 @@ jobs:
           author_name: github-actions
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: ${{ inputs.baseDir }}-${{ inputs.scenarioName }}-report
