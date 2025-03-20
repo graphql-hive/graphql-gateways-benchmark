@@ -5,10 +5,10 @@
     "generate-report": "tsx generate-report.ts"
   },
   "dependencies": {
-    "vega": "5.30.0",
+    "vega": "5.33.0",
     "vega-lite": "5.23.0",
     "tablemark": "3.1.0",
-    "tsx": "4.19.2",
+    "tsx": "4.19.3",
     "typescript": "5.7.3",
     "graphql": "16.10.0"
   },
