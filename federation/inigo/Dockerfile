@@ -4,7 +4,7 @@
 FROM alpine:3.19
 RUN apk add --no-cache curl
 
-COPY --from=inigohub/gateway:v0.30.15 /usr/bin/gateway .
+COPY --from=inigohub/gateway:1.1.0 /usr/bin/gateway .
 
 COPY supergraph.graphql ./
 COPY config.yaml ./
