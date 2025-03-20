@@ -41,10 +41,11 @@ jobs:
           DOCKER_REGISTRY: ghcr.io/${{ github.repository }}/
           COMMIT_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
         with:
+          source: .
           workdir: ${{ inputs.dir }}
           provenance: false
           push: true
-          files: ${{ inputs.dir }}/${{ inputs.hcl }}
+          files: ${{ inputs.hcl }}
           targets: ${{ inputs.target }}
           set: |
             *.cache-from=type=gha,scope=build
