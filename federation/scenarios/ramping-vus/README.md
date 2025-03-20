@@ -1,7 +1,7 @@
 ## Overview for: `federation/ramping-vus`
 
 
-This scenario runs 4 subgraphs and a GraphQL gateway with federation spec, and runs a heavy query. We are running a heavy load of concurrent VUs to measure response time and other stats, during stress. It measure things like memory usage, CPU usage, response times. It also includes a summary of the entire execution, and metrics information about HTTP execution times.
+This scenario runs 4 subgraphs and a GraphQL gateway with Federation spec, and runs a heavy query. We are running a heavy load of concurrent VUs to measure response time and other stats, during stress. It measure things like memory usage, CPU usage, response times. It also includes a summary of the entire execution, and metrics information about HTTP execution times.
 
 
 This scenario was trying to reach 2000 concurrent VUs over 60s

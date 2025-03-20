@@ -41,7 +41,7 @@ This goals of this repo:
 This scenario runs the following:
 
 1. 4 GraphQL subgraphs in dedicated services 
-2. A GraphQL gateway compatible with the Apollo federation spec
+2. A GraphQL gateway compatible with the Apollo Federation spec
 3. Constant rate of VUs over fixed time span
 
 This measures the following:
@@ -53,7 +53,7 @@ This measures the following:
 5. RAM usage during the entire execution
 6. HTTP layer timings
 
-> This scenario uses federation spec with all gateways that supports this kind of specification (not all gateways supports v2 spec).
+> This scenario uses Federation spec with all gateways that supports this kind of specification (not all gateways supports v2 spec).
 
 ## `fed-constant-vus-subgraphs-delay`
 
@@ -74,7 +74,7 @@ This scenario runs the same flow as `fed-constant-vus-subgraphs-delay` but with 
 This scenario runs the following:
 
 1. 4 GraphQL subgraphs in dedicated services 
-2. A GraphQL gateway compatible with the Apollo federation spec
+2. A GraphQL gateway compatible with the Apollo Federation spec
 3. Gradually ramping VUs to a high number, to demo a stress scenario
 
 This measures the following:
@@ -85,4 +85,4 @@ This measures the following:
 5. RAM usage during the entire execution
 6. HTTP layer timings
 
-> This scenario uses federation spec with all gateways that supports this kind of specification (not all gateways supports v2 spec).
+> This scenario uses Federation spec with all gateways that supports this kind of specification (not all gateways supports v2 spec).
