@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   gateway:
-    image: ghcr.io/apollographql/router:v1.61.0
+    image: ghcr.io/apollographql/router:v2.0.0
     container_name: gateway
     networks:
       - test
