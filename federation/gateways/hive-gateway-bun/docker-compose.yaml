@@ -9,6 +9,7 @@ services:
     environment:
       - NODE_ENV=production
       - FORK=2
+      - JIT=1
     depends_on:
       accounts:
         condition: service_healthy
