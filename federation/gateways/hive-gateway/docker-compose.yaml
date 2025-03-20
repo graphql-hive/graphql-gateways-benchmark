@@ -19,7 +19,7 @@ services:
         condition: service_healthy
     volumes:
       - type: bind
-        source: federation-v1/gateways/hive-gateway/supergraph.graphql
+        source: federation/gateways/hive-gateway/supergraph.graphql
         target: /serve/supergraph.graphql
     healthcheck:
       test: [ "CMD", "/usr/lib/apt/apt-helper", "download-file", "http://127.0.0.1:4000/graphql?query=%7B+users+%7B+reviews+%7B+product+%7B+reviews+%7B+author+%7B+reviews+%7B+product+%7B+name+%7D+%7D+%7D+%7D+%7D+%7D+%7D+%7D", "/tmp/health" ]

@@ -169,7 +169,7 @@ async function generateReport(artifactsRootPath: string) {
   );
 
   const markdownLines: string[] = [
-    "## Overview for: `federation-v1/ramping-vus`",
+    "## Overview for: `federation/ramping-vus`",
     NEWLINE,
     pkgJson.description,
     NEWLINE,

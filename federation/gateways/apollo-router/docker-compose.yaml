@@ -1,13 +1,15 @@
+version: "3.8"
+
 services:
   gateway:
-    image: ghcr.io/graphql-hive/gateway:1.13.0-bun
+    image: ghcr.io/apollographql/router:v2.0.0
     container_name: gateway
     networks:
       - test
     ports:
       - "0.0.0.0:4000:4000"
     environment:
-      - NODE_ENV=production
+      APOLLO_ROUTER_LISTEN_ADDRESS: "0.0.0.0:4000"
     depends_on:
       accounts:
         condition: service_healthy
@@ -19,21 +21,24 @@ services:
         condition: service_healthy
     volumes:
       - type: bind
-        source: federation-v1/gateways/hive-gateway-bun/supergraph.graphql
-        target: /serve/supergraph.graphql
+        source: federation/gateways/apollo-router/supergraph.graphql
+        target: /dist/schema/local.graphql
+      - type: bind
+        source: federation/gateways/apollo-router/config.yaml
+        target: /dist/config/router.yaml
     healthcheck:
       test:
         [
           "CMD",
           "/usr/lib/apt/apt-helper",
           "download-file",
-          "http://127.0.0.1:4000/graphql?query=%7B+users+%7B+reviews+%7B+product+%7B+reviews+%7B+author+%7B+reviews+%7B+product+%7B+name+%7D+%7D+%7D+%7D+%7D+%7D+%7D+%7D",
+          "http://127.0.0.1:8088/health?ready",
           "/tmp/health",
         ]
       interval: 3s
       timeout: 5s
       retries: 10
-    command: ["supergraph", "--jit"]
+    command: ["-c", "config/router.yaml", "-s", "schema/local.graphql"]
     deploy:
       resources:
         limits:

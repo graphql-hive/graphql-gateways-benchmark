@@ -1,17 +1,17 @@
-name: federation-v1
+name: federation
 on:
   pull_request: {}
   workflow_dispatch: {}
 
 concurrency:
-  group: federation-v1-${{ github.ref }}
+  group: federation-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   subgraphs:
     uses: ./.github/workflows/docker-bake.template.yaml
     with:
-      dir: federation-v1/subgraphs
+      dir: federation/subgraphs
       hcl: docker.hcl
       target: subgraphs
 
@@ -39,7 +39,7 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 300
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-over-time
       runner: ${{ needs.decide-runner.outputs.runner }}
@@ -52,7 +52,7 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-over-time
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: constant-vus-over-time
 
   constant-vus-subgraphs-delay:
@@ -75,7 +75,7 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 300
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay
       runner: ${{ needs.decide-runner.outputs.runner }}
@@ -89,7 +89,7 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-subgraphs-delay
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: constant-vus-over-time
 
   constant-vus-subgraphs-delay-resources:
@@ -112,7 +112,7 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 500
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay-resources
       runner: ${{ needs.decide-runner.outputs.runner }}
@@ -126,7 +126,7 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-subgraphs-delay-resources
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: constant-vus-over-time
 
   ramping-vus:
@@ -149,7 +149,7 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 2000
       time: 60s
-      baseDir: federation-v1
+      baseDir: federation
       scenarioDir: ramping-vus
       scenarioName: ramping-vus
       runner: ${{ needs.decide-runner.outputs.runner }}
@@ -163,4 +163,4 @@ jobs:
     with:
       scenarioName: ramping-vus
       scenarioDir: ramping-vus
-      baseDir: federation-v1
+      baseDir: federation
