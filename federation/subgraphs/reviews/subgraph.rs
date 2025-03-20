@@ -199,7 +199,7 @@ async fn main() {
         .enable_federation()
         .finish();
     let sdl = schema.sdl_with_options(SDLExportOptions::new().federation().compose_directive());
-    println!("GraphQL federation SDL:\n{}", sdl);
+    println!("GraphQL Federation SDL:\n{}", sdl);
     let host = var("HOST").unwrap_or("0.0.0.0".to_owned());
     let port = var("PORT").unwrap_or("4001".to_owned());
     let path = "/graphql";
