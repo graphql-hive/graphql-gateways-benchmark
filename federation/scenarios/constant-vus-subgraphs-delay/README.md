@@ -1,7 +1,7 @@
-## Overview for: `federation-v1/constant-vus-subgraphs-delay`
+## Overview for: `federation/constant-vus-subgraphs-delay`
 
 
-This scenario runs 4 subgraphs and a GraphQL gateway with Federation v1 spec, and runs a heavy query. It's being executed with a constant amount of VUs over a fixed amount of time. It measure things like memory usage, CPU usage, average RPS. It also includes a summary of the entire execution, and metrics information about HTTP execution times.
+This scenario runs 4 subgraphs and a GraphQL gateway with federation spec, and runs a heavy query. It's being executed with a constant amount of VUs over a fixed amount of time. It measure things like memory usage, CPU usage, average RPS. It also includes a summary of the entire execution, and metrics information about HTTP execution times.
 
 
 This scenario was running 300 VUs over 60s

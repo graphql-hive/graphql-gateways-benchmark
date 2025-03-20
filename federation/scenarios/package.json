@@ -1,5 +1,5 @@
 {
-  "name": "federation-v1-scenarios",
+  "name": "federation-scenarios",
   "scripts": {
     "compose-supergraph": "tsx compose-supergraph.ts"
   },
