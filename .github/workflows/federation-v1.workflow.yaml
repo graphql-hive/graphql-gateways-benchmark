@@ -11,7 +11,7 @@ jobs:
   subgraphs:
     uses: ./.github/workflows/docker-bake.template.yaml
     with:
-      dir: federation/subgraphs
+      dir: ./federation/subgraphs
       hcl: docker.hcl
       target: subgraphs
 
