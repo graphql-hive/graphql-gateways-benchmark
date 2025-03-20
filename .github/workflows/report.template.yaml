@@ -77,8 +77,6 @@ jobs:
           author_email: github-actions@github.com
           author_name: github-actions
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          new_branch: new_results
-          push: origin new_results --set-upstream --force
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
