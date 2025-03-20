@@ -44,7 +44,7 @@ jobs:
           workdir: ${{ inputs.dir }}
           provenance: false
           push: true
-          files: ${{ inputs.hcl }}
+          files: ${{ inputs.dir }}/${{ inputs.hcl }}
           targets: ${{ inputs.target }}
           set: |
             *.cache-from=type=gha,scope=build
