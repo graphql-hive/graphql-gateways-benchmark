@@ -1,4 +1,4 @@
-name: federation
+name: federation-v1
 on:
   pull_request: {}
   workflow_dispatch: {}
