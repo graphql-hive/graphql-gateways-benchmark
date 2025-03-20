@@ -8,7 +8,7 @@ services:
       - "0.0.0.0:4000:4000"
     environment:
       - NODE_ENV=production
-      - FORK=0
+      - FORK=2
     depends_on:
       accounts:
         condition: service_healthy
