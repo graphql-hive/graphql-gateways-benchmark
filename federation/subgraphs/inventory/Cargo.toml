@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 async-graphql = "7.0.10"
-async-graphql-axum = "6.0.11"
+async-graphql-axum = "7.0.10"
 axum = "0.6.2"
 lazy_static = "1.4.0"
 rand = "0.9.0"
