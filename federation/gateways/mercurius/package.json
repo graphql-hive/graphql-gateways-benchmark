@@ -7,7 +7,7 @@
     "tsx": "4.19.3",
     "typescript": "5.8.2",
     "graphql": "16.10.0",
-    "fastify": "5.2.1",
+    "fastify": "5.2.2",
     "@mercuriusjs/gateway": "5.0.0"
   },
   "resolutions": {
