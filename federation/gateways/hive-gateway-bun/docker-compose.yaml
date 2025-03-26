@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/graphql-hive/gateway:1.13.2-bun
+    image: ghcr.io/graphql-hive/gateway:1.13.3-bun
     container_name: gateway
     networks:
       - test
