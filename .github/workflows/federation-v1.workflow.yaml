@@ -43,7 +43,7 @@ jobs:
       scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-over-time
       runner: ${{ needs.decide-runner.outputs.runner }}
-      cpuLimit: 2
+      cpuLimit: 3
       fork: 2
       memoryLimit: 6gb
 
@@ -80,7 +80,7 @@ jobs:
       scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay
       runner: ${{ needs.decide-runner.outputs.runner }}
-      cpuLimit: 2
+      cpuLimit: 3
       fork: 2
       memoryLimit: 6gb
       subgraphDelayRange: "40~150"
