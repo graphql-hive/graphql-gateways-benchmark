@@ -7,7 +7,7 @@
   },
   "dependencies": {
     "vega": "6.1.2",
-    "vega-lite": "5.23.0",
+    "vega-lite": "6.1.0",
     "tablemark": "3.1.0",
     "tsx": "4.19.3",
     "typescript": "5.8.2",
