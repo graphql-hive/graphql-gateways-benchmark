@@ -1329,10 +1329,10 @@ vega-wordcloud@~5.0.0:
     vega-statistics "^2.0.0"
     vega-util "^2.0.0"
 
-vega@6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/vega/-/vega-6.0.0.tgz#f309aa494d75d54d9d3a9d6f1da95819e1818ea2"
-  integrity sha512-5VHcatMD8vf7d+Z/xfxPsTGARzAZso+C9TQV09dfzNNDx/ytHWLFLFWONtW9tY5lXTqNyyxQPn6zpSbzZDH/Dg==
+vega@6.1.2:
+  version "6.1.2"
+  resolved "https://registry.yarnpkg.com/vega/-/vega-6.1.2.tgz#24158ff977ba164f3fa0f5485e53871dff276c77"
+  integrity sha512-d5GT7wRoRnK+bsQWgauOHyPFY4td52PTuX5IzMXr9PXHkz2OKXpVti7LeK5evAoyhNxVenkT1ptpRQKU2MRJdw==
   dependencies:
     vega-crossfilter "~5.0.0"
     vega-dataflow "~6.0.0"
