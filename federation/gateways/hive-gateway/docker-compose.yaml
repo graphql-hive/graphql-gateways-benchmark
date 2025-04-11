@@ -10,6 +10,7 @@ services:
       - NODE_ENV=production
       - FORK=${FORK}
       - JIT=true
+      - NODE_OPTIONS="--max-old-space-size=1024 --max-semi-space-size=256"
     depends_on:
       accounts:
         condition: service_healthy
