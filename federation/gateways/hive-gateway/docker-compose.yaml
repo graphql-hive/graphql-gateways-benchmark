@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/graphql-hive/gateway:1.13.4
+    image: ghcr.io/graphql-hive/gateway:1.13.5
     container_name: gateway
     networks:
       - test
@@ -10,6 +10,7 @@ services:
       - NODE_ENV=production
       - FORK=${FORK}
       - JIT=true
+      - NODE_OPTIONS=--max-old-space-size=2048 --max-semi-space-size=512
     depends_on:
       accounts:
         condition: service_healthy
