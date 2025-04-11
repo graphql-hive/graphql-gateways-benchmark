@@ -2,30 +2,30 @@
 # yarn lockfile v1
 
 
-"@apollo/composition@2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@apollo/composition/-/composition-2.10.0.tgz#7322ebd0fdc894bdeae2487ebe93f6c046e5db7a"
-  integrity sha512-+EkUY97+DMrBnMvbaPGwYwVmOzNgvAmbvRJSMGGC95ISnev7Cd5sVVVP6HKKann3hd8Yq6y83Enzp1xew5HI4w==
+"@apollo/composition@2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@apollo/composition/-/composition-2.10.1.tgz#62e33f986038dec3118ce31b6ee6d4db8eabab0b"
+  integrity sha512-plQwaoemEuL7rDjb51ULmxJmstaoBK9ys/HvGMUtTXTxSIM1COkMK29x7fGHrztwdfDiGqEN4H+JGZeraBZHAg==
   dependencies:
-    "@apollo/federation-internals" "2.10.0"
-    "@apollo/query-graphs" "2.10.0"
+    "@apollo/federation-internals" "2.10.1"
+    "@apollo/query-graphs" "2.10.1"
 
-"@apollo/federation-internals@2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.10.0.tgz#f345ffa0359538376c80c99323d13dfa7ccfcbb9"
-  integrity sha512-IneWuwDc9ozKLcEsKw7YEkhzo7VAa54RjKwAVEqPFHPVqUjIYUKX99gSWAp9ZQeI8DGrz2a8uKEDlKGOHh3UaA==
+"@apollo/federation-internals@2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@apollo/federation-internals/-/federation-internals-2.10.1.tgz#740217fa026ffdcdc33289e3adb255f0a06d1b24"
+  integrity sha512-QToNlspkpA/qXOMwdIUzmJe3OasZFpSO92luQik6Ov9aJBnxldLGPi6rD0FkunVd678lHuKWDFQ4vkb7/KCfgg==
   dependencies:
     "@types/uuid" "^9.0.0"
     chalk "^4.1.0"
     js-levenshtein "^1.1.6"
     uuid "^9.0.0"
 
-"@apollo/query-graphs@2.10.0":
-  version "2.10.0"
-  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.10.0.tgz#299c99e648c6e0a371832a85155ce0ba7c4e62e7"
-  integrity sha512-d9PgQ7sjd98lK2NvKKYp1iOZP24OrvbtRw5GNuW7nlQPYD4D8DCofEBGtDXs7RIcWaMp5OrU4U2dQcCzPi2MDg==
+"@apollo/query-graphs@2.10.1":
+  version "2.10.1"
+  resolved "https://registry.yarnpkg.com/@apollo/query-graphs/-/query-graphs-2.10.1.tgz#1a05598d4619a0051ca09ebd51ccdee94a053c36"
+  integrity sha512-nJMujPDmmkPqZcHYIa8pe738uknFEyldYGQj2cljj/mhuL7lmF3oNS4xsdjes16v3cIAngBYzPkPJfRTf57yPg==
   dependencies:
-    "@apollo/federation-internals" "2.10.0"
+    "@apollo/federation-internals" "2.10.1"
     deep-equal "^2.0.5"
     ts-graphviz "^1.5.4"
     uuid "^9.0.0"
