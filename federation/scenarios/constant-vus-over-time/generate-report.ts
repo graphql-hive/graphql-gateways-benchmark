@@ -249,7 +249,7 @@ async function generateReport(artifactsRootPath: string) {
       {
         columns: [
           { name: "Gateway" },
-          { name: "RPS ⬇️", align: "center" },
+          { name: "Successful RPS ⬇️", align: "center" },
           { name: "Requests", align: "center" },
           { name: "Duration", align: "center" },
           { name: "Notes", align: "left" },
