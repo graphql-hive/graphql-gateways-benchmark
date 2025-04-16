@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-RUN apt-get install curl
+RUN apt-get update -y && apt-get install curl -y
 
 WORKDIR /home/gw
 COPY router.json ./
