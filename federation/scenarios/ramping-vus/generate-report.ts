@@ -115,13 +115,19 @@ async function generateReport(artifactsRootPath: string) {
       }
 
       const jsonSummary = JSON.parse(readFileSync(jsonSummaryFilePath, "utf8"));
+      const succReqs =
+        jsonSummary.metrics.http_reqs.values.count -
+        jsonSummary.metrics.http_req_failed.values.passes;
 
       return {
         name: dirName.replace(process.env.SCENARIO_ARTIFACTS_PREFIX!, ""),
         path: fullPath,
         jsonSummary,
         txtSummary: readFileSync(txtSummaryFilePath, "utf8"),
-        rps: Math.floor(jsonSummary.metrics.http_reqs.values.rate),
+        rps: Math.floor(
+          // calculate only successful requests
+          succReqs / (jsonSummary.state.testRunDurationMs / 1000)
+        ),
         p95_duration: Math.floor(
           jsonSummary.metrics.http_req_duration.values["p(95)"]
         ),
@@ -245,7 +251,7 @@ async function generateReport(artifactsRootPath: string) {
         columns: [
           { name: "Gateway" },
           { name: "duration(p95)⬇️", align: "center" },
-          { name: "RPS", align: "center" },
+          { name: "Successful RPS", align: "center" },
           { name: "Requests", align: "center" },
           { name: "Durations", align: "center" },
           { name: "Notes", align: "left" },
