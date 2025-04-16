@@ -7,7 +7,7 @@
     "tsx": "4.19.3",
     "typescript": "5.8.3",
     "graphql": "16.10.0",
-    "@apollo/composition": "2.10.0"
+    "@apollo/composition": "2.10.2"
   },
   "devDependencies": {
     "@types/node": "22.13.14"
