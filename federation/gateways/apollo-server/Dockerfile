@@ -1,6 +1,6 @@
 FROM node:23-slim
 
-RUN apk --no-cache add curl
+RUN apt-get install curl
 
 RUN addgroup -S gw && adduser -S gw -G gw
 

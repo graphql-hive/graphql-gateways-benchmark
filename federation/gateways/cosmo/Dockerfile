@@ -1,6 +1,6 @@
 FROM debian:12-slim
 
-RUN apk --no-cache add curl
+RUN apt-get install curl
 
 WORKDIR /home/gw
 COPY router.json ./
