@@ -1,4 +1,4 @@
-FROM node:22-alpine
+FROM node:23-slim
 
 RUN apk --no-cache add curl
 
