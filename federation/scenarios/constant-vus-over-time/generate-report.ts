@@ -58,10 +58,7 @@ async function generateReport(artifactsRootPath: string) {
     withFileTypes: true,
   })
     .filter((r) => r.isDirectory() && !IGNORED_DIRS.includes(r.name))
-    .filter(
-      (r) =>
-        r.name.startsWith(process.env.SCENARIO_ARTIFACTS_PREFIX!)
-    )
+    .filter((r) => r.name.startsWith(process.env.SCENARIO_ARTIFACTS_PREFIX!))
     .map((r) => r.name);
 
   console.info(
@@ -222,7 +219,6 @@ async function generateReport(artifactsRootPath: string) {
         const responseStructure = checks.find(
           (c) => c.name === "valid response structure"
         );
-
 
         if (http200Check.fails > 0) {
           notes.push(`${http200Check.fails} non-200 responses`);
