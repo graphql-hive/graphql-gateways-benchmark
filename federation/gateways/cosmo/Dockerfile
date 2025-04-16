@@ -1,11 +1,11 @@
-FROM alpine:20250108
+FROM debian:12-slim
 
-RUN apk --no-cache add curl
+RUN apt-get update -y && apt-get install curl -y
 
 WORKDIR /home/gw
 COPY router.json ./
 
-ENV ROUTER_VERSION=0.183.2
+ENV ROUTER_VERSION=0.199.1
 
 RUN curl -L https://github.com/wundergraph/cosmo/releases/download/router%40${ROUTER_VERSION}/router-router@${ROUTER_VERSION}-linux-$(uname -m | sed s:aarch:arm:| sed s:x86_:amd:).tar.gz | gunzip -dc | tar x && mv router /usr/local/bin
 
