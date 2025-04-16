@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   accounts:
     image: '${DOCKER_REGISTRY}subgraph-accounts${DOCKER_TAG}'
