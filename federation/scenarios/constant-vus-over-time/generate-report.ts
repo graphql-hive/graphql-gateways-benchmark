@@ -129,7 +129,7 @@ async function generateReport(artifactsRootPath: string) {
         txtSummary: readFileSync(txtSummaryFilePath, "utf8"),
         rps: Math.floor(
           // calculate only successful requests
-          succReqs / (jsonSummary.state.testRunDurationMs * 1000)
+          succReqs / (jsonSummary.state.testRunDurationMs / 1000)
         ),
         overviewImageUrl,
         httpImageUrl,
