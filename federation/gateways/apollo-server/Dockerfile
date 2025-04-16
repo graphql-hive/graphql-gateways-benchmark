@@ -1,6 +1,6 @@
 FROM node:23-slim
 
-RUN apt-get updapte -y && apt-get install curl -y
+RUN apt-get update -y && apt-get install curl -y
 
 WORKDIR /home/gw
 COPY supergraph.graphql index.ts ./
