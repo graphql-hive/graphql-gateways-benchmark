@@ -58,10 +58,7 @@ async function generateReport(artifactsRootPath: string) {
     withFileTypes: true,
   })
     .filter((r) => r.isDirectory() && !IGNORED_DIRS.includes(r.name))
-    .filter(
-      (r) =>
-        r.name.startsWith(process.env.SCENARIO_ARTIFACTS_PREFIX!)
-    )
+    .filter((r) => r.name.startsWith(process.env.SCENARIO_ARTIFACTS_PREFIX!))
     .map((r) => r.name);
 
   console.info(
@@ -121,13 +118,19 @@ async function generateReport(artifactsRootPath: string) {
       }
 
       const jsonSummary = JSON.parse(readFileSync(jsonSummaryFilePath, "utf8"));
+      const succReqs =
+        jsonSummary.metrics.http_reqs.values.count -
+        jsonSummary.metrics.http_req_failed.values.passes;
 
       return {
         name: dirName.replace(process.env.SCENARIO_ARTIFACTS_PREFIX!, ""),
         path: fullPath,
         jsonSummary,
         txtSummary: readFileSync(txtSummaryFilePath, "utf8"),
-        rps: Math.floor(jsonSummary.metrics.http_reqs.values.rate),
+        rps: Math.floor(
+          // calculate only successful requests
+          succReqs / (jsonSummary.state.testRunDurationMs / 1000)
+        ),
         overviewImageUrl,
         httpImageUrl,
         containersImageUrl,
@@ -217,7 +220,6 @@ async function generateReport(artifactsRootPath: string) {
           (c) => c.name === "valid response structure"
         );
 
-
         if (http200Check.fails > 0) {
           notes.push(`${http200Check.fails} non-200 responses`);
         }
@@ -247,7 +249,7 @@ async function generateReport(artifactsRootPath: string) {
       {
         columns: [
           { name: "Gateway" },
-          { name: "RPS ⬇️", align: "center" },
+          { name: "Successful RPS ⬇️", align: "center" },
           { name: "Requests", align: "center" },
           { name: "Duration", align: "center" },
           { name: "Notes", align: "left" },
