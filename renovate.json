@@ -11,5 +11,6 @@
     "axum",
     "async-graphql",
     "async-graphql-axum"
-  ]
+  ],
+  "automerge": true
 }
