@@ -4,7 +4,7 @@
     "start": "tsx index.ts"
   },
   "dependencies": {
-    "tsx": "4.19.3",
+    "tsx": "4.19.4",
     "typescript": "5.8.3",
     "graphql": "16.10.0",
     "@apollo/server": "4.11.3",
