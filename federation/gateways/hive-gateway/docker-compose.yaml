@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/graphql-hive/gateway:1.14.2-alpha-b09e3e259508a7e76d0e3786fd43d38795ec8f57
+    image: ghcr.io/graphql-hive/gateway:1.14.2-alpha-10b09b21994f57974606a704b91a5922034f86d9
     container_name: gateway
     networks:
       - test
@@ -9,6 +9,7 @@ services:
     environment:
       - NODE_ENV=production
       - FORK=${FORK}
+      - JIT=1
     depends_on:
       accounts:
         condition: service_healthy
