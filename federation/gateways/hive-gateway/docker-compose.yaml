@@ -9,7 +9,6 @@ services:
     environment:
       - NODE_ENV=production
       - FORK=${FORK}
-      - JIT=true
     depends_on:
       accounts:
         condition: service_healthy
@@ -35,7 +34,7 @@ services:
       interval: 3s
       timeout: 5s
       retries: 10
-    command: ["supergraph", "--jit"]
+    command: ["supergraph"]
     deploy:
       resources:
         limits:
