@@ -1,20 +1,36 @@
 services:
   accounts:
     build:
-      context: ${BASE_DIR:-.}/../../subgraphs/accounts
+      context: ./accounts
       dockerfile: ../Dockerfile.rust
+    environment:
+      - PORT=4001
+    ports:
+      - 4001:4001
   inventory:
     build:
-      context: ${BASE_DIR:-.}/../../subgraphs/inventory
+      context: ./inventory
       dockerfile: ../Dockerfile.rust
+    environment:
+      - PORT=4002
+    ports:
+      - 4002:4002
   products:
     build:
-      context: ${BASE_DIR:-.}/../../subgraphs/products
+      context: ./products
       dockerfile: ../Dockerfile.rust
+    environment:
+      - PORT=4003
+    ports:
+      - 4003:4003
   reviews:
     build:
-      context: ${BASE_DIR:-.}/../../subgraphs/reviews
+      context: ./reviews
       dockerfile: ../Dockerfile.rust
+    environment:
+      - PORT=4004
+    ports:
+      - 4004:4004
 
 networks:
   test:
