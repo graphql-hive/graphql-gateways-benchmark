@@ -725,10 +725,10 @@ ts-graphviz@^1.5.4:
   resolved "https://registry.yarnpkg.com/ts-graphviz/-/ts-graphviz-1.8.2.tgz#6c4768d05f8a36e37abe34855ffe89a4c4bd96cc"
   integrity sha512-5YhbFoHmjxa7pgQLkB07MtGnGJ/yhvjmc9uhsnDBEICME6gkPf83SBwLDQqGDoCa3XzUMWLk1AU2Wn1u1naDtA==
 
-tsx@4.19.4:
-  version "4.19.4"
-  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.19.4.tgz#647b4141f4fdd9d773a9b564876773d2846901f4"
-  integrity sha512-gK5GVzDkJK1SI1zwHf32Mqxf2tSJkNx+eYcNly5+nHvWqXUJYUkWBQtKauoESz3ymezAI++ZwT855x5p5eop+Q==
+tsx@4.20.3:
+  version "4.20.3"
+  resolved "https://registry.yarnpkg.com/tsx/-/tsx-4.20.3.tgz#f913e4911d59ad177c1bcee19d1035ef8dd6e2fb"
+  integrity sha512-qjbnuR9Tr+FJOMBqJCW5ehvIo/buZq7vH7qD7JziU98h6l3qGy0a/yPFjwO+y0/T7GFpNgNAvEcPPVfyT8rrPQ==
   dependencies:
     esbuild "~0.25.0"
     get-tsconfig "^4.7.5"
