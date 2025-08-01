@@ -10,7 +10,7 @@
     "vega-lite": "6.2.0",
     "tablemark": "3.1.0",
     "tsx": "4.20.3",
-    "typescript": "5.8.3",
+    "typescript": "5.9.2",
     "graphql": "16.11.0",
     "patch-package": "8.0.0"
   },
