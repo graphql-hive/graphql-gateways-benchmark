@@ -15,6 +15,6 @@
     "patch-package": "8.0.0"
   },
   "devDependencies": {
-    "@types/node": "22.17.1"
+    "@types/node": "22.17.2"
   }
 }
