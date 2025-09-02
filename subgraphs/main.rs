@@ -51,6 +51,7 @@ async fn main() {
             "/reviews",
             post_service(GraphQL::new(reviews::get_subgraph())),
         )
+        .route("/health", axum::routing::get(|| async { "OK" }))
         .route_layer(middleware::from_fn(delay_middleware));
 
     println!("Starting server on http://localhost:4200");
