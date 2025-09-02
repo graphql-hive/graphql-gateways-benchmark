@@ -49,7 +49,8 @@ jobs:
           sudo apt-get install k6=0.49.0
 
       - name: install
-        run: cd gateways/${{ inputs.gateway }} && ./install.sh && cd ../../
+        run: ./install.sh
+        working-directory: gateways/${{ inputs.gateway }}
 
       - name: wait for subgraphs
         uses: iFaxity/wait-on-action@main
