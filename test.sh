@@ -201,8 +201,22 @@ echo "Monitoring started (PID $MONITOR_PID)."
 
 # Measure
 echo "Load test ($MEASURE_SECONDS s) ..."
-maybe_taskset "${LOAD_CPUSET}" k6 run --address "$K6_API_ADDR" -e SUMMARY_PATH="$(pwd)" \
+export START_TIME="$(date +%s)"
+maybe_taskset "${LOAD_CPUSET}" k6 run --out=experimental-prometheus-rw --out json=$GATEWAY_DIR/k6_metrics.json --address "$K6_API_ADDR" -e SUMMARY_PATH="$(pwd)" \
   -e MODE="$LOAD_MODE" -e BENCH_GATEWAY_PID="$GATEWAY_LEADER_PID" -e BENCH_OVER_TIME="${MEASURE_SECONDS}s" "$SCRIPT_DIR/k6.js"
+
+sleep 2
+
+export END_TIME="$(date +%s)"
+
+rm -rf $GATEWAY_DIR/overview.png || echo ""
+npx --quiet capture-website-cli "http://localhost:3000/d/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $OUT_DIR/overview.png --width 1200 --height 850
+
+rm -rf $GATEWAY_DIR/http.png || echo ""
+npx --quiet capture-website-cli "http://localhost:3000/d-solo/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&panelId=41" --output $OUT_DIR/http.png --width 1200 --height 850
+
+rm -rf $GATEWAY_DIR/containers.png || echo ""
+npx --quiet capture-website-cli "http://localhost:3000/d/pMEd7m0Mz/cadvisor-exporter?orgId=1&var-host=All&var-container=accounts&var-container=inventory&var-container=products&var-container=reviews&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $GATEWAY_DIR/containers.png --width 1200 --height 850
 
 echo "Summary:"
 cargo run -p toolkit report "$(pwd)"
