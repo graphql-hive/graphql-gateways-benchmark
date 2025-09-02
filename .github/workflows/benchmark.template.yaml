@@ -58,6 +58,11 @@ jobs:
       - name: install
         run: cd gateways/${{ inputs.gateway }} && ./install.sh && cd ../../
 
+      - name: wait for subgraphs
+        uses: iFaxity/wait-on-action@main
+        with:
+          resource: http://localhost:4200/health
+
       - name: run benchmark (${{ inputs.time }})
         timeout-minutes: 20
         run: make test gateway=${{ inputs.gateway }} mode=${{ inputs.mode }}
