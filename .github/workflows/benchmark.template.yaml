@@ -77,7 +77,7 @@ jobs:
 
       - name: Run Metrics Container
         run: |
-          docker-compose -f docker-compose.metrics.yaml up -d --wait --force-recreate --build
+          docker compose -f docker-compose.metrics.yaml up -d --wait --force-recreate --build
 
       - name: wait for subgraphs
         uses: iFaxity/wait-on-action@main
