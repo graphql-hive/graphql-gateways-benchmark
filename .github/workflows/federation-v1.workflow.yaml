@@ -24,7 +24,7 @@ jobs:
         
       - name: run subgraphs
         run: |
-          make run-subgraphs
+          make run-subgraphs &
 
   decide-runner:
     needs: subgraphs
