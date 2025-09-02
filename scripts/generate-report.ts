@@ -137,7 +137,7 @@ async function generateReport(artifactsRootPath: string) {
         httpImageUrl,
         containersImageUrl,
         vus: jsonSummary.vus,
-        time: jsonSummary.time,
+        duration: jsonSummary.duration,
       };
     })
   );
@@ -190,7 +190,7 @@ async function generateReport(artifactsRootPath: string) {
     NEWLINE,
     "--TODO--",
     NEWLINE,
-    `This scenario was running ${validReportsData[0].vus} VUs over ${validReportsData[0].time}`,
+    `This scenario was running ${validReportsData[0].vus} VUs over ${validReportsData[0].duration}`,
     NEWLINE,
     "### Comparison",
     NEWLINE,
