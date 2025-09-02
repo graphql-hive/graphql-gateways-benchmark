@@ -98,25 +98,31 @@ async function generateReport(artifactsRootPath: string) {
           `Could not find CF_IMAGES_LINK or CF_IMAGES_TOKEN in env! Skipping...`
         );
       } else {
-        const overviewImageFilePath = join(fullPath, "./overview.png");
-        const httpImageFilePath = join(fullPath, "./http.png");
-        const containersFilePath = join(fullPath, "./containers.png");
+        try {
+          const overviewImageFilePath = join(fullPath, "./overview.png");
+          const httpImageFilePath = join(fullPath, "./http.png");
+          const containersFilePath = join(fullPath, "./containers.png");
 
-        [overviewImageUrl, httpImageUrl, containersImageUrl] =
-          await Promise.all([
-            uploadImageToCloudflare(
-              `${GITHUB_RUN_ID}-overview.png`,
-              overviewImageFilePath
-            ),
-            uploadImageToCloudflare(
-              `${GITHUB_RUN_ID}-http.png`,
-              httpImageFilePath
-            ),
-            uploadImageToCloudflare(
-              `${GITHUB_RUN_ID}-http.png`,
-              containersFilePath
-            ),
-          ]);
+          [overviewImageUrl, httpImageUrl, containersImageUrl] =
+            await Promise.all([
+              uploadImageToCloudflare(
+                `${GITHUB_RUN_ID}-overview.png`,
+                overviewImageFilePath
+              ),
+              uploadImageToCloudflare(
+                `${GITHUB_RUN_ID}-http.png`,
+                httpImageFilePath
+              ),
+              uploadImageToCloudflare(
+                `${GITHUB_RUN_ID}-http.png`,
+                containersFilePath
+              ),
+            ]);
+        } catch (e) {
+          console.error(
+            `Failed to upload one of the images to Cloudflare: ${e}`
+          );
+        }
       }
 
       const jsonSummary = JSON.parse(readFileSync(jsonSummaryFilePath, "utf8"));
