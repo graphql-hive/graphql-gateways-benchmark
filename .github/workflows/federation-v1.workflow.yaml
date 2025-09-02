@@ -21,6 +21,8 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+
+      - uses: Swatinem/rust-cache@v2
         
       - name: run subgraphs
         run: |
