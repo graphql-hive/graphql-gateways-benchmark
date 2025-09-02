@@ -60,6 +60,17 @@ jobs:
         run: ./install.sh
         working-directory: gateways/${{ inputs.gateway }}
 
+      - name: login to docker registry
+        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Metrics Container
+        run: |
+          docker-compose -f docker-compose.metrics.yaml up -d --wait --force-recreate --build
+
       - name: wait for subgraphs
         uses: iFaxity/wait-on-action@main
         with:

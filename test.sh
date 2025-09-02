@@ -201,6 +201,10 @@ echo "Monitoring started (PID $MONITOR_PID)."
 
 # Measure
 echo "Load test ($MEASURE_SECONDS s) ..."
+
+export K6_PROMETHEUS_RW_SERVER_URL=http://localhost:9090/api/v1/write
+export K6_PROMETHEUS_RW_TREND_AS_NATIVE_HISTOGRAM=true
+
 export START_TIME="$(date +%s)"
 maybe_taskset "${LOAD_CPUSET}" k6 run --out=experimental-prometheus-rw --out json=$GATEWAY_DIR/k6_metrics.json --address "$K6_API_ADDR" -e SUMMARY_PATH="$(pwd)" \
   -e MODE="$LOAD_MODE" -e BENCH_GATEWAY_PID="$GATEWAY_LEADER_PID" -e BENCH_OVER_TIME="${MEASURE_SECONDS}s" "$SCRIPT_DIR/k6.js"

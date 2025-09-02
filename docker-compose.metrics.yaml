@@ -1,0 +1,56 @@
+networks:
+  test:
+    name: test
+
+services:
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    command:
+      - --web.enable-remote-write-receiver
+      - --enable-feature=native-histograms
+      - --config.file=/etc/prometheus/prometheus.yaml
+    networks:
+      - test
+    ports:
+      - "9090:9090"
+    logging:
+      driver: none
+    volumes:
+      - ./prometheus:/etc/prometheus/
+
+  grafana:
+    image: grafana/grafana:12.1.1
+    networks:
+      - test
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_BASIC_ENABLED=false
+    volumes:
+      - ./grafana:/etc/grafana/provisioning/
+    logging:
+      driver: none
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.52.1
+    ports:
+      - 8080:8080
+    volumes:
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - /etc/machine-id:/etc/machine-id:ro
+      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
+    networks:
+      - test
+    restart: unless-stopped
+    container_name: cadvisor
+    command: --enable_metrics=cpu,cpuLoad,sched,process,resctrl,memory,cpuset,advtcp,network,tcp,perf_event
+    privileged: true
+    devices:
+      - /dev/kmsg:/dev/kmsg
+    logging:
+      driver: none
