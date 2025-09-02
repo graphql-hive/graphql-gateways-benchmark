@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "generate-report": "tsx generate-report.ts",
+    "generate-report": "tsx scripts/generate-report.ts",
     "postinstall": "patch-package"
   },
   "dependencies": {
