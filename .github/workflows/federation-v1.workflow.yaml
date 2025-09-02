@@ -28,11 +28,6 @@ jobs:
         run: |
           make run-subgraphs &
 
-      - name: wait for subgraphs
-        uses: iFaxity/wait-on-action@main
-        with:
-          resource: http://localhost:4200/health
-
   decide-runner:
     needs: subgraphs
     uses: ./.github/workflows/decide-runner.template.yaml
