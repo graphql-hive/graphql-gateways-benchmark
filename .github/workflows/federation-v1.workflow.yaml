@@ -29,7 +29,7 @@ jobs:
           make run-subgraphs &
 
       - name: wait for subgraphs
-        uses: iFaxity/wait-on-action
+        uses: iFaxity/wait-on-action@main
         with:
           resource: http://localhost:4200/health
 
