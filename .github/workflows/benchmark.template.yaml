@@ -48,13 +48,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install k6=0.49.0
 
-      - name: login to docker registry
-        uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: install
         run: cd gateways/${{ inputs.gateway }} && ./install.sh && cd ../../
 
