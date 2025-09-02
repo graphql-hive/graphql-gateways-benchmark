@@ -32,7 +32,6 @@ jobs:
 
       - name: generate report
         run: yarn generate-report ${{ steps.download.outputs.download-path }}
-        working-directory: scenarios/${{ inputs.scenarioName }}
         env:
           SCENARIO_ARTIFACTS_PREFIX: ${{ inputs.scenarioName }}_
           SCENARIO_TITLE: ${{ inputs.scenarioName }}
@@ -44,17 +43,12 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           header: ${{ inputs.scenarioName }}
-          path: scenarios/${{ inputs.scenarioName }}/result.md
+          path: ${{ inputs.scenarioName }}_result.md
         env:
           GITHUB_TOKEN: ${{ secrets.githubToken }}
 
       - name: update summary
-        run: cat scenarios/${{ inputs.scenarioName }}/result.md >> $GITHUB_STEP_SUMMARY
-
-      - name: copy report (workflow_dispatch/push)
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
-        run: |
-          cp scenarios/${{ inputs.scenarioName }}/result.md scenarios/${{ inputs.scenarioName }}/README.md
+        run: cat ${{ inputs.scenarioName }}_result.md >> $GITHUB_STEP_SUMMARY
 
       - run: |
           git config user.name github-actions
@@ -64,7 +58,7 @@ jobs:
         uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         with:
-          add: scenarios/${{ inputs.scenarioName }}/README.md
+          add: ${{ inputs.scenarioName }}_result.md
           message: "Update results for scenario: ${{ inputs.scenarioName }}"
           pull: "--rebase --autostash"
           author_email: github-actions@github.com
@@ -76,6 +70,6 @@ jobs:
         with:
           name: ${{ inputs.scenarioName }}-report
           path: |
-            scenarios/${{ inputs.scenarioName }}/result.md
-            scenarios/${{ inputs.scenarioName }}/report.vega.json
-            scenarios/${{ inputs.scenarioName }}/report.svg
+            ${{ inputs.scenarioName }}_result.md
+            ${{ inputs.scenarioName }}_report.vega.json
+            ${{ inputs.scenarioName }}_report.svg
