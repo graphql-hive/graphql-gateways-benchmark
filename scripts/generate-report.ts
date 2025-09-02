@@ -297,4 +297,7 @@ async function generateReport(artifactsRootPath: string) {
 
 const artifactsRootPath = process.argv[2] || __dirname;
 
-generateReport(artifactsRootPath).catch(console.error);
+generateReport(artifactsRootPath).catch(e => {
+  console.error(e);
+  process.exit(1);
+});
