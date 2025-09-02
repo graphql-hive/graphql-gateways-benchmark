@@ -42,12 +42,12 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           header: ${{ inputs.scenarioName }}
-          path: ${{ inputs.scenarioName }}_result.md
+          path: result.md
         env:
           GITHUB_TOKEN: ${{ secrets.githubToken }}
 
       - name: update summary
-        run: cat ${{ inputs.scenarioName }}_result.md >> $GITHUB_STEP_SUMMARY
+        run: cat result.md >> $GITHUB_STEP_SUMMARY && mv result.md ${{ inputs.scenarioName }}_result.md
 
       - run: |
           git config user.name github-actions
