@@ -58,7 +58,7 @@ jobs:
           resource: http://localhost:4200/health
 
       - name: run benchmark (${{ inputs.time }})
-        timeout-minutes: 20
+        timeout-minutes: 600
         run: make test gateway=${{ inputs.gateway }} mode=${{ inputs.mode }}
         env:
           ACCOUNTS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
