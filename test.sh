@@ -210,10 +210,10 @@ sleep 2
 export END_TIME="$(date +%s)"
 
 rm -rf $GATEWAY_DIR/overview.png || echo ""
-npx --quiet capture-website-cli "http://localhost:3000/d/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $OUT_DIR/overview.png --width 1200 --height 850
+npx --quiet capture-website-cli "http://localhost:3000/d/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $GATEWAY_DIR/overview.png --width 1200 --height 850
 
 rm -rf $GATEWAY_DIR/http.png || echo ""
-npx --quiet capture-website-cli "http://localhost:3000/d-solo/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&panelId=41" --output $OUT_DIR/http.png --width 1200 --height 850
+npx --quiet capture-website-cli "http://localhost:3000/d-solo/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&panelId=41" --output $GATEWAY_DIR/http.png --width 1200 --height 850
 
 rm -rf $GATEWAY_DIR/containers.png || echo ""
 npx --quiet capture-website-cli "http://localhost:3000/d/pMEd7m0Mz/cadvisor-exporter?orgId=1&var-host=All&var-container=accounts&var-container=inventory&var-container=products&var-container=reviews&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $GATEWAY_DIR/containers.png --width 1200 --height 850
