@@ -185,10 +185,15 @@ async function generateReport(artifactsRootPath: string) {
     "report.svg"
   );
 
+  const descriptions = {
+    "constant": "This scenario runs 4 subgraphs and a GraphQL gateway with Federation spec, and runs a heavy query. It's being executed with a constant amount of VUs over a fixed amount of time. It measure things like memory usage, CPU usage, average RPS. It also includes a summary of the entire execution, and metrics information about HTTP execution times.",
+    "ramping": "This scenario runs 4 subgraphs and a GraphQL gateway with Federation spec, and runs a heavy query. We are running a heavy load of concurrent VUs to measure response time and other stats, during stress. It measure things like memory usage, CPU usage, response times. It also includes a summary of the entire execution, and metrics information about HTTP execution times.",
+  }
+
   const markdownLines: string[] = [
     `## Overview for: \`${process.env.SCENARIO_TITLE}\``,
     NEWLINE,
-    "--TODO--",
+    process.env.SCENARIO_TITLE?.includes("constant") ? descriptions.constant : descriptions.ramping,
     NEWLINE,
     `This scenario was running ${validReportsData[0].vus} VUs over ${validReportsData[0].duration}`,
     NEWLINE,
