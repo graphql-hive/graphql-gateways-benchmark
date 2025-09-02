@@ -11,19 +11,21 @@ const isConstant = mode === "constant";
 
 const successRate = new Rate("success_rate");
 
+const summaryTrendStats = [
+  "avg",
+  "min",
+  "med",
+  "max",
+  "p(90)",
+  "p(95)",
+  "p(99.9)",
+];
+
 export const options = isConstant
   ? {
       duration,
       vus,
-      summaryTrendStats: [
-        "avg",
-        "min",
-        "med",
-        "max",
-        "p(90)",
-        "p(95)",
-        "p(99.9)",
-      ],
+      summaryTrendStats,
     }
   : {
       scenarios: {
@@ -32,22 +34,14 @@ export const options = isConstant
           startVUs: 0,
           stages: [
             { duration: "10s", target: 50 },
-            { duration: "40s", target: 500 },
+            { duration: "40s", target: vus },
             { duration: "10s", target: 50 },
           ],
           gracefulRampDown: "1s",
           gracefulStop: "0s",
         },
       },
-      summaryTrendStats: [
-        "avg",
-        "min",
-        "med",
-        "max",
-        "p(90)",
-        "p(95)",
-        "p(99.9)",
-      ],
+      summaryTrendStats,
     };
 
 export function setup() {
@@ -61,7 +55,7 @@ export default function () {
 }
 
 export function handleSummary(data) {
-  return handleBenchmarkSummary(data, { vus, duration });
+  return handleBenchmarkSummary(data, { vus, duration, time });
 }
 
 let printIdentifiersMap = {};
