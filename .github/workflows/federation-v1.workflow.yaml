@@ -9,11 +9,22 @@ concurrency:
 
 jobs:
   subgraphs:
-    uses: ./.github/workflows/docker-bake.template.yaml
-    with:
-      dir: ./federation/subgraphs
-      hcl: docker.hcl
-      target: subgraphs
+    runs-on: ubuntu-24.04
+    name: subgraphs
+    steps:
+      - name: checkout
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+
+      - name: setup rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+        
+      - name: run subgraphs
+        run: |
+          make run-subgraphs
 
   decide-runner:
     needs: subgraphs
@@ -31,6 +42,7 @@ jobs:
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
           - mercurius
           - grafbase
@@ -39,12 +51,9 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 300
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-over-time
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
-      fork: 2
       memoryLimit: 6gb
 
   constant-vus-over-time-report:
@@ -53,8 +62,6 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-over-time
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
 
   constant-vus-subgraphs-delay:
     needs:
@@ -76,12 +83,9 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 300
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
-      fork: 2
       memoryLimit: 6gb
       subgraphDelayRange: "40~150"
 
@@ -91,8 +95,6 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-subgraphs-delay
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
 
   constant-vus-subgraphs-delay-resources:
     needs:
@@ -114,12 +116,9 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 500
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay-resources
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
-      fork: 3
       memoryLimit: 8gb
       subgraphDelayRange: "40~150"
 
@@ -129,8 +128,6 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-subgraphs-delay-resources
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
 
   ramping-vus:
     needs:
@@ -152,12 +149,9 @@ jobs:
       gateway: ${{ matrix.directory }}
       vu: 2000
       time: 60s
-      baseDir: federation
-      scenarioDir: ramping-vus
       scenarioName: ramping-vus
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
-      fork: 3
       memoryLimit: 8gb
 
   ramping-vus-report:
@@ -166,5 +160,3 @@ jobs:
     secrets: inherit
     with:
       scenarioName: ramping-vus
-      scenarioDir: ramping-vus
-      baseDir: federation

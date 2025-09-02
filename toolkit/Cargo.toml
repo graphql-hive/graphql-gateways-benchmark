@@ -1,0 +1,14 @@
+[package]
+name = "toolkit"
+version = "0.0.1"
+edition = "2021"
+
+[[bin]]
+name = "toolkit"
+path = "main.rs"
+
+[dependencies]
+sonic-rs = "0.5.3"
+serde = "1.0.219"
+ratatui = { version = "0.29.0", features = ["all-widgets"] }
+crossterm = "0.29.0"
