@@ -8,39 +8,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  subgraphs:
-    runs-on: ubuntu-24.04
-    name: subgraphs
-    steps:
-      - name: checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-
-      - name: setup rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-
-      - uses: Swatinem/rust-cache@v2
-        
-      - name: run subgraphs
-        run: |
-          make run-subgraphs &
-
   decide-runner:
-    needs: subgraphs
     uses: ./.github/workflows/decide-runner.template.yaml
 
   constant-vus-over-time:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
@@ -69,15 +47,15 @@ jobs:
   constant-vus-subgraphs-delay:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
           - mercurius
           - grafbase
@@ -103,15 +81,15 @@ jobs:
   constant-vus-subgraphs-delay-resources:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
           - mercurius
           - grafbase
@@ -137,15 +115,15 @@ jobs:
   ramping-vus:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
           - mercurius
           - grafbase
