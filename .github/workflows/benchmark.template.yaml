@@ -56,7 +56,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: install
-        run: make install
+        run: cd gateways/${{ inputs.gateway }} && ./install.sh && cd ../../
 
       - name: run benchmark (${{ inputs.time }})
         timeout-minutes: 20

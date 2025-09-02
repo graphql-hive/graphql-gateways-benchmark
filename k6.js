@@ -11,29 +11,44 @@ const isConstant = mode === "constant";
 
 const successRate = new Rate("success_rate");
 
-export const options = {
-  ...(isConstant
-    ? {
-        duration,
-        vus,
-      }
-    : {
-        scenarios: {
-          stress: {
-            executor: "ramping-vus",
-            startVUs: 0,
-            stages: [
-              { duration: "10s", target: 50 },
-              { duration: "40s", target: 500 },
-              { duration: "10s", target: 50 },
-            ],
-            gracefulRampDown: "1s",
-            gracefulStop: "0s",
-          },
+export const options = isConstant
+  ? {
+      duration,
+      vus,
+      summaryTrendStats: [
+        "avg",
+        "min",
+        "med",
+        "max",
+        "p(90)",
+        "p(95)",
+        "p(99.9)",
+      ],
+    }
+  : {
+      scenarios: {
+        stress: {
+          executor: "ramping-vus",
+          startVUs: 0,
+          stages: [
+            { duration: "10s", target: 50 },
+            { duration: "40s", target: 500 },
+            { duration: "10s", target: 50 },
+          ],
+          gracefulRampDown: "1s",
+          gracefulStop: "0s",
         },
-      }),
-  summaryTrendStats: ["avg", "min", "med", "max", "p(90)", "p(95)", "p(99.9)"],
-};
+      },
+      summaryTrendStats: [
+        "avg",
+        "min",
+        "med",
+        "max",
+        "p(90)",
+        "p(95)",
+        "p(99.9)",
+      ],
+    };
 
 export function setup() {
   for (let i = 0; i < vus * 2; i++) {
@@ -145,7 +160,7 @@ function handleBenchmarkSummary(data, additionalContext = {}) {
 
   if (__ENV.SUMMARY_PATH) {
     out[`${__ENV.SUMMARY_PATH}/k6_summary.json`] = JSON.stringify(
-      Object.assign(data, additionalContext),
+      Object.assign(data, additionalContext)
     );
     out[`${__ENV.SUMMARY_PATH}/k6_summary.txt`] = textSummary(data, {
       indent: " ",
@@ -160,7 +175,7 @@ function sendGraphQLRequest() {
   const res = http.post(
     endpoint,
     graphqlRequest.payload,
-    graphqlRequest.params,
+    graphqlRequest.params
   );
 
   return res;
@@ -173,11 +188,11 @@ function makeGraphQLRequest() {
     "no graphql errors": (resp) => {
       let has_errors = !!resp.body && resp.body.includes(`"errors"`);
       if (has_errors && __ENV.PRINT_ONCE) {
-          printOnce(
-              "graphql_errors",
-              `‼️ Got GraphQL errors, here's a sample:`,
-              res.json.errors,
-          );
+        printOnce(
+          "graphql_errors",
+          `‼️ Got GraphQL errors, here's a sample:`,
+          res.json.errors
+        );
       }
 
       return !has_errors;
@@ -189,11 +204,11 @@ function makeGraphQLRequest() {
         let isValid = checkResponseStructure(json);
 
         if (!isValid && __ENV.PRINT_ONCE) {
-            printOnce(
-                "response_strcuture",
-                `‼️ Got invalid structure, here's a sample:`,
-                res.body,
-            );
+          printOnce(
+            "response_strcuture",
+            `‼️ Got invalid structure, here's a sample:`,
+            res.body
+          );
         }
 
         return isValid;
