@@ -68,7 +68,7 @@ jobs:
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
       memoryLimit: 6gb
-      subgraphDelayRange: "40~150"
+      subgraphDelay: 150
       mode: constant
 
   constant-vus-subgraphs-delay-report:
@@ -102,7 +102,7 @@ jobs:
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
       memoryLimit: 8gb
-      subgraphDelayRange: "40~150"
+      subgraphDelay: "150"
       mode: constant
 
   constant-vus-subgraphs-delay-resources-report:

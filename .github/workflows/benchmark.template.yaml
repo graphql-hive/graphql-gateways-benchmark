@@ -25,9 +25,9 @@ on:
       memoryLimit:
         type: string
         required: true
-      subgraphDelayRange:
-        type: string
-        default: ""
+      subgraphDelay:
+        type: number
+        default: 0
 
 jobs:
   test:
@@ -53,6 +53,8 @@ jobs:
       - name: run subgraphs
         run: |
           make run-subgraphs &
+        env:
+          SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelay }}
 
       - uses: grafana/setup-k6-action@v1
 
@@ -88,10 +90,6 @@ jobs:
         timeout-minutes: 600
         run: make test gateway=${{ inputs.gateway }} mode=${{ inputs.mode }}
         env:
-          ACCOUNTS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          INVENTORY_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          PRODUCTS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          REVIEWS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
           BENCH_VUS: ${{ inputs.vu }}
           BENCH_OVER_TIME: ${{ inputs.time }}
           MEM_LIMIT: ${{ inputs.memoryLimit }}
