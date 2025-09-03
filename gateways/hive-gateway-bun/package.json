@@ -1,7 +1,11 @@
 {
-    "name": "hive-gateway-bun",
-    "dependencies": {
-        "@graphql-hive/gateway": "1.16.3",
-        "graphql": "16.11.0"
-    }
+  "name": "hive-gateway-bun",
+  "version": "0.0.0",
+  "dependencies": {
+    "@graphql-hive/gateway": "1.16.3",
+    "graphql": "16.11.0"
+  },
+  "devDependencies": {
+    "bun": "1.2.21"
+  }
 }

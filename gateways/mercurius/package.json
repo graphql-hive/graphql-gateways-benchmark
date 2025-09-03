@@ -1,5 +1,6 @@
 {
   "name": "mercurius",
+  "version": "0.0.0",
   "scripts": {
     "start": "tsx index.ts"
   },

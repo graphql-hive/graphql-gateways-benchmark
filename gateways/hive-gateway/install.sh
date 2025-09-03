@@ -1,2 +1,1 @@
-# https://github.com/graphql-hive/gateway/releases
-yarn install
+echo "Nothing to install"
