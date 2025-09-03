@@ -318,15 +318,17 @@ if (!process.env.SCENARIO_ARTIFACTS_PREFIX?.includes("delay")) {
   let allLines: string[] = [];
   let headerLine: string | null = null;
   for (const dataCsvPath of dataCsvs) {
-    const dirName = dataCsvPath.split("/").slice(-2, -1)[0];
-    console.log(`Found CSV at path: ${dataCsvPath} on dir ${dirName}`);
-    const gatewayName = dirName.replaceAll(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
-    console.log(`Processing CSV for gateway ${gatewayName} at path ${dataCsvPath}`);
-    const csvStr = readFileSync(dataCsvPath, "utf-8");
-    const csvLines = csvStr.split("\n").filter((line) => line.trim() !== "");
-    headerLine = csvLines[0];
-    const dataLines = csvLines.slice(1).filter((line) => line.trim() !== "").map(line => `${gatewayName},${line}`);
-    allLines.push(...dataLines);
+    if (dataCsvPath.includes("/" + process.env.SCENARIO_ARTIFACTS_PREFIX!)) {
+      const dirName = dataCsvPath.split("/").slice(-2, -1)[0];
+      console.log(`Found CSV at path: ${dataCsvPath} on dir ${dirName}`);
+      const gatewayName = dirName.replaceAll(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
+      console.log(`Processing CSV for gateway ${gatewayName} at path ${dataCsvPath}`);
+      const csvStr = readFileSync(dataCsvPath, "utf-8");
+      const csvLines = csvStr.split("\n").filter((line) => line.trim() !== "");
+      headerLine = csvLines[0];
+      const dataLines = csvLines.slice(1).filter((line) => line.trim() !== "").map(line => `${gatewayName},${line}`);
+      allLines.push(...dataLines);
+    }
   }
   if (!headerLine) {
     headerLine = "Seconds,VUs,RPS,P95_ms,Req_success_rate,Total_CPU,Total_RSS_KB";
