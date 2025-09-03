@@ -130,7 +130,7 @@ jobs:
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 2000
+      vu: 500
       time: 60s
       scenarioName: ramping-vus
       runner: ${{ needs.decide-runner.outputs.runner }}
