@@ -101,3 +101,4 @@ jobs:
             gateways/${{ inputs.gateway }}/gateway_log.txt
             gateways/${{ inputs.gateway }}/*.png
             gateways/${{ inputs.gateway }}/data.csv
+            gateways/${{ inputs.gateway }}/stats.json
