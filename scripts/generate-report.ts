@@ -333,6 +333,6 @@ if (!headerLine) {
 headerLine = `Gateway,${headerLine}`;
 
 const finalCsv = [headerLine, ...allLines].join("\n");
-const loadMode = process.env.LOAD_MODE ? process.env.LOAD_MODE : "constant";
+const loadMode = process.env.SCENARIO_ARTIFACTS_PREFIX?.includes("constant") ? "constant" : "stress";
 const outFile = `${loadMode}-data.csv`;
 writeFileSync(join(__dirname, "..", "website", outFile), finalCsv);
