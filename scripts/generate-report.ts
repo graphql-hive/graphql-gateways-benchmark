@@ -312,27 +312,29 @@ generateReport(artifactsRootPath).catch(e => {
 
 import { globSync } from "node:fs";
 
-const dataCsvs = globSync(join(artifactsRootPath, "*/data.csv"));
+if (!process.env.SCENARIO_ARTIFACTS_PREFIX?.includes("delay")) {
+  const dataCsvs = globSync(join(artifactsRootPath, "*/data.csv"));
 
-let allLines: string[] = [];
-let headerLine: string | null = null;
-for (const dataCsvPath of dataCsvs) {
-  const dirName = dataCsvPath.split("/").slice(-2, -1)[0];
-  const gatewayName = dirName.replaceAll(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
-  console.log(`Processing CSV for gateway ${gatewayName} at path ${dataCsvPath}`);
-  const csvStr = readFileSync(dataCsvPath, "utf-8");
-  const csvLines = csvStr.split("\n").filter((line) => line.trim() !== "");
-  headerLine = csvLines[0];
-  const dataLines = csvLines.slice(1).filter((line) => line.trim() !== "").map(line => `${gatewayName},${line}`);
-  allLines.push(...dataLines);
+  let allLines: string[] = [];
+  let headerLine: string | null = null;
+  for (const dataCsvPath of dataCsvs) {
+    const dirName = dataCsvPath.split("/").slice(-2, -1)[0];
+    const gatewayName = dirName.replaceAll(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
+    console.log(`Processing CSV for gateway ${gatewayName} at path ${dataCsvPath}`);
+    const csvStr = readFileSync(dataCsvPath, "utf-8");
+    const csvLines = csvStr.split("\n").filter((line) => line.trim() !== "");
+    headerLine = csvLines[0];
+    const dataLines = csvLines.slice(1).filter((line) => line.trim() !== "").map(line => `${gatewayName},${line}`);
+    allLines.push(...dataLines);
+  }
+  if (!headerLine) {
+    headerLine = "Seconds,VUs,RPS,P95_ms,Req_success_rate,Total_CPU,Total_RSS_KB";
+  }
+
+  headerLine = `Gateway,${headerLine}`;
+
+  const finalCsv = [headerLine, ...allLines].join("\n");
+  const loadMode = process.env.SCENARIO_ARTIFACTS_PREFIX?.includes("constant") ? "constant" : "stress";
+  const outFile = `${loadMode}-data.csv`;
+  writeFileSync(join(__dirname, "..", "website", outFile), finalCsv);
 }
-if (!headerLine) {
-  headerLine = "Seconds,VUs,RPS,P95_ms,Req_success_rate,Total_CPU,Total_RSS_KB";
-}
-
-headerLine = `Gateway,${headerLine}`;
-
-const finalCsv = [headerLine, ...allLines].join("\n");
-const loadMode = process.env.SCENARIO_ARTIFACTS_PREFIX?.includes("constant") ? "constant" : "stress";
-const outFile = `${loadMode}-data.csv`;
-writeFileSync(join(__dirname, "..", "website", outFile), finalCsv);
