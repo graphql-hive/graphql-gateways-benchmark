@@ -14,11 +14,10 @@ jobs:
       - name: decide on runner
         id: step1
         run: |
-          # Temporarily disable hosted runners
-          # if [ ${{ github.event_name }} == 'pull_request' ]; then
+          if [ ${{ github.event_name }} == 'pull_request' ]; then
             echo "using GitHub Actions default runner"
             echo "runner=ubuntu-22.04" >> $GITHUB_OUTPUT
-          # else
-          #   echo "using stable runner: 'benchmark-runner-1'"
-          #   echo 'runner=benchmark-runner-1' >> $GITHUB_OUTPUT
-          # fi
+          else
+            echo "using stable runner: 'benchmark-runner-1'"
+            echo 'runner=benchmark-runner-1' >> $GITHUB_OUTPUT
+          fi
