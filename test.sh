@@ -57,7 +57,8 @@ fi
 CORES="$(get_logical_cores)"
 echo "Host logical CPU cores: $CORES"
 
-if $CPU_LIMIT; then
+CPU_LIMIT="${CPU_LIMIT:-}"
+if [[ -n "$CPU_LIMIT" ]]; then
   CORES="$CPU_LIMIT"
   echo "Using CPU_LIMIT for cores: $CORES"
 fi
