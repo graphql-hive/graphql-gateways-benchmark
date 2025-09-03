@@ -34,7 +34,6 @@ jobs:
       scenarioName: constant-vus-over-time
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
-      fork: 2
       memoryLimit: 6gb
       mode: constant
 
@@ -68,7 +67,6 @@ jobs:
       scenarioName: constant-vus-subgraphs-delay
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
-      fork: 2
       memoryLimit: 6gb
       subgraphDelayRange: "40~150"
       mode: constant
@@ -103,7 +101,6 @@ jobs:
       scenarioName: constant-vus-subgraphs-delay-resources
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
-      fork: 3
       memoryLimit: 8gb
       subgraphDelayRange: "40~150"
       mode: constant
@@ -138,7 +135,6 @@ jobs:
       scenarioName: ramping-vus
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
-      fork: 3
       memoryLimit: 8gb
       mode: stress
 

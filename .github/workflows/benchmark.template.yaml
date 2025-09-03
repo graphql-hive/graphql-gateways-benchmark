@@ -22,9 +22,6 @@ on:
       cpuLimit:
         type: string
         required: true
-      fork:
-        type: string
-        required: true
       memoryLimit:
         type: string
         required: true
