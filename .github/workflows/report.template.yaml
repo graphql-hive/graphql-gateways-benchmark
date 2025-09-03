@@ -66,7 +66,9 @@ jobs:
 
       - name: Update CSV data
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' && !contains(inputs.scenarioName, 'delay')
-        run: yarn collect-data-csv
+        run: |
+          cargo run -p toolkit summary
+          cargo run -p toolkit data
         env:
           MODE: ${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping' }}
 
