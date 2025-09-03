@@ -21,8 +21,8 @@ services:
         condition: service_healthy
     volumes:
       - type: bind
-        source: federation/gateways/hive-gateway-bun/supergraph.graphql
-        target: /serve/supergraph.graphql
+        source: ${BASE_DIR:-.}/../../gateways/hive-gateway/supergraph.graphql
+        target: /gateway/supergraph.graphql
     healthcheck:
       test:
         [
