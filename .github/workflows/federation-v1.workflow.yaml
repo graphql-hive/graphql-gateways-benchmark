@@ -29,7 +29,7 @@ jobs:
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 300
+      vu: 50
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
       scenarioName: constant-vus-over-time
       runner: ${{ needs.decide-runner.outputs.runner }}
@@ -62,7 +62,7 @@ jobs:
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 300
+      vu: 50
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
       scenarioName: constant-vus-subgraphs-delay
       runner: ${{ needs.decide-runner.outputs.runner }}
@@ -96,7 +96,7 @@ jobs:
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 500
+      vu: 50
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
       scenarioName: constant-vus-subgraphs-delay-resources
       runner: ${{ needs.decide-runner.outputs.runner }}
