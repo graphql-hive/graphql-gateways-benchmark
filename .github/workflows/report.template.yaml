@@ -53,17 +53,6 @@ jobs:
           git config user.name github-actions
           git config user.email github-actions@github.com
 
-      - name: publish report (workflow_dispatch/push)
-        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
-        with:
-          add: ${{ inputs.scenarioName }}_result.md
-          message: "Update results for scenario: ${{ inputs.scenarioName }}"
-          pull: "--rebase --autostash"
-          author_email: github-actions@github.com
-          author_name: github-actions
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Update CSV data
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' && !contains(inputs.scenarioName, 'delay')
         run: |
@@ -71,6 +60,17 @@ jobs:
           cargo run -p toolkit data
         env:
           MODE: ${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping' }}
+
+      - name: publish report (workflow_dispatch/push)
+        uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
+        with:
+          add: .
+          message: "Update results for scenario: ${{ inputs.scenarioName }}"
+          pull: "--rebase --autostash"
+          author_email: github-actions@github.com
+          author_name: github-actions
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
