@@ -8,4 +8,4 @@ exec env -i LOG_LEVEL=fatal \
     GRAPHQL_METRICS_ENABLED=false \
     PROMETHEUS_ENABLED=false \
     ROUTER_CONFIG_PATH=config.json \
-    ./cosmo > /gateway_log.txt 2>&1
+    ./cosmo > ./gateway_log.txt 2>&1
