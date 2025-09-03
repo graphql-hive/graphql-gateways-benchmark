@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "generate-report": "tsx scripts/generate-report.ts",
-    "postinstall": "patch-package"
+    "postinstall": "npx patch-package"
   },
   "dependencies": {
     "vega": "6.1.2",
