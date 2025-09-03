@@ -49,7 +49,11 @@ fn data() {
             }
 
             let gateway_name = gateway.file_name().into_string().unwrap();
-            let csv = read_file(&format!("{}/data.csv", gateway.path().display()));
+            let csv = std::fs::read_to_string(&format!("{}/data.csv", gateway.path().display()));
+            if csv.is_err() {
+                continue;
+            }
+            let csv: String = csv.unwrap();
             let lines = csv.lines();
             for (index, line) in lines.enumerate() {
                 if index == 0 {

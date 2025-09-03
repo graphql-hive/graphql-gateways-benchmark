@@ -100,3 +100,4 @@ jobs:
             gateways/${{ inputs.gateway }}/k6_summary.txt
             gateways/${{ inputs.gateway }}/gateway_log.txt
             gateways/${{ inputs.gateway }}/*.png
+            gateways/${{ inputs.gateway }}/data.csv

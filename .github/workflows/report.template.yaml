@@ -54,10 +54,10 @@ jobs:
           git config user.email github-actions@github.com
 
       - name: Update CSV data
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' && !contains(inputs.scenarioName, 'delay')
         run: |
           cargo run -p toolkit summary
           cargo run -p toolkit data
+          mv data.csv website/${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping'}}-data.csv
         env:
           MODE: ${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping' }}
 
@@ -80,3 +80,4 @@ jobs:
             ${{ inputs.scenarioName }}_result.md
             ${{ inputs.scenarioName }}_report.vega.json
             ${{ inputs.scenarioName }}_report.svg
+            website/${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping'}}-data.csv
