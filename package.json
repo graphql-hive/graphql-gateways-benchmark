@@ -3,8 +3,9 @@
   "private": true,
   "scripts": {
     "generate-report": "tsx scripts/generate-report.ts",
-    "postinstall": "npx patch-package"
+    "postinstall": "npx patch-package || exit 0"
   },
+  "license": "MIT",
   "dependencies": {
     "vega": "6.1.2",
     "vega-lite": "6.2.0",
