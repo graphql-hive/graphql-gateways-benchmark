@@ -64,6 +64,12 @@ jobs:
           author_name: github-actions
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Update CSV data
+        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push' && !contains(inputs.scenarioName, 'delay')
+        run: yarn collect-data-csv
+        env:
+          MODE: ${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping' }}
+
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:

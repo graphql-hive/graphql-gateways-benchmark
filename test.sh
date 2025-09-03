@@ -38,6 +38,8 @@ GATEWAY_DIR="$SCRIPT_DIR/gateways/$GATEWAY_NAME"
 WARMUP_SECONDS="${WARMUP_SECONDS:-15}"
 MEASURE_SECONDS="${MEASURE_SECONDS:-60}"
 K6_API_ADDR="127.0.0.1:6565"
+
+EXTRA_OUT=""
 # If it is CI
 if [[ "${CI:-}" == "true" ]]; then
   EXTRA_OUT=" --out=experimental-prometheus-rw"

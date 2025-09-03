@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "generate-report": "tsx scripts/generate-report.ts",
+    "collect-data-csv": "tsx scripts/collect-data-csv.ts",
     "postinstall": "npx patch-package || exit 0"
   },
   "license": "MIT",

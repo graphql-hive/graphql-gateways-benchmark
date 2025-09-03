@@ -8,3 +8,4 @@ k6_summary.txt
 stats.json
 node_modules
 gateway_log.txt
+k6_metrics.json
