@@ -318,7 +318,7 @@ let allLines: string[] = [];
 let headerLine: string | null = null;
 for (const dataCsvPath of dataCsvs) {
   const dirName = dataCsvPath.split("/").slice(-2, -1)[0];
-  const gatewayName = dirName.replace(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
+  const gatewayName = dirName.replaceAll(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
   console.log(`Processing CSV for gateway ${gatewayName} at path ${dataCsvPath}`);
   const csvStr = readFileSync(dataCsvPath, "utf-8");
   const csvLines = csvStr.split("\n").filter((line) => line.trim() !== "");

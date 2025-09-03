@@ -72,4 +72,4 @@ jobs:
             ${{ inputs.scenarioName }}_result.md
             ${{ inputs.scenarioName }}_report.vega.json
             ${{ inputs.scenarioName }}_report.svg
-            website/${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'ramping'}}-data.csv
+            website/${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'stress'}}-data.csv
