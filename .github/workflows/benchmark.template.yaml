@@ -34,10 +34,6 @@ jobs:
     runs-on: ${{ startsWith(inputs.runner, '{') && fromJSON(inputs.runner) || inputs.runner }}
     name: ${{ inputs.gateway }}
     steps:
-      - name: adjust os
-        run: |
-          ulimit -n 10000
-
       - name: checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         
