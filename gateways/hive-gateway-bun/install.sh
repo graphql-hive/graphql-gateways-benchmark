@@ -1,1 +1,2 @@
-echo "Nothing to install"
+curl -fsSL https://bun.com/install | bash # for macOS, Linux, and WSLx
+~/.bun/bin/bun install
