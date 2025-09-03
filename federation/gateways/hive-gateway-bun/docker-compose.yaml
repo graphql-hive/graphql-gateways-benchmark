@@ -1,6 +1,6 @@
 services:
   gateway:
-    image: ghcr.io/graphql-hive/gateway:1.16.3-bun
+    image: ghcr.io/graphql-hive/gateway:1.16.5-bun
     container_name: gateway
     networks:
       - test
@@ -22,7 +22,7 @@ services:
     volumes:
       - type: bind
         source: federation/gateways/hive-gateway-bun/supergraph.graphql
-        target: /serve/supergraph.graphql
+        target: /gateway/supergraph.graphql
     healthcheck:
       test:
         [
@@ -35,7 +35,7 @@ services:
       interval: 3s
       timeout: 5s
       retries: 10
-    command: ["supergraph", "--jit"]
+    command: ["supergraph"]
     deploy:
       resources:
         limits:
