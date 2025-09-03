@@ -70,7 +70,7 @@ export function StressTestIntro(props: {
         </>
       }
       data={{
-        hive: {
+        "hive-router": {
           version: "v0.0.5",
           website: "https://github.com/graphql-hive/router",
           rps: 1726.32,
@@ -100,7 +100,7 @@ export function StressTestIntro(props: {
           mem: 201,
           reliability: 98.68,
         },
-        apollo: {
+        "apollo-router": {
           version: "v2.6.0",
           website: "https://github.com/apollographql/router",
           rps: 312.52,
@@ -141,7 +141,7 @@ export function ConstantTestIntro(props: {
         </>
       }
       data={{
-        hive: {
+        "hive-router": {
           version: "v0.0.5",
           website: "https://github.com/graphql-hive/router",
           rps: 1831.09,
@@ -171,7 +171,7 @@ export function ConstantTestIntro(props: {
           mem: 93,
           reliability: 100,
         },
-        apollo: {
+        "apollo-router": {
           version: "v2.6.0",
           website: "https://github.com/apollographql/router",
           rps: 329.84,
@@ -248,49 +248,49 @@ function Intro(props: {
               <TableHeaderCell
                 className="text-center"
                 href="#rps"
-                title="Go to RPS measurments"
+                title="Go to RPS measurements"
               >
                 RPS
               </TableHeaderCell>
               <TableHeaderCell
                 className="text-center"
                 href="#latency"
-                title="Go to latency measurments"
+                title="Go to latency measurements"
               >
                 p95
               </TableHeaderCell>
               <TableHeaderCell
                 className="text-center"
                 href="#latency"
-                title="Go to latency measurments"
+                title="Go to latency measurements"
               >
                 p99.9
               </TableHeaderCell>
               <TableHeaderCell
                 className="text-center"
                 href="#cpu"
-                title="Go to CPU measurments"
+                title="Go to CPU measurements"
               >
                 CPU (max)
               </TableHeaderCell>
               <TableHeaderCell
                 className="text-center"
                 href="#mem"
-                title="Go to Memory measurments"
+                title="Go to Memory measurements"
               >
                 MEM (max)
               </TableHeaderCell>
               <TableHeaderCell
                 className="text-center"
-                href="#cpu"
-                title="Go to Memory measurments"
+                href="#mem"
+                title="Go to Memory measurements"
               >
                 RPS per core
               </TableHeaderCell>
               <TableHeaderCell
                 className="text-center"
                 href="#reliability"
-                title="Go to Reliability measurments"
+                title="Go to Reliability measurements"
               >
                 Reliability
               </TableHeaderCell>

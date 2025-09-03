@@ -40,23 +40,23 @@ async function fetchAuditScores() {
   }> = await response.json();
 
   const results: Record<GatewayName, string> = {
-    apollo: "0.00",
+    "apollo-router": "0.00",
     cosmo: "0.00",
     grafbase: "0.00",
-    hive: "100.00",
+    "hive-router": "100.00",
   };
 
   for (const item of data) {
     const score = (item.cases.passed / item.cases.total) * 100;
 
     if (item.name === "Apollo Router") {
-      results.apollo = score.toFixed(2);
+      results["apollo-router"] = score.toFixed(2);
     } else if (item.name === "Cosmo Router") {
       results.cosmo = score.toFixed(2);
     } else if (item.name === "Grafbase Gateway") {
       results.grafbase = score.toFixed(2);
     } else if (item.name === "Hive Router") {
-      results.hive = score.toFixed(2);
+      results["hive-router"] = score.toFixed(2);
     }
   }
 
@@ -317,7 +317,7 @@ export default function App() {
                       gateway's maximum capacity.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive" /> achieves a maximum
+                      <GatewayNameLabel name="hive-router" /> achieves a maximum
                       throughput of <strong>1700 RPS</strong>, demonstrating a
                       superior capacity for handling concurrent traffic.
                     </p>
@@ -346,7 +346,7 @@ export default function App() {
                       under a constant, low load of 50 virtual users.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive" /> sustains a steady
+                      <GatewayNameLabel name="hive-router" /> sustains a steady
                       throughput of <strong>~1800 RPS</strong>, indicating very
                       low per-request overhead at everyday traffic levels.
                     </p>
@@ -364,17 +364,17 @@ export default function App() {
                     <p>
                       The other gateways settle at lower steady-state rates (
                       <GatewayNameLabel name="grafbase" /> ~460 RPS,{" "}
-                      <GatewayNameLabel name="apollo" /> ~330 RPS), suggesting a
+                      <GatewayNameLabel name="apollo-router" /> ~330 RPS), suggesting a
                       higher baseline cost per request on the same hardware.
                     </p>
                   </>
                 )
               }
             >
-              <RPSChart test={test} gateway="apollo" showLeftYAxis />
+              <RPSChart test={test} gateway="apollo-router" showLeftYAxis />
               <RPSChart test={test} gateway="cosmo" />
               <RPSChart test={test} gateway="grafbase" />
-              <RPSChart test={test} gateway="hive" showRightYAxis />
+              <RPSChart test={test} gateway="hive-router" showRightYAxis />
             </MetricChart>
 
             <MetricChart
@@ -401,7 +401,7 @@ export default function App() {
                       gray dashed line) ramps up.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive" /> consistently maintains
+                      <GatewayNameLabel name="hive-router" /> consistently maintains
                       the lowest p95 latency across the entire test, and its
                       curve remains relatively flat even as it handles a
                       significantly higher request volume (RPS). This
@@ -415,7 +415,7 @@ export default function App() {
                       and low latency profile, though at a lower throughput.
                     </p>
                     <p>
-                      In contrast, <GatewayNameLabel name="apollo" /> show
+                      In contrast, <GatewayNameLabel name="apollo-router" /> show
                       latency climbing steeply and linearly with the load,
                       suggesting their architectures struggle to maintain
                       responsiveness under the same high-concurrency stress.
@@ -429,7 +429,7 @@ export default function App() {
                 ) : (
                   <>
                     <p>
-                      <GatewayNameLabel name="hive" /> maintains the lowest
+                      <GatewayNameLabel name="hive-router" /> maintains the lowest
                       steady-state p95 with a flat profile and minimal jitter,
                       indicating very low per-request overhead at everyday
                       traffic levels.
@@ -442,7 +442,7 @@ export default function App() {
                       when the system isn't under pressure.
                     </p>
                     <p>
-                      <GatewayNameLabel name="apollo" /> settles at a noticeably
+                      <GatewayNameLabel name="apollo-router" /> settles at a noticeably
                       higher p95 baseline. While stable, the higher floor
                       implies a greater cost per request during calm traffic.
                     </p>
@@ -457,10 +457,10 @@ export default function App() {
                 )
               }
             >
-              <LatencyChart test={test} gateway="apollo" showLeftYAxis />
+              <LatencyChart test={test} gateway="apollo-router" showLeftYAxis />
               <LatencyChart test={test} gateway="cosmo" />
               <LatencyChart test={test} gateway="grafbase" />
-              <LatencyChart test={test} gateway="hive" showRightYAxis />
+              <LatencyChart test={test} gateway="hive-router" showRightYAxis />
             </MetricChart>
 
             <MetricChart
@@ -483,7 +483,7 @@ export default function App() {
                       architectural efficiency.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive" />
+                      <GatewayNameLabel name="hive-router" />
                       's and <GatewayNameLabel name="grafbase" /> are the
                       standouts, peaking at just <strong>170%</strong> and{" "}
                       <strong>136%</strong> CPU usage respectively.
@@ -495,7 +495,7 @@ export default function App() {
                     <p>
                       <GatewayNameLabel name="cosmo" /> requires moderately more
                       CPU to achieve its high throughput, while{" "}
-                      <GatewayNameLabel name="apollo" />
+                      <GatewayNameLabel name="apollo-router" />
                       's CPU consumption is the highest in the group.
                     </p>
 
@@ -511,7 +511,7 @@ export default function App() {
                       architectural efficiency.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive" /> holds a flat profile
+                      <GatewayNameLabel name="hive-router" /> holds a flat profile
                       around ~167% CPU while delivering the{" "}
                       <strong>
                         highest RPS, indicating strong performance per core and
@@ -526,7 +526,7 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="cosmo" /> and{" "}
-                      <GatewayNameLabel name="apollo" /> settle higher, around
+                      <GatewayNameLabel name="apollo-router" /> settle higher, around
                       ~265–270% CPU at this load. The curves are stable, but the
                       elevated baseline points to a higher per-request cost on
                       the same hardware.
@@ -542,10 +542,10 @@ export default function App() {
                 )
               }
             >
-              <CPUChart test={test} gateway="apollo" showLeftYAxis />
+              <CPUChart test={test} gateway="apollo-router" showLeftYAxis />
               <CPUChart test={test} gateway="cosmo" />
               <CPUChart test={test} gateway="grafbase" />
-              <CPUChart test={test} gateway="hive" showRightYAxis />
+              <CPUChart test={test} gateway="hive-router" showRightYAxis />
             </MetricChart>
 
             <MetricChart
@@ -568,7 +568,7 @@ export default function App() {
                     </p>
                     <p>
                       At just <strong>109 MB</strong> of peak memory usage,{" "}
-                      <GatewayNameLabel name="hive" /> is decisively the most
+                      <GatewayNameLabel name="hive-router" /> is decisively the most
                       memory-efficient gateway. <br />
                       Its remarkably low footprint, likely due to its Rust-based
                       architecture, makes it extremely cost-effective to run.
@@ -579,14 +579,14 @@ export default function App() {
                       memory at <strong>201 MB</strong>.{" "}
                       <GatewayNameLabel name="cosmo" /> holds around{" "}
                       <strong>380 MB</strong>.
-                      <GatewayNameLabel name="apollo" /> exhibit a significantly
+                      <GatewayNameLabel name="apollo-router" /> exhibit a significantly
                       larger memory footprint.
                     </p>
                   </>
                 ) : (
                   <>
                     <p>
-                      <GatewayNameLabel name="hive" /> maintains the smallest
+                      <GatewayNameLabel name="hive-router" /> maintains the smallest
                       steady-state footprint (<strong>~48 MB</strong>) with an
                       almost ruler-flat line, indicating tight allocation
                       control and no drift/leak behavior.
@@ -594,7 +594,7 @@ export default function App() {
                     <p>
                       <GatewayNameLabel name="grafbase" /> stabilizes around ~93
                       MB, with a steady curve-efficient, but with more overhead
-                      than <GatewayNameLabel name="hive" /> at the same load.
+                      than <GatewayNameLabel name="hive-router" /> at the same load.
                     </p>
                     <p>
                       <GatewayNameLabel name="cosmo" /> sits higher at ~119 MB,
@@ -602,7 +602,7 @@ export default function App() {
                       buffering/allocation work even when traffic is calm.
                     </p>
                     <p>
-                      <GatewayNameLabel name="apollo" /> holds the largest
+                      <GatewayNameLabel name="apollo-router" /> holds the largest
                       baseline (~192 MB) under the same conditions, reflecting a
                       heavier runtime cost.
                     </p>
@@ -610,10 +610,10 @@ export default function App() {
                 )
               }
             >
-              <MemChart test={test} gateway="apollo" showLeftYAxis />
+              <MemChart test={test} gateway="apollo-router" showLeftYAxis />
               <MemChart test={test} gateway="cosmo" />
               <MemChart test={test} gateway="grafbase" />
-              <MemChart test={test} gateway="hive" showRightYAxis />
+              <MemChart test={test} gateway="hive-router" showRightYAxis />
             </MetricChart>
 
             <MetricChart
@@ -639,7 +639,7 @@ export default function App() {
                       their performance ceiling.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive" /> and{" "}
+                      <GatewayNameLabel name="hive-router" /> and{" "}
                       <GatewayNameLabel name="cosmo" /> demonstrated exceptional
                       resilience, maintaining a{" "}
                       <strong>100% success rate</strong> throughout the entire
@@ -649,7 +649,7 @@ export default function App() {
                     </p>
 
                     <p>
-                      <GatewayNameLabel name="apollo" /> maintained a 100%
+                      <GatewayNameLabel name="apollo-router" /> maintained a 100%
                       success rate until around{" "}
                       <strong>360 virtual users</strong>, at which point its
                       success rate began to dip, indicating it was starting to
@@ -674,10 +674,10 @@ export default function App() {
                     <p>
                       All lines sit flat at 100%, indicating stable operation
                       with no dropped requests. At this traffic level,{" "}
-                      <GatewayNameLabel name="hive" />,{" "}
+                      <GatewayNameLabel name="hive-router" />,{" "}
                       <GatewayNameLabel name="cosmo" />,{" "}
                       <GatewayNameLabel name="grafbase" />, and{" "}
-                      <GatewayNameLabel name="apollo" /> each maintain a perfect
+                      <GatewayNameLabel name="apollo-router" /> each maintain a perfect
                       success rate end-to-end. Reliability isn't the
                       differentiator here - everyone passes.
                     </p>
@@ -685,10 +685,10 @@ export default function App() {
                 )
               }
             >
-              <SuccessChart test={test} gateway="apollo" showLeftYAxis />
+              <SuccessChart test={test} gateway="apollo-router" showLeftYAxis />
               <SuccessChart test={test} gateway="cosmo" />
               <SuccessChart test={test} gateway="grafbase" />
-              <SuccessChart test={test} gateway="hive" showRightYAxis />
+              <SuccessChart test={test} gateway="hive-router" showRightYAxis />
             </MetricChart>
           </div>
         </section>

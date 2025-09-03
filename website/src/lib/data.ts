@@ -136,10 +136,10 @@ function calculateDataSet(csv: string) {
       cosmoVus: p95Map[tick].cosmo!.vus,
       grafbase: p95Map[tick].grafbase!.value,
       grafbaseVus: p95Map[tick].grafbase!.vus,
-      apollo: p95Map[tick].apollo!.value,
-      apolloVus: p95Map[tick].apollo!.vus,
-      hive: p95Map[tick].hive!.value,
-      hiveVus: p95Map[tick].hive!.vus,
+      ["apollo-router"]: p95Map[tick]['apollo-router']!.value,
+      ["apollo-routerVus"]: p95Map[tick]['apollo-router']!.vus,
+      ["hive-router"]: p95Map[tick]['hive-router']!.value,
+      ["hive-routerVus"]: p95Map[tick]['hive-router']!.vus,
     });
 
     data.rps.push({
@@ -148,10 +148,10 @@ function calculateDataSet(csv: string) {
       cosmoVus: rpsMap[tick].cosmo!.vus,
       grafbase: rpsMap[tick].grafbase!.value,
       grafbaseVus: rpsMap[tick].grafbase!.vus,
-      apollo: rpsMap[tick].apollo!.value,
-      apolloVus: rpsMap[tick].apollo!.vus,
-      hive: rpsMap[tick].hive!.value,
-      hiveVus: rpsMap[tick].hive!.vus,
+      ["apollo-router"]: rpsMap[tick]['apollo-router']!.value,
+      ["apollo-routerVus"]: rpsMap[tick]['apollo-router']!.vus,
+      ["hive-router"]: rpsMap[tick]['hive-router']!.value,
+      ["hive-routerVus"]: rpsMap[tick]['hive-router']!.vus,
     });
 
     data.cpu.push({
@@ -160,10 +160,10 @@ function calculateDataSet(csv: string) {
       cosmoVus: cpuMap[tick].cosmo!.vus,
       grafbase: cpuMap[tick].grafbase!.value,
       grafbaseVus: cpuMap[tick].grafbase!.vus,
-      apollo: cpuMap[tick].apollo!.value,
-      apolloVus: cpuMap[tick].apollo!.vus,
-      hive: cpuMap[tick].hive!.value,
-      hiveVus: cpuMap[tick].hive!.vus,
+      ["apollo-router"]: cpuMap[tick]['apollo-router']!.value,
+      ["apollo-routerVus"]: cpuMap[tick]['apollo-router']!.vus,
+      ["hive-router"]: cpuMap[tick]['hive-router']!.value,
+      ["hive-routerVus"]: cpuMap[tick]['hive-router']!.vus,
     });
 
     data.mem.push({
@@ -172,10 +172,10 @@ function calculateDataSet(csv: string) {
       cosmoVus: memMap[tick].cosmo!.vus,
       grafbase: memMap[tick].grafbase!.value,
       grafbaseVus: memMap[tick].grafbase!.vus,
-      apollo: memMap[tick].apollo!.value,
-      apolloVus: memMap[tick].apollo!.vus,
-      hive: memMap[tick].hive!.value,
-      hiveVus: memMap[tick].hive!.vus,
+      ["apollo-router"]: memMap[tick]['apollo-router']!.value,
+      ["apollo-routerVus"]: memMap[tick]['apollo-router']!.vus,
+      ["hive-router"]: memMap[tick]['hive-router']!.value,
+      ["hive-routerVus"]: memMap[tick]['hive-router']!.vus,
     });
 
     data.success_rate.push({
@@ -184,10 +184,10 @@ function calculateDataSet(csv: string) {
       cosmoVus: successRateMap[tick].cosmo!.vus,
       grafbase: successRateMap[tick].grafbase!.value,
       grafbaseVus: successRateMap[tick].grafbase!.vus,
-      apollo: successRateMap[tick].apollo!.value,
-      apolloVus: successRateMap[tick].apollo!.vus,
-      hive: successRateMap[tick].hive!.value,
-      hiveVus: successRateMap[tick].hive!.vus,
+      ["apollo-router"]: successRateMap[tick]['apollo-router']!.value,
+      ["apollo-routerVus"]: successRateMap[tick]['apollo-router']!.vus,
+      ["hive-router"]: successRateMap[tick]['hive-router']!.value,
+      ["hive-routerVus"]: successRateMap[tick]['hive-router']!.vus,
     });
   }
 
@@ -204,7 +204,7 @@ function calculateDataSet(csv: string) {
   };
 }
 
-export type GatewayName = "cosmo" | "grafbase" | "apollo" | "hive";
+export type GatewayName = "cosmo" | "grafbase" | "apollo-router" | "hive-router";
 
 export function fullGatewayName(name: GatewayName) {
   if (name === "cosmo") {
@@ -215,7 +215,7 @@ export function fullGatewayName(name: GatewayName) {
     return "Grafbase Gateway";
   }
 
-  if (name === "apollo") {
+  if (name === "apollo-router") {
     return "Apollo Router";
   }
 
@@ -228,13 +228,13 @@ export interface MetricRecord {
   cosmoVus: number;
   grafbase: number;
   grafbaseVus: number;
-  apollo: number;
-  apolloVus: number;
-  hive: number;
-  hiveVus: number;
+  "apollo-router": number;
+  "apollo-routerVus": number;
+  "hive-router": number;
+  "hive-routerVus": number;
 }
 
-const allGateways: GatewayName[] = ["cosmo", "grafbase", "apollo", "hive"];
+const allGateways: GatewayName[] = ["cosmo", "grafbase", "apollo-router", "hive-router"];
 
 // Create maps to group values by tick for each metric.
 // For each tick we store an object that maps each gateway to an object containing
@@ -243,16 +243,16 @@ type GatewayMetric = { value: number; vus: number };
 type MetricMap = Record<number, Partial<Record<GatewayName, GatewayMetric>>>;
 
 export const chartConfig = {
-  hive: {
-    label: "Hive",
+  ["hive-router"]: {
+    label: "Hive Router",
     color: "#e1ff00",
   },
   cosmo: {
     label: "Cosmo",
     color: "#ea4899",
   },
-  apollo: {
-    label: "Apollo",
+  ["apollo-router"]: {
+    label: "Apollo Router",
     color: "#fc5200",
   },
   grafbase: {
