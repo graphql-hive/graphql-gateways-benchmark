@@ -22,6 +22,9 @@ on:
       cpuLimit:
         type: string
         required: true
+      fork:
+        type: string
+        required: true
       memoryLimit:
         type: string
         required: true
@@ -96,7 +99,6 @@ jobs:
           BENCH_OVER_TIME: ${{ inputs.time }}
           MEM_LIMIT: ${{ inputs.memoryLimit }}
           CPU_LIMIT: ${{ inputs.cpuLimit }}
-          GATEWAY_CPUSET: 1-${{ inputs.cpuLimit }}
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
