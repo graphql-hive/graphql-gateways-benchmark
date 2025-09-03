@@ -319,6 +319,7 @@ if (!process.env.SCENARIO_ARTIFACTS_PREFIX?.includes("delay")) {
   let headerLine: string | null = null;
   for (const dataCsvPath of dataCsvs) {
     const dirName = dataCsvPath.split("/").slice(-2, -1)[0];
+    console.log(`Found CSV at path: ${dataCsvPath} on dir ${dirName}`);
     const gatewayName = dirName.replaceAll(process.env.SCENARIO_ARTIFACTS_PREFIX!, "");
     console.log(`Processing CSV for gateway ${gatewayName} at path ${dataCsvPath}`);
     const csvStr = readFileSync(dataCsvPath, "utf-8");
