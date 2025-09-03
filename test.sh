@@ -118,11 +118,17 @@ fi
 if $HAS_SETSID; then
     start_cmd=("setsid" "${start_cmd[@]}")
 fi
-if [[ -n "${MEM_LIMIT:-}" ]] && command -v cgexec >/dev/null; then
-  cgcreate -g memory:gateway_group || true
-  cgset -r memory.limit_in_bytes="$mem_bytes" gateway_group
-  echo "Applying memory limit of $MEM_LIMIT bytes to gateway group"
-  start_cmd=("cgexec" "-g" "memory:gateway_group" "${start_cmd[@]}")
+if [[ -n "${MEM_LIMIT:-}" ]]; then
+  # Check if cgexec is available
+  if command -v cgexec >/dev/null; then
+    cgcreate -g memory:gateway_group || true
+    cgset -r memory.limit_in_bytes="$mem_bytes" gateway_group
+    echo "Applying memory limit of $MEM_LIMIT bytes to gateway group"
+    start_cmd=("cgexec" "-g" "memory:gateway_group" "${start_cmd[@]}")
+  fi
+  if ! command -v cgexec >/dev/null; then
+    echo "WARN: cgexec not found; cannot apply memory limit of $MEM_LIMIT" >&2
+  fi
 fi
 
 # Start the gateway in the background.
