@@ -36,6 +36,9 @@ async function uploadImageToCloudflare(filename: string, filePath: string) {
   }
 
   const data = await res.json();
+  const url = data.result.variants[0];
+
+  console.log(`Image ${filename} uploaded to Cloudflare: ${url}`);
   return data.result.variants[0];
 }
 
@@ -91,38 +94,32 @@ async function generateReport(artifactsRootPath: string) {
 
       let overviewImageUrl: string | null = "";
       let httpImageUrl: string | null = "";
-      let containersImageUrl: string | null = "";
+      /* let containersImageUrl: string | null = ""; */
 
       if (!CF_IMAGES_LINK || !CF_IMAGES_TOKEN) {
         console.warn(
           `Could not find CF_IMAGES_LINK or CF_IMAGES_TOKEN in env! Skipping...`
         );
       } else {
-        try {
-          const overviewImageFilePath = join(fullPath, "./overview.png");
-          const httpImageFilePath = join(fullPath, "./http.png");
-          const containersFilePath = join(fullPath, "./containers.png");
+        const overviewImageFilePath = join(fullPath, "./overview.png");
+        const httpImageFilePath = join(fullPath, "./http.png");
+        /* const containersFilePath = join(fullPath, "./containers.png"); */
 
-          [overviewImageUrl, httpImageUrl, containersImageUrl] =
-            await Promise.all([
-              uploadImageToCloudflare(
-                `${GITHUB_RUN_ID}-overview.png`,
-                overviewImageFilePath
-              ),
-              uploadImageToCloudflare(
-                `${GITHUB_RUN_ID}-http.png`,
-                httpImageFilePath
-              ),
-              uploadImageToCloudflare(
-                `${GITHUB_RUN_ID}-http.png`,
-                containersFilePath
-              ),
-            ]);
-        } catch (e) {
-          console.error(
-            `Failed to upload one of the images to Cloudflare: ${e}`
-          );
-        }
+        [overviewImageUrl, httpImageUrl, /* containersImageUrl */] =
+          await Promise.all([
+            uploadImageToCloudflare(
+              `${GITHUB_RUN_ID}-overview.png`,
+              overviewImageFilePath
+            ),
+            uploadImageToCloudflare(
+              `${GITHUB_RUN_ID}-http.png`,
+              httpImageFilePath
+            ),
+            /* uploadImageToCloudflare(
+              `${GITHUB_RUN_ID}-http.png`,
+              containersFilePath
+            ), */
+          ]);
       }
 
       const jsonSummary = JSON.parse(readFileSync(jsonSummaryFilePath, "utf8"));
@@ -135,7 +132,7 @@ async function generateReport(artifactsRootPath: string) {
         rps: Math.floor(jsonSummary.metrics.http_reqs.values.rate),
         overviewImageUrl,
         httpImageUrl,
-        containersImageUrl,
+        /* containersImageUrl, */
         vus: jsonSummary.vus,
         duration: jsonSummary.duration,
       };
@@ -283,11 +280,11 @@ async function generateReport(artifactsRootPath: string) {
               ? `<img src="${info.overviewImageUrl}" alt="Performance Overview" />`
               : "**no-image-available**",
             NEWLINE,
-            "**Subgraphs Overview**",
+/*             "**Subgraphs Overview**",
             NEWLINE,
             info.containersImageUrl
               ? `<img src="${info.containersImageUrl}" alt="Subgraphs Overview" />`
-              : "**no-image-available**",
+              : "**no-image-available**", */
             NEWLINE,
             "**HTTP Overview**",
             NEWLINE,
