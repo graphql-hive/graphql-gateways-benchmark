@@ -121,6 +121,7 @@ fi
 if [[ -n "${MEM_LIMIT:-}" ]] && command -v cgexec >/dev/null; then
   cgcreate -g memory:gateway_group || true
   cgset -r memory.limit_in_bytes="$mem_bytes" gateway_group
+  echo "Applying memory limit of $MEM_LIMIT bytes to gateway group"
   start_cmd=("cgexec" "-g" "memory:gateway_group" "${start_cmd[@]}")
 fi
 
