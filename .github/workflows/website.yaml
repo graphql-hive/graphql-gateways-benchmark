@@ -17,10 +17,8 @@ jobs:
         with:
           node-version: 22.18
       - name: build website
-        run: |
-          yarn install
-          cd website
-          yarn build
+        working-directory: website
+        run: npm install & npm run build
       - name: Deploy
         uses: cloudflare/wrangler-action@v3.14.1
         with:

@@ -18,13 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         directory:
-          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
           - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
@@ -51,13 +49,11 @@ jobs:
       fail-fast: false
       matrix:
         directory:
-          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
           - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
@@ -85,13 +81,11 @@ jobs:
       fail-fast: false
       matrix:
         directory:
-          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
           - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
@@ -119,13 +113,11 @@ jobs:
       fail-fast: false
       matrix:
         directory:
-          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
           - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:

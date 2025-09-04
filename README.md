@@ -1,7 +1,7 @@
 # GraphQL Federation Gateways Benchmark
 
-> 📊 **Live Results Available Here:**  
-> 👉 [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance)  
+> 📊 **Live Results Available Here:**
+> 👉 [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance)
 
 This project contains a suite of tools to benchmark and compare the performance of different GraphQL federation gateways.
 
@@ -64,7 +64,7 @@ The benchmark process is orchestrated by a `Makefile` and a series of bash scrip
 
 The benchmark uses Unix-specific tools and commands that are not available on Windows, including:
 - Process monitoring utilities (`taskset`, `setsid`)
-- CPU core detection commands (`nproc`, `sysctl`) 
+- CPU core detection commands (`nproc`, `sysctl`)
 - Shell scripts with Unix-specific functionality
 
 **CPU Pinning Behavior**: If `taskset` and `setsid` are not available on your system, the benchmark will still run but processes will not be pinned to specific CPU cores. In this case, both k6 (load generator) and the gateway processes will run on all available cores, which may result in less consistent performance measurements due to CPU contention and context switching.
@@ -91,8 +91,8 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
         ```bash
         make test gateway=<gateway_name> mode=<constant|stress>
         ```
-        Replace `<gateway_name>` with one of: `apollo-router`, `apollo-gateway`, `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-bun`, `mercurius` or `hive-router`.
-        
+        Replace `<gateway_name>` with one of: `apollo-router`,  `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-bun`, or `hive-router`.
+
         Examples:
         ```bash
         make test gateway=apollo-router mode=constant
@@ -104,7 +104,7 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
         ```bash
         make test-all mode=<constant|stress>
         ```
-        
+
         Examples:
         ```bash
         make test-all mode=constant
@@ -129,8 +129,8 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
     ```
 
      ---
-    🌐 **Want the full, up-to-date benchmark results (with all gateways compared)?**  
-    Check them out here: [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance)  
+    🌐 **Want the full, up-to-date benchmark results (with all gateways compared)?**
+    Check them out here: [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance)
 
 ## Testing Modes
 
