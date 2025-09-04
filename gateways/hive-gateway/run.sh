@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-NODE_ENV=production npm start > ./gateway_log.txt 2>&1
+FORK=2 NODE_ENV=production npm start > ./gateway_log.txt 2>&1
