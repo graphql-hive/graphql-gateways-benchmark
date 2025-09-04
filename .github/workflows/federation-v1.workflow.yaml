@@ -18,6 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         directory:
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
@@ -49,6 +50,7 @@ jobs:
       fail-fast: false
       matrix:
         directory:
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
@@ -81,6 +83,7 @@ jobs:
       fail-fast: false
       matrix:
         directory:
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
@@ -113,6 +116,7 @@ jobs:
       fail-fast: false
       matrix:
         directory:
+          - apollo-gateway
           - apollo-router
           - hive-gateway
           - hive-gateway-bun

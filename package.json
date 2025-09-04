@@ -3,7 +3,6 @@
   "private": true,
   "scripts": {
     "generate-report": "tsx scripts/generate-report.ts",
-    "collect-data-csv": "tsx scripts/collect-data-csv.ts",
     "postinstall": "npx patch-package || exit 0"
   },
   "license": "MIT",
@@ -19,5 +18,10 @@
   },
   "devDependencies": {
     "@types/node": "22.18.1"
-  }
+  },
+  "workspaces": [
+    "gateways/*",
+    "website"
+  ],
+  "packageManager": "npm@11.3.0"
 }
