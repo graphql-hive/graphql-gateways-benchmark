@@ -8,44 +8,32 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  subgraphs:
-    uses: ./.github/workflows/docker-bake.template.yaml
-    with:
-      dir: ./federation/subgraphs
-      hcl: docker.hcl
-      target: subgraphs
-
   decide-runner:
-    needs: subgraphs
     uses: ./.github/workflows/decide-runner.template.yaml
 
   constant-vus-over-time:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 300
+      vu: 50
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-over-time
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
-      fork: 2
       memoryLimit: 6gb
+      mode: constant
 
   constant-vus-over-time-report:
     needs: constant-vus-over-time
@@ -53,37 +41,31 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-over-time
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
 
   constant-vus-subgraphs-delay:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 300
+      vu: 50
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 3
-      fork: 2
       memoryLimit: 6gb
-      subgraphDelayRange: "40~150"
+      subgraphDelay: 50
+      mode: constant
 
   constant-vus-subgraphs-delay-report:
     needs: constant-vus-subgraphs-delay
@@ -91,37 +73,31 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-subgraphs-delay
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
 
   constant-vus-subgraphs-delay-resources:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 500
+      vu: 50
       time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
       scenarioName: constant-vus-subgraphs-delay-resources
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
-      fork: 3
       memoryLimit: 8gb
-      subgraphDelayRange: "40~150"
+      subgraphDelay: 50
+      mode: constant
 
   constant-vus-subgraphs-delay-resources-report:
     needs: constant-vus-subgraphs-delay-resources
@@ -129,36 +105,30 @@ jobs:
     secrets: inherit
     with:
       scenarioName: constant-vus-subgraphs-delay-resources
-      baseDir: federation
-      scenarioDir: constant-vus-over-time
 
   ramping-vus:
     needs:
       - decide-runner
-      - subgraphs
     strategy:
       fail-fast: false
       matrix:
         directory:
-          - apollo-server
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-router
           - cosmo
-          - mercurius
           - grafbase
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
-      vu: 2000
+      vu: 500
       time: 60s
-      baseDir: federation
-      scenarioDir: ramping-vus
       scenarioName: ramping-vus
       runner: ${{ needs.decide-runner.outputs.runner }}
       cpuLimit: 4
-      fork: 3
       memoryLimit: 8gb
+      mode: stress
 
   ramping-vus-report:
     needs: ramping-vus
@@ -166,5 +136,3 @@ jobs:
     secrets: inherit
     with:
       scenarioName: ramping-vus
-      scenarioDir: ramping-vus
-      baseDir: federation

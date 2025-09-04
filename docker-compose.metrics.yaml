@@ -32,25 +32,3 @@ services:
       - ./grafana:/etc/grafana/provisioning/
     logging:
       driver: none
-
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:v0.52.1
-    ports:
-      - 8080:8080
-    volumes:
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - /etc/machine-id:/etc/machine-id:ro
-      - /var/lib/dbus/machine-id:/var/lib/dbus/machine-id:ro
-    networks:
-      - test
-    restart: unless-stopped
-    container_name: cadvisor
-    command: --enable_metrics=cpu,cpuLoad,sched,process,resctrl,memory,cpuset,advtcp,network,tcp,perf_event
-    privileged: true
-    devices:
-      - /dev/kmsg:/dev/kmsg
-    logging:
-      driver: none

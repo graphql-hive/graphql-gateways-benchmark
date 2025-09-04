@@ -1,0 +1,23 @@
+{
+  "name": "gateways-benchmark",
+  "private": true,
+  "scripts": {
+    "generate-report": "tsx scripts/generate-report.ts",
+    "collect-data-csv": "tsx scripts/collect-data-csv.ts",
+    "postinstall": "npx patch-package || exit 0"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "vega": "6.1.2",
+    "vega-lite": "6.3.0",
+    "tablemark": "3.1.0",
+    "tsx": "4.20.5",
+    "typescript": "5.9.2",
+    "graphql": "16.11.0",
+    "patch-package": "8.0.0",
+    "capture-website-cli": "4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "22.17.2"
+  }
+}

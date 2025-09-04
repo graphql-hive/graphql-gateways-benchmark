@@ -1,88 +1,139 @@
-# GraphQL Gateways Benchmark
+# GraphQL Federation Gateways Benchmark
 
-This repository is a collection is different scenarios and tests performed on different implementations of GraphQL gateways. 
+> 📊 **Live Results Available Here:**
+> 👉 [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance)
 
-This goals of this repo:
+This project contains a suite of tools to benchmark and compare the performance of different GraphQL federation gateways.
 
-1. **Provide a transparent, accurate and descriptive benchmark testing for different tools:**
+## What This Benchmark Measures
 
-    ➡️ All tests are running in Docker containers, with the same configuration.
+This benchmark evaluates GraphQL federation gateways across multiple performance dimensions:
 
-    ➡️ During the test, tools like [cadvisor](https://github.com/google/cadvisor) are monitoring stats.
+- **Throughput (RPS)**: Requests per second handled by each gateway
+- **Latency**: Response times including P95 and P99.9 percentiles
+- **Resource Usage**: Maximum CPU and memory consumption during load
+- **Reliability**: Success rate under different load conditions
 
-    ➡️ Promethues and Grafana are stores results and stats for every run, and we export and embed it as PNG.
+The benchmark supports two testing modes:
+- **Constant Load**: Steady traffic with 50 virtual users to measure baseline efficiency
+- **Stress Testing**: Gradually increasing load to find breaking points and maximum capacity
 
-    ➡️ Every scenario have a different report, based on what it measures.
+## Overview
 
-    ➡️ We are using a dedicated GitHub Actions runners, with `concurrency=1` to make sure tests are running as standalone. 
+The benchmark process is orchestrated by a `Makefile` and a series of bash scripts that coordinate multiple tools. For each gateway defined in the `gateways/` directory, the process is as follows:
 
-2. **Always be up to date:**
+### Tools and Scripts
 
-    ➡️ This allows tools to improve over time.
+- **`Makefile`**: Provides convenient commands (`install`, `run-subgraphs`, `test`, `test-all`) that orchestrate the entire benchmarking workflow
+- **`test.sh`**: Main test orchestration script that manages gateway lifecycle, CPU pinning, and resource monitoring
+- **`monitor.sh`**: Continuous monitoring script that tracks CPU and memory usage of gateway processes and collects k6 performance metrics via REST API
+- **`k6.js`**: Load testing script that defines the GraphQL queries and load patterns (constant or stress testing modes)
+- **`toolkit`**: Rust-based CLI utility for processing raw data and generating reports
 
-    ➡️ All code in the repository is open and can be changed by the community. 
+### Benchmark Process
 
-    ➡️ Scenarios are executed for every PR, and reports are generated automatically per scenario.
+1.  **Gateway Setup**: The `test.sh` script starts the gateway server using `setsid` for process group management and optionally pins it to specific CPU cores using `taskset`
+2.  **Warmup Phase**: A brief warmup period with constant load to stabilize the gateway before measurement begins
+3.  **Monitoring**: The `monitor.sh` script continuously tracks:
+     - CPU and memory usage of the gateway process group
+     - k6 performance metrics (VUs, RPS, P95 latency, success rate) via k6's REST API
+     - All data is logged to `data.csv` with timestamps
+4.  **Load Testing**: The `k6` tool executes the specified test mode (constant or stress) while monitoring continues, saving detailed results to `k6_summary.json`
+5.  **Data Processing**: The `toolkit` utility processes the raw monitoring data (`data.csv`) and k6 results (`k6_summary.json`) to generate a unified `stats.json` with key metrics
+6.  **Report Generation**: The `toolkit` provides summary views aggregating results across all tested gateways into comparative tables
 
-    ➡️ [Renovate](https://github.com/renovatebot/renovate) keeps all dependencies up-to-date.
+## Project Structure
 
-3. **Various scenarios**
+- `gateways/`: Contains subdirectories for each gateway to be benchmarked. Each gateway needs an `install.sh` to set up dependencies and a `run.sh` to start the server.
+- `toolkit/`: A Rust crate with a command-line tool to process and summarize benchmark results.
+- `subgraphs/`: Contains the Rust source for the GraphQL subgraphs used for testing.
+- `k6.js`: The k6 script for load testing.
+- `monitor.sh`: Script to monitor CPU and memory usage of a process.
+- `test.sh`: Script to run the benchmark for a single gateway.
+- `Makefile`: Provides convenience commands to run the benchmarks.
 
-    ➡️ We are trying to create real-life scenarios based on [our experience and our customers](https://the-guild.dev). 
+## Prerequisites
 
-    ➡️ Each scenario has differnt setup and measure different stats.
+- [Rust](https://www.rust-lang.org/tools/install)
+- [k6](https://k6.io/docs/getting-started/installation/)
+- A running instance of the subgraphs.
 
-# Scenarios
+## System Requirements
 
-## `fed-constant-vus-over-time`
+**This benchmark only works on macOS and Linux.** Windows is not supported.
 
-[Latest Results](./federation/scenarios/constant-vus-over-time/README.md)
+The benchmark uses Unix-specific tools and commands that are not available on Windows, including:
+- Process monitoring utilities (`taskset`, `setsid`)
+- CPU core detection commands (`nproc`, `sysctl`)
+- Shell scripts with Unix-specific functionality
 
-This scenario runs the following:
+**CPU Pinning Behavior**: If `taskset` and `setsid` are not available on your system, the benchmark will still run but processes will not be pinned to specific CPU cores. In this case, both k6 (load generator) and the gateway processes will run on all available cores, which may result in less consistent performance measurements due to CPU contention and context switching.
 
-1. 4 GraphQL subgraphs in dedicated services 
-2. A GraphQL gateway compatible with the Apollo Federation spec
-3. Constant rate of VUs over fixed time span
+## Usage
 
-This measures the following:
+1.  **Install Gateway Dependencies**:
+    This will run the `install.sh` script for each gateway.
+    ```bash
+    make install
+    ```
 
-1. RPS (requests per second) rate 
-2. Request duration (average, p95)
-3. Request failures (count)
-4. CPU usage during the entire execution
-5. RAM usage during the entire execution
-6. HTTP layer timings
+2.  **Run the Subgraphs**:
+    The subgraphs need to be running for the gateways to connect to them.
+    ```bash
+    make run-subgraphs
+    ```
+    This command will block, so run it in a separate terminal.
 
-> This scenario uses Federation spec with all gateways that supports this kind of specification (not all gateways supports v2 spec).
+3.  **Run Benchmarks**:
+    You can test a single gateway or all of them. You must specify a testing mode: `constant` or `stress`.
 
-## `fed-constant-vus-subgraphs-delay`
+    *   **Test a single gateway:**
+        ```bash
+        make test gateway=<gateway_name> mode=<constant|stress>
+        ```
+        Replace `<gateway_name>` with one of: `apollo-router`,  `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-bun`, or `hive-router`.
 
-[Latest Results](./federation/scenarios/constant-vus-subgraphs-delay/README.md)
+        Examples:
+        ```bash
+        make test gateway=apollo-router mode=constant
+        make test gateway=hive-router mode=stress
+        ```
 
-This scenario runs the same flow as `fed-constant-vus-over-time` but with an intentional delay on each upstream Subgraph. This creates more stress and increases memory in the server due to the more inflight requests. 
+    *   **Test all gateways:**
+        This will run the test for every gateway in the `gateways` directory and then print a summary table.
+        ```bash
+        make test-all mode=<constant|stress>
+        ```
 
-## `fed-constant-vus-subgraphs-delay-resources`
+        Examples:
+        ```bash
+        make test-all mode=constant
+        make test-all mode=stress
+        ```
 
-[Latest Results](./federation/scenarios/constant-vus-subgraphs-delay-resources/README.md)
+4.  **View Summary Manually**:
+    If you have already run the tests and just want to see the summary table again:
+    ```bash
+    cargo run -p toolkit summary
+    ```
 
-This scenario runs the same flow as `fed-constant-vus-subgraphs-delay` but with more resources (CPU and RAM) allocated for the gateway.
+    The summary output will look something like this:
 
-## `fed-ramping-vus`
+    ```
+    | Gateway    | RPS     | P99 (ms)   | P95 (ms)   | Count   | CPU (max %) | MEM (max MB) | Success Rate (%) |
+    | ---------- | ------- | ---------- | ---------- | ------- | ----------- | ------------ | ---------------- |
+    | hive-router       | 1826.91 | 78.56      | 48.34      | 109861  | 166.00      | 53           | 100.00           |
+    | cosmo      | 570.79  | 348.17     | 128.25     | 34327   | 263.00      | 119          | 100.00           |
+    | grafbase   | 451.24  | 400.35     | 139.79     | 27148   | 136.00      | 94           | 100.00           |
+    | apollo-router     | 317.45  | 495.61     | 201.34     | 19098   | 273.00      | 193          | 100.00           |
+    ```
 
-[Latest Results](./federation/scenarios/ramping-vus/README.md)
+     ---
+    🌐 **Want the full, up-to-date benchmark results (with all gateways compared)?**
+    Check them out here: [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance)
 
-This scenario runs the following:
+## Testing Modes
 
-1. 4 GraphQL subgraphs in dedicated services 
-2. A GraphQL gateway compatible with the Apollo Federation spec
-3. Gradually ramping VUs to a high number, to demo a stress scenario
+- **Constant Mode** (`mode=constant`): Maintains steady traffic with 50 virtual users for 60 seconds to measure baseline performance and efficiency under normal load conditions.
 
-This measures the following:
-1. RPS (requests per second) rate 
-2. Request duration (average, med, max, p95)
-3. Request failures (count)
-4. CPU usage during the entire execution
-5. RAM usage during the entire execution
-6. HTTP layer timings
-
-> This scenario uses Federation spec with all gateways that supports this kind of specification (not all gateways supports v2 spec).
+- **Stress Mode** (`mode=stress`): Gradually increases load to find the breaking point of each gateway, helping identify maximum capacity and reliability under pressure.

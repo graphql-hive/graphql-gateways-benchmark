@@ -1,13 +1,7 @@
 on:
   workflow_call:
     inputs:
-      baseDir:
-        type: string
-        required: true
       scenarioName:
-        type: string
-        required: true
-      scenarioDir:
         type: string
         required: true
 
@@ -26,7 +20,6 @@ jobs:
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5
         with:
           path: artifacts
-          pattern: federation*
 
       - name: setup node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
@@ -34,15 +27,13 @@ jobs:
           node-version: 24
 
       - name: install dependencies
-        run: yarn install
-        working-directory: ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}
+        run: npm i
 
       - name: generate report
-        run: yarn generate-report ${{ steps.download.outputs.download-path }}
-        working-directory: ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}
+        run: npm run generate-report ${{ steps.download.outputs.download-path }}
         env:
-          SCENARIO_ARTIFACTS_PREFIX: ${{ inputs.baseDir }}_${{ inputs.scenarioName }}_
-          SCENARIO_TITLE: ${{ inputs.baseDir }}/${{ inputs.scenarioName }}
+          SCENARIO_ARTIFACTS_PREFIX: ${{ inputs.scenarioName }}_
+          SCENARIO_TITLE: ${{ inputs.scenarioName }}
           CF_IMAGES_LINK: ${{ secrets.CF_IMAGES_LINK }}
           CF_IMAGES_TOKEN: ${{ secrets.CF_IMAGES_TOKEN }}
 
@@ -51,17 +42,12 @@ jobs:
         if: github.event_name == 'pull_request'
         with:
           header: ${{ inputs.scenarioName }}
-          path: ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}/result.md
+          path: result.md
         env:
           GITHUB_TOKEN: ${{ secrets.githubToken }}
 
       - name: update summary
-        run: cat ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}/result.md >> $GITHUB_STEP_SUMMARY
-
-      - name: copy report (workflow_dispatch/push)
-        if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
-        run: |
-          cp ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}/result.md ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioName }}/README.md
+        run: cat result.md >> $GITHUB_STEP_SUMMARY && mv result.md ${{ inputs.scenarioName }}_result.md
 
       - run: |
           git config user.name github-actions
@@ -71,7 +57,7 @@ jobs:
         uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         with:
-          add: ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioName }}/README.md
+          add: .
           message: "Update results for scenario: ${{ inputs.scenarioName }}"
           pull: "--rebase --autostash"
           author_email: github-actions@github.com
@@ -81,8 +67,9 @@ jobs:
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: ${{ inputs.baseDir }}-${{ inputs.scenarioName }}-report
+          name: ${{ inputs.scenarioName }}-report
           path: |
-            ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}/result.md
-            ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}/report.vega.json
-            ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}/report.svg
+            ${{ inputs.scenarioName }}_result.md
+            ${{ inputs.scenarioName }}_report.vega.json
+            ${{ inputs.scenarioName }}_report.svg
+            website/${{ contains(inputs.scenarioName, 'constant') && 'constant' || 'stress'}}-data.csv

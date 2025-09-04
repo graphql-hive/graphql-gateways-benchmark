@@ -1,0 +1,7 @@
+[workspace]
+members = [
+  "toolkit",
+  "subgraphs",
+]
+resolver = "2"
+default-members = ["subgraphs"]

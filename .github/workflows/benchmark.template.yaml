@@ -1,16 +1,13 @@
 on:
   workflow_call:
     inputs:
-      baseDir:
+      scenarioName:
         type: string
         required: true
       runner:
         type: string
         required: true
-      scenarioDir:
-        type: string
-        required: true
-      scenarioName:
+      mode:
         type: string
         required: true
       gateway:
@@ -25,34 +22,49 @@ on:
       cpuLimit:
         type: string
         required: true
-      fork:
-        type: string
-        required: true
       memoryLimit:
         type: string
         required: true
-      subgraphDelayRange:
-        type: string
-        default: ""
+      subgraphDelay:
+        type: number
+        default: 0
 
 jobs:
   test:
     runs-on: ${{ startsWith(inputs.runner, '{') && fromJSON(inputs.runner) || inputs.runner }}
     name: ${{ inputs.gateway }}
     steps:
-      - name: adjust os
-        run: |
-          ulimit -n 10000
-
       - name: checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
+        
+      - name: setup rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
 
-      - name: Setup K6
+      - uses: Swatinem/rust-cache@v2
+        
+      - name: run subgraphs
         run: |
-          sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
-          echo "deb https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install k6=0.49.0
+          make run-subgraphs &
+        env:
+          SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelay }}
+
+      - uses: grafana/setup-k6-action@v1
+
+      - name: install
+        run: ./install.sh
+        working-directory: gateways/${{ inputs.gateway }}
+
+      - name: configure eqemu
+        uses: docker/setup-qemu-action@29109295f81e9208d7d86ff1c6c12d2833863392 # v3
+        with:
+          platforms: 'linux/arm64,linux/amd64'
+
+      - name: configure docker buildx
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
 
       - name: login to docker registry
         uses: docker/login-action@184bdaa0721073962dff0199f1fb9940f07167d1 # v3
@@ -61,29 +73,32 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: prepare containers and run benchmark (${{ inputs.time }})
-        timeout-minutes: 20
-        working-directory: ${{ inputs.baseDir }}/scenarios/${{ inputs.scenarioDir }}
-        run: ./run.sh ${{ inputs.gateway }}
+      - name: Run Metrics Container
+        run: |
+          docker compose -f docker-compose.metrics.yaml up -d --wait --force-recreate --build
+
+      - name: wait for subgraphs
+        uses: iFaxity/wait-on-action@main
+        with:
+          resource: http://localhost:4200/health
+
+      - name: run benchmark (${{ inputs.time }})
+        timeout-minutes: 600
+        run: make test gateway=${{ inputs.gateway }} mode=${{ inputs.mode }}
         env:
-          ACCOUNTS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          INVENTORY_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          PRODUCTS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          REVIEWS_SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelayRange }}
-          DOCKER_REGISTRY: ghcr.io/${{ github.repository }}/
-          DOCKER_TAG: ":${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}"
           BENCH_VUS: ${{ inputs.vu }}
           BENCH_OVER_TIME: ${{ inputs.time }}
           MEM_LIMIT: ${{ inputs.memoryLimit }}
           CPU_LIMIT: ${{ inputs.cpuLimit }}
-          FORK: ${{ inputs.fork }}
 
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
-          name: ${{ inputs.baseDir }}_${{ inputs.scenarioName }}_${{ inputs.gateway }}
+          name: ${{ inputs.scenarioName }}_${{ inputs.gateway }}
           path: |
-            ${{ inputs.baseDir }}/gateways/${{ inputs.gateway }}/k6_summary.json
-            ${{ inputs.baseDir }}/gateways/${{ inputs.gateway }}/k6_summary.txt
-            ${{ inputs.baseDir }}/gateways/${{ inputs.gateway }}/gateway_log.txt
-            ${{ inputs.baseDir }}/gateways/${{ inputs.gateway }}/*.png
+            gateways/${{ inputs.gateway }}/k6_summary.json
+            gateways/${{ inputs.gateway }}/k6_summary.txt
+            gateways/${{ inputs.gateway }}/gateway_log.txt
+            gateways/${{ inputs.gateway }}/*.png
+            gateways/${{ inputs.gateway }}/data.csv
+            gateways/${{ inputs.gateway }}/stats.json
