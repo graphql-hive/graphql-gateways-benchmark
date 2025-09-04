@@ -54,7 +54,7 @@ jobs:
         uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9
         if: github.event_name == 'workflow_dispatch' || github.event_name == 'push'
         with:
-          add: .
+          add: ${{ inputs.scenarioName }}_result.md${{ contains(inputs.scenarioName, 'delay') && '' || (contains(inputs.scenarioName, 'constant') && ' website/constant-data.csv' || ' website/stress-data.csv') }}
           message: "Update results for scenario: ${{ inputs.scenarioName }}"
           pull: "--rebase --autostash"
           author_email: github-actions@github.com
