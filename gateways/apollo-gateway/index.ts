@@ -6,9 +6,9 @@ import cluster from "cluster";
 import { availableParallelism } from "os";
 
 async function main() {
-  const forkCount = process.env.FORK
+  const forkCount = (process.env.FORK
     ? parseInt(process.env.FORK)
-    : availableParallelism();
+    : availableParallelism()) - 1;
   if (cluster.isPrimary && forkCount) {
     console.log(`Forking ${forkCount} workers...`);
     for (let i = 0; i < forkCount; i++) {
