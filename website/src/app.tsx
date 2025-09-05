@@ -323,9 +323,9 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="grafbase" /> follows around
-                      <strong>~1550 RPS</strong>, and
-                      <GatewayNameLabel name="cosmo" /> peaks around
-                      <strong>~680–690 RPS</strong>.
+                      <strong> ~1550 RPS</strong>, and
+                      {" "}<GatewayNameLabel name="cosmo" /> peaks around
+                      <strong> ~680–690 RPS</strong>.
                     </p>
                     <p>
                       It's important to correlate this flattening of the curve
@@ -353,9 +353,9 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="grafbase" /> sits around
-                      <strong>~1500–1600 RPS</strong>, while
-                      <GatewayNameLabel name="cosmo" /> holds around
-                      <strong>~680–690 RPS</strong>.
+                      {" "}<strong>~1500–1600 RPS</strong>, while
+                      {" "}<GatewayNameLabel name="cosmo" /> holds around
+                      {" "}<strong>~680–690 RPS</strong>.
                     </p>
                     <p>
                       At this traffic level, the goal is stability rather than
@@ -365,7 +365,7 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="apollo-router" /> settles near
-                      <strong>~360–365 RPS</strong>, implying a higher baseline
+                      <strong> ~360–365 RPS</strong>, implying a higher baseline
                       cost per request on the same hardware.
                     </p>
                   </>
@@ -485,7 +485,7 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="hive-router" /> and
-                      <GatewayNameLabel name="grafbase" /> are the standouts,
+                      {" "}<GatewayNameLabel name="grafbase" /> are the standouts,
                       peaking around <strong>150–170%</strong> CPU while delivering
                       industry-leading throughput.
                       <br />
@@ -496,7 +496,7 @@ export default function App() {
                     <p>
                       <GatewayNameLabel name="cosmo" /> climbs to ~240% CPU as it
                       reaches ~680–690 RPS, and
-                      <GatewayNameLabel name="apollo-router" /> reaches ~230–240%
+                      {" "}<GatewayNameLabel name="apollo-router" /> reaches ~230–240%
                       as it approaches ~360–370 RPS.
                     </p>
 
@@ -575,10 +575,10 @@ export default function App() {
 
                     <p>
                       <GatewayNameLabel name="grafbase" /> is also lean at
-                      <strong>~150–160 MB</strong> max. {" "}
-                      <GatewayNameLabel name="cosmo" /> peaks around
-                      <strong>~370 MB</strong>, while
-                      <GatewayNameLabel name="apollo-router" /> grows to
+                      {" "}<strong>~150–160 MB</strong> max.
+                      {" "}<GatewayNameLabel name="cosmo" /> peaks around
+                      {" "}<strong>~370 MB</strong>, while
+                      {" "}<GatewayNameLabel name="apollo-router" /> grows to
                       <strong>~750 MB</strong>.
                     </p>
                   </>
@@ -639,10 +639,10 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="hive-router" /> and
-                      <GatewayNameLabel name="grafbase" /> maintained a
-                      <strong>100% success rate</strong> throughout the entire
-                      test, even when fully saturated. They handled overload by
-                      increasing latency, but never dropped a request.
+                      {" "}<GatewayNameLabel name="grafbase" /> maintained a
+                      {" "}<strong>100% success rate</strong> throughout the entire
+                      {" "}test, even when fully saturated. They handled overload by
+                      {" "}increasing latency, but never dropped a request.
                     </p>
 
                     <p>
