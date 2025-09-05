@@ -32,7 +32,8 @@ async function uploadImageToCloudflare(filename: string, filePath: string) {
   console.log(`Got a response from cloudflare (status=${res.status})`);
 
   if (!res.ok) {
-    throw new Error(`Failed to upload image to Cloudflare: ${res.statusText}`);
+    console.error(`Failed to upload image to Cloudflare: ${res.statusText}`);
+    return null;
   }
 
   const data = await res.json();
