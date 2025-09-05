@@ -14,6 +14,10 @@ const {
 } = process.env;
 
 async function uploadImageToCloudflare(filename: string, filePath: string) {
+  if (!CF_IMAGES_LINK) {
+    console.warn("CF_IMAGES_LINK is not set, skipping image upload");
+    return null;
+  }
   console.log("Uploading image to cloudflare");
   const buffer = readFileSync(filePath);
   const blob = new Blob([buffer], { type: "image/png" });
