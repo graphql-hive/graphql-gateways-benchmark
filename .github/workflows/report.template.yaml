@@ -9,6 +9,7 @@ jobs:
   report:
     runs-on: ubuntu-24.04
     name: report
+    permissions: write-all
     steps:
       - name: checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
@@ -41,7 +42,7 @@ jobs:
           header: ${{ inputs.scenarioName }}
           path: result.md
         env:
-          GITHUB_TOKEN: ${{ secrets.githubToken }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: update summary
         run: cat result.md >> $GITHUB_STEP_SUMMARY && mv result.md ${{ inputs.scenarioName }}_result.md
