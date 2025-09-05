@@ -46,13 +46,13 @@ jobs:
           node-version-file: .node-version
 
       - name: setup rust
-        uses: actions-rs/toolchain@v1
+        uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1
         with:
           profile: minimal
           toolchain: stable
           override: true
 
-      - uses: Swatinem/rust-cache@v2
+      - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2
         
       - name: run subgraphs
         run: |
@@ -60,7 +60,7 @@ jobs:
         env:
           SUBGRAPH_DELAY_MS: ${{ inputs.subgraphDelay }}
 
-      - uses: grafana/setup-k6-action@v1
+      - uses: grafana/setup-k6-action@ffe7d7290dfa715e48c2ccc924d068444c94bde2 # v1
 
       - name: install
         run: ./install.sh
