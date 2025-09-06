@@ -91,7 +91,7 @@ export function StressTestIntro(props: {
           reliability: 100.0,
         },
         grafbase: {
-          version: "v0.48.1",
+          version: "v0.49.0",
           website: "https://github.com/grafbase/grafbase",
           rps: 1554.2,
           p95: 339.2,
@@ -162,7 +162,7 @@ export function ConstantTestIntro(props: {
           reliability: 100,
         },
         grafbase: {
-          version: "v0.48.1",
+          version: "v0.49.0",
           website: "https://github.com/grafbase/grafbase",
           rps: 1624.1,
           p95: 53.4,
