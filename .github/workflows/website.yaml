@@ -1,28 +1,37 @@
+name: website
+
 on:
-  workflow_dispatch: {}
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
-  deploy:
+  deployment:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-    name: Deploy to Cloudflare Pages
     steps:
       - name: checkout
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - name: Set up env
-        uses: the-guild-org/shared-config/setup@v1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v4
+
+      - uses: the-guild-org/shared-config/setup@v1
+        name: set up env
         with:
           node-version-file: .node-version
-      - name: build website
-        working-directory: website
-        run: npm run build
-      - name: Deploy
-        uses: cloudflare/wrangler-action@da0e0dfe58b7a431659754fdf3f186c529afbe65 # v3.14.1
+
+      - uses: the-guild-org/shared-config/website-cf@v1
+        name: build and deploy website
+        env:
+          NEXT_BASE_PATH: ${{ github.event.pull_request.number && '/' || '/graphql/hive/federation-gateway-performance/' }}
+          SITE_URL:
+            ${{ github.event.pull_request.number && '' || 'https://the-guild.dev/graphql/hive/federation-gateway-performance' }}
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: pages deploy
-          gitHubToken: ${{ secrets.GITHUB_TOKEN }}
-          workingDirectory: website
+          cloudflareAccountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          cloudflareApiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          projectName: federation-gateway-benchmark
+          prId: ${{ github.event.pull_request.number }}
+          websiteDirectory: website
+          buildScript: npm run build
+          artifactDir: dist

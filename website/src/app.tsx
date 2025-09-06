@@ -317,13 +317,15 @@ export default function App() {
                       gateway's maximum capacity.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive-router" /> achieves a maximum
-                      throughput of <strong>1700 RPS</strong>, demonstrating a
-                      superior capacity for handling concurrent traffic.
+                      <GatewayNameLabel name="hive-router" /> reaches a
+                      maximum throughput of <strong>~1970–1980 RPS</strong>,
+                      demonstrating the highest capacity under stress.
                     </p>
                     <p>
-                      <GatewayNameLabel name="cosmo" /> follows with a peak
-                      performance of <strong>~560 RPS</strong>.
+                      <GatewayNameLabel name="grafbase" /> follows around
+                      <strong> ~1550 RPS</strong>, and
+                      {" "}<GatewayNameLabel name="cosmo" /> peaks around
+                      <strong> ~680–690 RPS</strong>.
                     </p>
                     <p>
                       It's important to correlate this flattening of the curve
@@ -333,10 +335,9 @@ export default function App() {
                     </p>
 
                     <p>
-                      The other gateways reach their saturation points much
-                      earlier in the stress test and at significantly lower
-                      request volumes, indicating they reached their performance
-                      ceiling with fewer concurrent users.
+                      <GatewayNameLabel name="apollo-router" /> saturates at a
+                      much lower rate (~360–370 RPS) under the same
+                      conditions.
                     </p>
                   </>
                 ) : (
@@ -347,13 +348,14 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="hive-router" /> sustains a steady
-                      throughput of <strong>~1800 RPS</strong>, indicating very
+                      throughput of <strong>~1840–1850 RPS</strong>, indicating very
                       low per-request overhead at everyday traffic levels.
                     </p>
                     <p>
-                      <GatewayNameLabel name="cosmo" /> follows with a
-                      steady-state throughput of
-                      <strong>~580 RPS</strong>.
+                      <GatewayNameLabel name="grafbase" /> sits around
+                      {" "}<strong>~1500–1600 RPS</strong>, while
+                      {" "}<GatewayNameLabel name="cosmo" /> holds around
+                      {" "}<strong>~680–690 RPS</strong>.
                     </p>
                     <p>
                       At this traffic level, the goal is stability rather than
@@ -362,10 +364,9 @@ export default function App() {
                       no hidden jitter or overhead.
                     </p>
                     <p>
-                      The other gateways settle at lower steady-state rates (
-                      <GatewayNameLabel name="grafbase" /> ~460 RPS,{" "}
-                      <GatewayNameLabel name="apollo-router" /> ~330 RPS), suggesting a
-                      higher baseline cost per request on the same hardware.
+                      <GatewayNameLabel name="apollo-router" /> settles near
+                      <strong> ~360–365 RPS</strong>, implying a higher baseline
+                      cost per request on the same hardware.
                     </p>
                   </>
                 )
@@ -483,20 +484,20 @@ export default function App() {
                       architectural efficiency.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive-router" />
-                      's and <GatewayNameLabel name="grafbase" /> are the
-                      standouts, peaking at just <strong>170%</strong> and{" "}
-                      <strong>136%</strong> CPU usage respectively.
+                      <GatewayNameLabel name="hive-router" /> and
+                      {" "}<GatewayNameLabel name="grafbase" /> are the standouts,
+                      peaking around <strong>150–170%</strong> CPU while delivering
+                      industry-leading throughput.
                       <br />
                       This showcases an extremely efficient processing model
                       that minimizes computational overhead.
                     </p>
 
                     <p>
-                      <GatewayNameLabel name="cosmo" /> requires moderately more
-                      CPU to achieve its high throughput, while{" "}
-                      <GatewayNameLabel name="apollo-router" />
-                      's CPU consumption is the highest in the group.
+                      <GatewayNameLabel name="cosmo" /> climbs to ~240% CPU as it
+                      reaches ~680–690 RPS, and
+                      {" "}<GatewayNameLabel name="apollo-router" /> reaches ~230–240%
+                      as it approaches ~360–370 RPS.
                     </p>
 
                     <p>
@@ -512,7 +513,7 @@ export default function App() {
                     </p>
                     <p>
                       <GatewayNameLabel name="hive-router" /> holds a flat profile
-                      around ~167% CPU while delivering the{" "}
+                      around ~120–130% CPU while delivering the {" "}
                       <strong>
                         highest RPS, indicating strong performance per core and
                         minimal background overhead
@@ -520,16 +521,14 @@ export default function App() {
                       .
                     </p>
                     <p>
-                      <GatewayNameLabel name="grafbase" /> runs with the lowest
-                      CPU footprint (~133%), but at a much lower throughput,
-                      signaling a frugal runtime that trades speed for cost.
+                      <GatewayNameLabel name="grafbase" /> runs efficiently at
+                      ~160–165% CPU while sustaining ~1.6k RPS.
                     </p>
                     <p>
-                      <GatewayNameLabel name="cosmo" /> and{" "}
-                      <GatewayNameLabel name="apollo-router" /> settle higher, around
-                      ~265–270% CPU at this load. The curves are stable, but the
-                      elevated baseline points to a higher per-request cost on
-                      the same hardware.
+                      <GatewayNameLabel name="cosmo" /> sits around ~185–190% CPU
+                      at ~680–690 RPS, while
+                      <GatewayNameLabel name="apollo-router" /> sits around
+                      ~185–190% CPU at ~360–365 RPS.
                     </p>
                     <p>
                       At this traffic level, the signal to watch is{" "}
@@ -567,7 +566,7 @@ export default function App() {
                       gateway's underlying language and runtime.
                     </p>
                     <p>
-                      At just <strong>109 MB</strong> of peak memory usage,{" "}
+                      At just <strong>~100 MB</strong> of peak memory usage, {" "}
                       <GatewayNameLabel name="hive-router" /> is decisively the most
                       memory-efficient gateway. <br />
                       Its remarkably low footprint, likely due to its Rust-based
@@ -575,35 +574,35 @@ export default function App() {
                     </p>
 
                     <p>
-                      <GatewayNameLabel name="grafbase" /> is also very lean on
-                      memory at <strong>201 MB</strong>.{" "}
-                      <GatewayNameLabel name="cosmo" /> holds around{" "}
-                      <strong>380 MB</strong>.
-                      <GatewayNameLabel name="apollo-router" /> exhibit a significantly
-                      larger memory footprint.
+                      <GatewayNameLabel name="grafbase" /> is also lean at
+                      {" "}<strong>~150–160 MB</strong> max.
+                      {" "}<GatewayNameLabel name="cosmo" /> peaks around
+                      {" "}<strong>~370 MB</strong>, while
+                      {" "}<GatewayNameLabel name="apollo-router" /> grows to
+                      <strong>~750 MB</strong>.
                     </p>
                   </>
                 ) : (
                   <>
                     <p>
                       <GatewayNameLabel name="hive-router" /> maintains the smallest
-                      steady-state footprint (<strong>~48 MB</strong>) with an
+                      steady-state footprint (<strong>~49 MB</strong>) with an
                       almost ruler-flat line, indicating tight allocation
                       control and no drift/leak behavior.
                     </p>
                     <p>
-                      <GatewayNameLabel name="grafbase" /> stabilizes around ~93
-                      MB, with a steady curve-efficient, but with more overhead
-                      than <GatewayNameLabel name="hive-router" /> at the same load.
+                      <GatewayNameLabel name="grafbase" /> stabilizes around ~70–75
+                      MB, with a steady curve—efficient, and close to Hive's
+                      footprint at this load.
                     </p>
                     <p>
-                      <GatewayNameLabel name="cosmo" /> sits higher at ~119 MB,
+                      <GatewayNameLabel name="cosmo" /> sits higher at ~110–120 MB,
                       showing a modest baseline that implies additional
                       buffering/allocation work even when traffic is calm.
                     </p>
                     <p>
                       <GatewayNameLabel name="apollo-router" /> holds the largest
-                      baseline (~192 MB) under the same conditions, reflecting a
+                      baseline (~170–180 MB) under the same conditions, reflecting a
                       heavier runtime cost.
                     </p>
                   </>
@@ -639,27 +638,21 @@ export default function App() {
                       their performance ceiling.
                     </p>
                     <p>
-                      <GatewayNameLabel name="hive-router" /> and{" "}
-                      <GatewayNameLabel name="cosmo" /> demonstrated exceptional
-                      resilience, maintaining a{" "}
-                      <strong>100% success rate</strong> throughout the entire
-                      test, even when fully saturated. They handled overload by
-                      increasing latency, but never dropped a request. This is
-                      the ideal behavior for a mission-critical system.
+                      <GatewayNameLabel name="hive-router" /> and
+                      {" "}<GatewayNameLabel name="grafbase" /> maintained a
+                      {" "}<strong>100% success rate</strong> throughout the entire
+                      {" "}test, even when fully saturated. They handled overload by
+                      {" "}increasing latency, but never dropped a request.
                     </p>
 
                     <p>
-                      <GatewayNameLabel name="apollo-router" /> maintained a 100%
-                      success rate until around{" "}
-                      <strong>360 virtual users</strong>, at which point its
-                      success rate began to dip, indicating it was starting to
-                      shed load.
+                      <GatewayNameLabel name="cosmo" /> stayed at 100% as load
+                      ramped, not shedding requests in this run.
                     </p>
                     <p>
-                      <GatewayNameLabel name="grafbase" /> began experiencing
-                      request failures much earlier, at around{" "}
-                      <strong>250 virtual users</strong>, and its success rate
-                      continued to decline as the load increased.
+                      <GatewayNameLabel name="apollo-router" /> dipped slightly
+                      below 100% (≈99.93%) at peak load; its limiting factor also
+                      showed up in latency and RPS ceilings.
                     </p>
                     <p>
                       For an architect, this is a crucial finding. A gateway
