@@ -10,9 +10,7 @@ concurrency:
 
 jobs:
   deployment:
-    permissions:
-      contents: read
-      deployments: write
+    permissions: write-all
     runs-on: ubuntu-latest
     steps:
       - name: checkout
