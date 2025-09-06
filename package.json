@@ -25,6 +25,6 @@
   ],
   "packageManager": "npm@11.6.0",
   "overrides": {
-    "tmp": "0.2.4"
+    "tmp": "0.2.5"
   }
 }
