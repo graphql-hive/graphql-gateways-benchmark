@@ -23,5 +23,8 @@
     "gateways/*",
     "website"
   ],
-  "packageManager": "npm@11.6.0"
+  "packageManager": "npm@11.6.0",
+  "overrides": {
+    "tmp": "0.2.4"
+  }
 }
