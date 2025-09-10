@@ -8,7 +8,7 @@
   "license": "MIT",
   "dependencies": {
     "vega": "6.1.2",
-    "vega-lite": "6.3.0",
+    "vega-lite": "6.3.1",
     "tablemark": "3.1.0",
     "tsx": "4.20.5",
     "typescript": "5.9.2",
