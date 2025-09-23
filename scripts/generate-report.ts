@@ -191,7 +191,7 @@ async function generateReport(artifactsRootPath: string) {
     "ramping": "This scenario runs 4 subgraphs and a GraphQL gateway with Federation spec, and runs a heavy query. We are running a heavy load of concurrent VUs to measure response time and other stats, during stress. It measure things like memory usage, CPU usage, response times. It also includes a summary of the entire execution, and metrics information about HTTP execution times.",
   }
 
-  const tablemark = await import('tablemark');
+  const { tablemark } = await import('tablemark');
 
   const markdownLines: string[] = [
     `## Overview for: \`${process.env.SCENARIO_TITLE}\``,
