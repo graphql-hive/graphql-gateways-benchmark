@@ -6,6 +6,6 @@
     "graphql": "16.11.0"
   },
   "devDependencies": {
-    "bun": "1.2.22"
+    "bun": "1.2.23"
   }
 }
