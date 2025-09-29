@@ -13,7 +13,7 @@
     "tsx": "4.20.6",
     "typescript": "5.9.2",
     "graphql": "16.11.0",
-    "patch-package": "8.0.0",
+    "patch-package": "8.0.1",
     "capture-website-cli": "5.1.0"
   },
   "devDependencies": {
