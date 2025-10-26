@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-NODE_ENV=production npm start > ./gateway_log.txt 2>&1
+__EXPERIMENTAL__HIVE_ROUTER_QUERY_PLANNER=1 NODE_ENV=production npm start > ./gateway_log.txt 2>&1
