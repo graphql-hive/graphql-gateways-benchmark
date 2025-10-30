@@ -8,7 +8,7 @@
     "tsx": "4.20.6",
     "typescript": "5.9.3",
     "graphql": "16.11.0",
-    "@apollo/server": "5.0.0",
+    "@apollo/server": "5.1.0",
     "@apollo/gateway": "2.11.3"
   }
 }
