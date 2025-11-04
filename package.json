@@ -14,7 +14,7 @@
     "typescript": "5.9.3",
     "graphql": "16.11.0",
     "patch-package": "8.0.1",
-    "capture-website-cli": "5.1.0"
+    "capture-website-cli": "5.2.0"
   },
   "devDependencies": {
     "@types/node": "22.19.0"
