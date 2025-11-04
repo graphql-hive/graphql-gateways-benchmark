@@ -17,7 +17,7 @@
     "capture-website-cli": "5.2.0"
   },
   "devDependencies": {
-    "@types/node": "22.19.0"
+    "@types/node": "24.10.0"
   },
   "workspaces": [
     "gateways/*",
