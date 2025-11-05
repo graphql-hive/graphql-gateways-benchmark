@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "@graphql-hive/gateway": "hive-router-query-planner",
+    "@graphql-hive/router-runtime": "hive-router-query-planner",
     "graphql": "16.12.0"
   },
   "devDependencies": {
