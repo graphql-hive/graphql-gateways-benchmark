@@ -6,6 +6,6 @@
   },
   "dependencies": {
     "@graphql-hive/gateway": "hive-router-query-planner",
-    "graphql": "16.11.0"
+    "graphql": "16.12.0"
   }
 }

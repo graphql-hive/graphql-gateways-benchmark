@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "dependencies": {
     "@graphql-hive/gateway": "hive-router-query-planner",
-    "graphql": "16.11.0"
+    "graphql": "16.12.0"
   },
   "devDependencies": {
-    "bun": "1.3.0"
+    "bun": "1.3.1"
   }
 }
