@@ -44,73 +44,71 @@ jobs:
     with:
       scenarioName: constant-vus-over-time
 
-  constant-vus-subgraphs-delay:
-    needs:
-      - decide-runner
-    strategy:
-      fail-fast: false
-      matrix:
-        directory:
-          - apollo-gateway
-          - apollo-router
-          - hive-gateway
-          - hive-gateway-router-runtime
-          - hive-router
-          - cosmo
-          - grafbase
-    uses: ./.github/workflows/benchmark.template.yaml
-    with:
-      gateway: ${{ matrix.directory }}
-      vu: 50
-      time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      scenarioName: constant-vus-subgraphs-delay
-      runner: ${{ needs.decide-runner.outputs.runner }}
-      cpuLimit: 3
-      fork: 2
-      memoryLimit: 6gb
-      subgraphDelay: 50
-      mode: constant
-
-  constant-vus-subgraphs-delay-report:
-    needs: constant-vus-subgraphs-delay
-    uses: ./.github/workflows/report.template.yaml
-    secrets: inherit
-    with:
-      scenarioName: constant-vus-subgraphs-delay
-
-  constant-vus-subgraphs-delay-resources:
-    needs:
-      - decide-runner
-    strategy:
-      fail-fast: false
-      matrix:
-        directory:
-          - apollo-gateway
-          - apollo-router
-          - hive-gateway
-          - hive-gateway-router-runtime
-          - hive-router
-          - cosmo
-          - grafbase
-    uses: ./.github/workflows/benchmark.template.yaml
-    with:
-      gateway: ${{ matrix.directory }}
-      vu: 50
-      time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
-      scenarioName: constant-vus-subgraphs-delay-resources
-      runner: ${{ needs.decide-runner.outputs.runner }}
-      cpuLimit: 4
-      fork: 3
-      memoryLimit: 8gb
-      subgraphDelay: 50
-      mode: constant
-
-  constant-vus-subgraphs-delay-resources-report:
-    needs: constant-vus-subgraphs-delay-resources
-    uses: ./.github/workflows/report.template.yaml
-    secrets: inherit
-    with:
-      scenarioName: constant-vus-subgraphs-delay-resources
+  # TODO: do we need the delay scenarios?
+  # constant-vus-subgraphs-delay:
+  #   needs:
+  #     - decide-runner
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       directory:
+  #         - apollo-gateway
+  #         - apollo-router
+  #         - hive-gateway
+  #         - hive-gateway-router-runtime
+  #         - hive-router
+  #         - cosmo
+  #         - grafbase
+  #   uses: ./.github/workflows/benchmark.template.yaml
+  #   with:
+  #     gateway: ${{ matrix.directory }}
+  #     vu: 50
+  #     time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
+  #     scenarioName: constant-vus-subgraphs-delay
+  #     runner: ${{ needs.decide-runner.outputs.runner }}
+  #     cpuLimit: 3
+  #     fork: 2
+  #     memoryLimit: 6gb
+  #     subgraphDelay: 50
+  #     mode: constant
+  # constant-vus-subgraphs-delay-report:
+  #   needs: constant-vus-subgraphs-delay
+  #   uses: ./.github/workflows/report.template.yaml
+  #   secrets: inherit
+  #   with:
+  #     scenarioName: constant-vus-subgraphs-delay
+  # constant-vus-subgraphs-delay-resources:
+  #   needs:
+  #     - decide-runner
+  #   strategy:
+  #     fail-fast: false
+  #     matrix:
+  #       directory:
+  #         - apollo-gateway
+  #         - apollo-router
+  #         - hive-gateway
+  #         - hive-gateway-router-runtime
+  #         - hive-router
+  #         - cosmo
+  #         - grafbase
+  #   uses: ./.github/workflows/benchmark.template.yaml
+  #   with:
+  #     gateway: ${{ matrix.directory }}
+  #     vu: 50
+  #     time: ${{ github.event_name == 'pull_request' && '30s' || '60s' }}
+  #     scenarioName: constant-vus-subgraphs-delay-resources
+  #     runner: ${{ needs.decide-runner.outputs.runner }}
+  #     cpuLimit: 4
+  #     fork: 3
+  #     memoryLimit: 8gb
+  #     subgraphDelay: 50
+  #     mode: constant
+  # constant-vus-subgraphs-delay-resources-report:
+  #   needs: constant-vus-subgraphs-delay-resources
+  #   uses: ./.github/workflows/report.template.yaml
+  #   secrets: inherit
+  #   with:
+  #     scenarioName: constant-vus-subgraphs-delay-resources
 
   ramping-vus:
     needs:
