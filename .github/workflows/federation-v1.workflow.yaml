@@ -23,7 +23,6 @@ jobs:
           - hive-gateway
           - hive-gateway-bun
           - hive-gateway-router-runtime
-          - hive-gateway-router-runtime-bun
           - hive-router
           - cosmo
           - grafbase
@@ -58,7 +57,6 @@ jobs:
           - hive-gateway
           - hive-gateway-bun
           - hive-gateway-router-runtime
-          - hive-gateway-router-runtime-bun
           - hive-router
           - cosmo
           - grafbase
@@ -94,7 +92,6 @@ jobs:
           - hive-gateway
           - hive-gateway-bun
           - hive-gateway-router-runtime
-          - hive-gateway-router-runtime-bun
           - hive-router
           - cosmo
           - grafbase
@@ -130,7 +127,6 @@ jobs:
           - hive-gateway
           - hive-gateway-bun
           - hive-gateway-router-runtime
-          - hive-gateway-router-runtime-bun
           - hive-router
           - cosmo
           - grafbase
