@@ -22,6 +22,8 @@ jobs:
           - apollo-router
           - hive-gateway
           - hive-gateway-bun
+          - hive-gateway-router-runtime
+          - hive-gateway-router-runtime-bun
           - hive-router
           - cosmo
           - grafbase
