@@ -4,7 +4,8 @@ on:
   workflow_dispatch: {}
 
 concurrency:
-  group: federation-${{ github.ref }}
+  # we group by event name because we dont want to cancel workflow dispatch runs on pr commits
+  group: federation-${{ github.ref }}-${{ github.event_name }}
   cancel-in-progress: true
 
 jobs:
