@@ -271,7 +271,7 @@ async function generateReport(artifactsRootPath: string) {
     validReportsData
       .map((info) =>
         formatSummary(
-          `Summary for: \`${info.name}\``,
+          `Summary for: ${info.name}`,
           [
             "**K6 Output**",
             NEWLINE,

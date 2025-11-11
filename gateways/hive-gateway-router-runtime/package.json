@@ -1,0 +1,12 @@
+{
+  "name": "hive-gateway-router-runtime",
+  "version": "0.0.0",
+  "scripts": {
+    "start": "hive-gateway supergraph supergraph.graphql"
+  },
+  "dependencies": {
+    "@graphql-hive/gateway": "2.1.16",
+    "@graphql-hive/router-runtime": "1.0.0",
+    "graphql": "16.12.0"
+  }
+}

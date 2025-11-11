@@ -91,7 +91,7 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
         ```bash
         make test gateway=<gateway_name> mode=<constant|stress>
         ```
-        Replace `<gateway_name>` with one of: `apollo-router`,  `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-bun`, or `hive-router`.
+        Replace `<gateway_name>` with one of: `apollo-router`,  `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-bun`, `hive-gateway-router-runtime`, `hive-gateway-router-runtime-bun`, or `hive-router`.
 
         Examples:
         ```bash
