@@ -31,6 +31,8 @@ on:
       fork:
         type: number
         required: true
+      waitForUrl:
+        type: string
 
 jobs:
   test:
@@ -99,6 +101,7 @@ jobs:
           MEM_LIMIT: ${{ inputs.memoryLimit }}
           CPU_LIMIT: ${{ inputs.cpuLimit }}
           FORK: ${{ inputs.fork }}
+          WAIT_FOR_URL: ${{ inputs.waitForUrl }}
 
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: always()

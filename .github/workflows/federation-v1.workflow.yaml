@@ -37,6 +37,7 @@ jobs:
       fork: 2
       memoryLimit: 6gb
       mode: constant
+      waitForUrl: ${{ startsWith(matrix.directory, 'hive-gateway') && 'http://localhost:4000/healthcheck' || '' }}
 
   constant-vus-over-time-report:
     needs: constant-vus-over-time
