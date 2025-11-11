@@ -39,7 +39,7 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-        
+
       - name: setup node
         uses: the-guild-org/shared-config/setup@v1
         with:
@@ -53,7 +53,7 @@ jobs:
           override: true
 
       - uses: Swatinem/rust-cache@98c8021b550208e191a6a3145459bfc9fb29c4c0 # v2
-        
+
       - name: run subgraphs
         run: |
           make run-subgraphs &
@@ -69,7 +69,7 @@ jobs:
       - name: configure eqemu
         uses: docker/setup-qemu-action@c7c53464625b32c7a7e944ae62b3e17d2b600130 # v3
         with:
-          platforms: 'linux/arm64,linux/amd64'
+          platforms: "linux/arm64,linux/amd64"
 
       - name: configure docker buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
@@ -99,6 +99,7 @@ jobs:
           MEM_LIMIT: ${{ inputs.memoryLimit }}
           CPU_LIMIT: ${{ inputs.cpuLimit }}
           FORK: ${{ inputs.fork }}
+          PRINT_ONCE: true
 
       - uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5
         if: always()
