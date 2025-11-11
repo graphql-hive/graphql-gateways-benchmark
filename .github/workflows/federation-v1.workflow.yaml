@@ -21,7 +21,6 @@ jobs:
           - apollo-gateway
           - apollo-router
           - hive-gateway
-          - hive-gateway-bun
           - hive-gateway-router-runtime
           - hive-router
           - cosmo
@@ -55,7 +54,6 @@ jobs:
           - apollo-gateway
           - apollo-router
           - hive-gateway
-          - hive-gateway-bun
           - hive-gateway-router-runtime
           - hive-router
           - cosmo
@@ -90,7 +88,6 @@ jobs:
           - apollo-gateway
           - apollo-router
           - hive-gateway
-          - hive-gateway-bun
           - hive-gateway-router-runtime
           - hive-router
           - cosmo
@@ -125,7 +122,6 @@ jobs:
           - apollo-gateway
           - apollo-router
           - hive-gateway
-          - hive-gateway-bun
           - hive-gateway-router-runtime
           - hive-router
           - cosmo
