@@ -73,6 +73,7 @@ jobs:
   #     memoryLimit: 6gb
   #     subgraphDelay: 50
   #     mode: constant
+  #     waitForUrl: ${{ startsWith(matrix.directory, 'hive-gateway') && 'http://localhost:4000/healthcheck' || '' }}
   # constant-vus-subgraphs-delay-report:
   #   needs: constant-vus-subgraphs-delay
   #   uses: ./.github/workflows/report.template.yaml
@@ -105,6 +106,7 @@ jobs:
   #     memoryLimit: 8gb
   #     subgraphDelay: 50
   #     mode: constant
+  #     waitForUrl: ${{ startsWith(matrix.directory, 'hive-gateway') && 'http://localhost:4000/healthcheck' || '' }}
   # constant-vus-subgraphs-delay-resources-report:
   #   needs: constant-vus-subgraphs-delay-resources
   #   uses: ./.github/workflows/report.template.yaml
@@ -137,6 +139,7 @@ jobs:
       fork: 3
       memoryLimit: 8gb
       mode: stress
+      waitForUrl: ${{ startsWith(matrix.directory, 'hive-gateway') && 'http://localhost:4000/healthcheck' || '' }}
 
   ramping-vus-report:
     needs: ramping-vus
