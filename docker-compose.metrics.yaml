@@ -19,7 +19,7 @@ services:
       - ./prometheus:/etc/prometheus/
 
   grafana:
-    image: grafana/grafana:12.2.1
+    image: grafana/grafana:12.3.0
     networks:
       - test
     ports:
