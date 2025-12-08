@@ -185,7 +185,7 @@ function makeGraphQLRequest() {
         printOnce(
           "graphql_errors",
           `‼️ Got GraphQL errors, here's a sample:`,
-          res.json.errors
+          res.json()
         );
       }
 
@@ -201,7 +201,7 @@ function makeGraphQLRequest() {
           printOnce(
             "response_strcuture",
             `‼️ Got invalid structure, here's a sample:`,
-            res.body
+            String(res.body)
           );
         }
 
