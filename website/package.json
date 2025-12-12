@@ -13,7 +13,7 @@
     "@tailwindcss/vite": "^4.1.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "lucide-react": "^0.560.0",
+    "lucide-react": "^0.561.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "recharts": "^3.0.0",
