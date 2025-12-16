@@ -96,6 +96,7 @@ jobs:
         timeout-minutes: 600
         run: make test gateway=${{ inputs.gateway }} mode=${{ inputs.mode }}
         env:
+          PRINT_ONCE: 1
           BENCH_VUS: ${{ inputs.vu }}
           BENCH_OVER_TIME: ${{ inputs.time }}
           MEM_LIMIT: ${{ inputs.memoryLimit }}
