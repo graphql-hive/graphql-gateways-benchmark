@@ -9,7 +9,7 @@
   "dependencies": {
     "body-parser": "2.2.2",
     "vega": "6.2.0",
-    "vega-lite": "6.4.1",
+    "vega-lite": "6.4.2",
     "tablemark": "4.1.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
