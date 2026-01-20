@@ -24,3 +24,6 @@ After the workflow is done, create a Pull Request from `update-results` to `main
 ## How to deploy the updated website?
 
 After merging the updated results to `main`, you can deploy the updated website by running [website Action](https://github.com/graphql-hive/graphql-gateways-benchmark/actions/workflows/website.yaml) on `main` branch. Go to that action, click `Run workflow`, select the `main` branch and run it. This will update the website at [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance).
+
+> The steps above will only update the numbers in the website but it won't update the commentary or other texts in general.
+> Make sure the content is up to date according the new results.
