@@ -21,6 +21,8 @@ After the workflow is done, create a Pull Request from `update-results` to `main
 
 > Be careful about running this workflow manually, as it uses the hosted runners in this case which have limited resources. If you run into issues, consider running the benchmarks locally by following the instructions in the [README.md](README.md).
 
+> And within the PR you create, it will also trigger a regular workflow without hosted runners which might have different results. Just ignore them, and take the results in the updated `.md` files account.
+
 ## How to deploy the updated website?
 
 After merging the updated results to `main`, you can deploy the updated website by running [website Action](https://github.com/graphql-hive/graphql-gateways-benchmark/actions/workflows/website.yaml) on `main` branch. Go to that action, click `Run workflow`, select the `main` branch and run it. This will update the website at [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance).
