@@ -13,7 +13,7 @@
     "tablemark": "4.1.0",
     "tsx": "4.21.0",
     "typescript": "5.9.3",
-    "graphql": "16.12.0",
+    "graphql": "16.13.0",
     "patch-package": "8.0.1",
     "capture-website-cli": "5.2.0",
     "tar": "7.5.9"
