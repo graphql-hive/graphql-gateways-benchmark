@@ -25,7 +25,7 @@
     "gateways/*",
     "website"
   ],
-  "packageManager": "npm@11.10.1",
+  "packageManager": "npm@11.11.0",
   "overrides": {
     "body-parser": "2.2.2",
     "glob": "10.5.0",
