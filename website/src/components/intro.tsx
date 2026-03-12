@@ -71,9 +71,9 @@ export function StressTestIntro(props: {
       }
       data={{
         "hive-router": {
-          version: "v0.0.5",
+          version: "v0.0.41",
           website: "https://github.com/graphql-hive/router",
-          rps: 1977.13,
+          rps: 1885,
           p95: 274.12,
           p99_9: 443.62,
           cpu: 151,
@@ -81,7 +81,7 @@ export function StressTestIntro(props: {
           reliability: 100.0,
         },
         cosmo: {
-          version: "v0.247.0",
+          version: "v0.291.0",
           website: "https://github.com/wundergraph/cosmo",
           rps: 679.37,
           p95: 736.98,
@@ -91,7 +91,7 @@ export function StressTestIntro(props: {
           reliability: 100.0,
         },
         grafbase: {
-          version: "v0.49.0",
+          version: "v0.53.2",
           website: "https://github.com/grafbase/grafbase",
           rps: 1554.2,
           p95: 339.2,
@@ -101,7 +101,7 @@ export function StressTestIntro(props: {
           reliability: 100.0,
         },
         "apollo-router": {
-          version: "v2.6.0",
+          version: "v2.12.0",
           website: "https://github.com/apollographql/router",
           rps: 369.59,
           p95: 1283.17,
