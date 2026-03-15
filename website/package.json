@@ -27,6 +27,6 @@
     "globals": "^17.0.0",
     "tw-animate-css": "^1.3.7",
     "typescript": "~5.9.0",
-    "vite": "^7.1.11"
+    "vite": "^8.0.0"
   }
 }
