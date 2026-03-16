@@ -8,7 +8,7 @@ set -u
 BINARY_DOWNLOAD_PREFIX="https://github.com/wundergraph/cosmo/releases/download"
 
 # https://github.com/wundergraph/cosmo/releases
-DOWNLOAD_VERSION="0.247.0"
+DOWNLOAD_VERSION="0.292.0"
 
 download_binary() {
     downloader --check
