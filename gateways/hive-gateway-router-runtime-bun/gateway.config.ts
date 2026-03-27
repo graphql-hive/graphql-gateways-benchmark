@@ -5,4 +5,3 @@ export const gatewayConfig = defineConfig({
   unifiedGraphHandler,
   inboundInflightRequestDeduplication: true,
 });
-console.log(globalThis.Bun);
