@@ -48,10 +48,27 @@ curl -fsSL \
   "https://dl.grafana.com/oss/release/grafana-${GRAFANA_VERSION}.linux-${ARCH}.tar.gz" \
   | tar -xz -C "$GRAFANA_INSTALL_DIR" --strip-components=1
 
+# Build a provisioning directory with the correct absolute path to the JSON dashboards.
+# The committed dashboard.yaml uses the Docker-specific path /etc/grafana/provisioning/json-dashboards,
+# so we generate a corrected copy for native (non-Docker) usage.
+PROVISIONING_DIR="/tmp/grafana-provisioning"
+mkdir -p "$PROVISIONING_DIR/dashboards" "$PROVISIONING_DIR/datasources"
+cp "$ROOT_DIR/grafana/datasources/datasource.yaml" "$PROVISIONING_DIR/datasources/"
+cat > "$PROVISIONING_DIR/dashboards/dashboard.yaml" << EOF
+apiVersion: 1
+providers:
+  - name: 'default'
+    org_id: 1
+    folder: ''
+    type: 'file'
+    options:
+      path: $ROOT_DIR/grafana/json-dashboards
+EOF
+
 GF_AUTH_ANONYMOUS_ENABLED=true \
 GF_AUTH_ANONYMOUS_ORG_ROLE=Admin \
 GF_AUTH_BASIC_ENABLED=false \
-GF_PATHS_PROVISIONING="$ROOT_DIR/grafana" \
+GF_PATHS_PROVISIONING="$PROVISIONING_DIR" \
 "$GRAFANA_INSTALL_DIR/bin/grafana" server \
   --homepath "$GRAFANA_INSTALL_DIR" \
   >/tmp/grafana.log 2>&1 &
