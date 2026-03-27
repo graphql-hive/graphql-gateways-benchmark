@@ -71,10 +71,10 @@ jobs:
       - name: Run Metrics Services
         run: ./scripts/setup-metrics.sh
 
-      # - name: wait for subgraphs
-      #   uses: iFaxity/wait-on-action@main
-      #   with:
-      #     resource: http://localhost:4200/health
+      - name: wait for subgraphs
+        uses: iFaxity/wait-on-action@main
+        with:
+          resource: http://localhost:4200/health
 
       - name: run benchmark (${{ inputs.time }})
         timeout-minutes: 600
