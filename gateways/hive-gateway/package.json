@@ -2,10 +2,10 @@
   "name": "hive-gateway",
   "version": "0.0.0",
   "scripts": {
-    "start": "hive-gateway supergraph supergraph.graphql --jit"
+    "start": "hive-gateway supergraph supergraph.graphql"
   },
   "dependencies": {
-    "@graphql-hive/gateway": "2.5.10",
+    "@graphql-hive/gateway": "2.5.15-alpha-654009afde7c8481507c9e2f28e4611ecee29623",
     "graphql": "16.13.1"
   }
 }
