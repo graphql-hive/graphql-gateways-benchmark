@@ -240,10 +240,10 @@ export END_TIME="$(date +%s)"
 # If CI
 if [[ "${CI:-}" == "true" ]]; then
   rm -rf $GATEWAY_DIR/overview.png || echo ""
-  npx --quiet capture-website-cli "http://localhost:3000/d/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $GATEWAY_DIR/overview.png --width 1200 --height 950
+  npx --quiet capture-website-cli "http://localhost:3000/d/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $GATEWAY_DIR/overview.png --width 1200 --height 950 --wait-for-network-idle --delay 2
 
   rm -rf $GATEWAY_DIR/http.png || echo ""
-  npx --quiet capture-website-cli "http://localhost:3000/d-solo/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&panelId=41" --output $GATEWAY_DIR/http.png --width 1200 --height 950
+  npx --quiet capture-website-cli "http://localhost:3000/d-solo/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&panelId=41" --output $GATEWAY_DIR/http.png --width 1200 --height 950 --wait-for-network-idle --delay 2
 
 fi
 echo "Summary:"
