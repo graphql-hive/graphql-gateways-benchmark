@@ -5,7 +5,7 @@
     "start": "hive-gateway supergraph supergraph.graphql"
   },
   "dependencies": {
-    "@graphql-hive/gateway": "2.5.15-alpha-654009afde7c8481507c9e2f28e4611ecee29623",
+    "@graphql-hive/gateway": "2.5.15-alpha-39fbbe5ad7f3ee000b327c9c06233b396d36abad",
     "@graphql-hive/router-runtime": "1.2.1",
     "graphql": "16.13.1"
   }
