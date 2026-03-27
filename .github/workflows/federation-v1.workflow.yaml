@@ -93,6 +93,7 @@ jobs:
   #         - apollo-router
   #         - hive-gateway
   #         - hive-gateway-router-runtime
+  #         - hive-gateway-router-runtime-bun
   #         - hive-router
   #         - cosmo
   #         - grafbase
