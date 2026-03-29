@@ -124,7 +124,7 @@ jobs:
           - apollo-gateway
           - apollo-router
           - hive-gateway
-          - hive-gateway-router-runtimex
+          - hive-gateway-router-runtime
           - hive-router
           - cosmo
           - grafbase
