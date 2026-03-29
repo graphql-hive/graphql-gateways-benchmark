@@ -54,9 +54,6 @@ jobs:
           toolchain: stable
           override: true
 
-      - name: setup bun
-        uses: oven-sh/setup-bun@v2
-
       - uses: Swatinem/rust-cache@e18b497796c12c097a38f9edb9d0641fb99eee32 # v2
 
       - name: run subgraphs
