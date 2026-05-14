@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "generate-report": "tsx scripts/generate-report.ts",
-    "postinstall": "npx patch-package || exit 0"
+    "postinstall": "npx puppeteer browsers install chrome || npx patch-package || exit 0"
   },
   "license": "MIT",
   "dependencies": {
