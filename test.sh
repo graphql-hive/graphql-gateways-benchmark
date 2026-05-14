@@ -239,6 +239,17 @@ export END_TIME="$(date +%s)"
 
 # If CI
 if [[ "${CI:-}" == "true" ]]; then
+  # Screenshot capture relies on Puppeteer-managed Chrome. In CI cache can be
+  # left in a broken state (folder exists but executable missing), so we retry
+  # installation once after clearing Chrome cache.
+  if ! npx --yes --quiet puppeteer browsers install chrome; then
+    echo "WARN: Initial Puppeteer Chrome install failed. Clearing cache and retrying once..." >&2
+    rm -rf "$HOME/.cache/puppeteer/chrome"
+    if ! npx --yes --quiet puppeteer browsers install chrome; then
+      echo "WARN: Puppeteer Chrome install still failing; screenshots will be skipped if capture fails." >&2
+    fi
+  fi
+
   rm -rf $GATEWAY_DIR/overview.png || echo ""
   if ! npx --quiet capture-website-cli "http://localhost:3000/d/01npcT44k/k6?orgId=1&from=${START_TIME}000&to=${END_TIME}000&kiosk" --output $GATEWAY_DIR/overview.png --width 1200 --height 950 --wait-for-network-idle --delay 2; then
     echo "WARN: Failed to capture overview.png; continuing benchmark without screenshots." >&2
