@@ -12,24 +12,25 @@
     "vega-lite": "6.4.2",
     "tablemark": "4.1.0",
     "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "graphql": "16.13.1",
+    "typescript": "6.0.3",
+    "graphql": "16.14.0",
     "patch-package": "8.0.1",
     "capture-website-cli": "5.2.0",
-    "tar": "7.5.11"
+    "tar": "7.5.15"
   },
   "devDependencies": {
-    "@types/node": "24.12.0"
+    "@types/node": "25.7.0"
   },
   "workspaces": [
     "gateways/*",
     "website"
   ],
-  "packageManager": "npm@11.11.1",
+  "packageManager": "npm@11.14.1",
   "overrides": {
     "body-parser": "2.2.2",
     "glob": "10.5.0",
+    "graphql": "16.14.0",
     "tmp": "0.2.5",
-    "tar": "7.5.11"
+    "tar": "7.5.15"
   }
 }
