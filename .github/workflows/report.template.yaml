@@ -26,6 +26,11 @@ jobs:
         uses: the-guild-org/shared-config/setup@v1
         with:
           node-version-file: .node-version
+          # See benchmark.template.yaml for why we skip install scripts.
+          install-command: npm install --ignore-scripts
+
+      - name: apply patches
+        run: npx patch-package
 
       - name: generate report
         run: npm run generate-report ${{ steps.download.outputs.download-path }}

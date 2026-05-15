@@ -5,10 +5,10 @@
     "start": "tsx index.ts"
   },
   "dependencies": {
-    "tsx": "4.21.0",
-    "typescript": "5.9.3",
-    "graphql": "16.13.1",
-    "@apollo/server": "5.5.0",
-    "@apollo/gateway": "2.13.2"
+    "tsx": "4.21.1",
+    "typescript": "6.0.3",
+    "graphql": "16.14.0",
+    "@apollo/server": "5.5.1",
+    "@apollo/gateway": "2.14.0"
   }
 }

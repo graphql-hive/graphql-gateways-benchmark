@@ -46,6 +46,18 @@ jobs:
         uses: the-guild-org/shared-config/setup@v1
         with:
           node-version-file: .node-version
+          # `--ignore-scripts` disables ALL package install hooks, including
+          # `puppeteer`'s bundled `install.mjs` which downloads Chrome,
+          # chrome-headless-shell, and Firefox in parallel and races with
+          # whichever explicit install runs after. With scripts disabled we
+          # then drive the Chrome install + patch-package ourselves below,
+          # serially and with full log visibility.
+          install-command: npm install --ignore-scripts
+
+      - name: install chrome and apply patches
+        run: |
+          ./scripts/install-chrome.sh
+          npx patch-package
 
       - name: setup rust
         uses: actions-rs/toolchain@16499b5e05bf2e26879000db0c1d13f7e13fa3af # v1

@@ -9,6 +9,8 @@ ROOT_DIR="$(dirname "$SCRIPT_DIR")"
 
 PROMETHEUS_VERSION="3.10.0"
 GRAFANA_VERSION="12.4.1"
+PROMETHEUS_READY_TIMEOUT_SECONDS="${PROMETHEUS_READY_TIMEOUT_SECONDS:-60}"
+GRAFANA_READY_TIMEOUT_SECONDS="${GRAFANA_READY_TIMEOUT_SECONDS:-120}"
 
 # Detect architecture
 ARCH="$(uname -m)"
@@ -80,7 +82,7 @@ echo "Grafana started (PID $!)."
 # ---------------------------------------------------------------------------
 echo "Waiting for Prometheus on :9090 ..."
 prometheus_ready=false
-for _ in $(seq 1 30); do
+for _ in $(seq 1 "$PROMETHEUS_READY_TIMEOUT_SECONDS"); do
   if curl -fsS http://localhost:9090/-/ready >/dev/null 2>&1; then
     prometheus_ready=true
     echo "Prometheus is ready."
@@ -96,7 +98,7 @@ fi
 
 echo "Waiting for Grafana on :3000 ..."
 grafana_ready=false
-for _ in $(seq 1 30); do
+for _ in $(seq 1 "$GRAFANA_READY_TIMEOUT_SECONDS"); do
   if curl -fsS http://localhost:3000/api/health >/dev/null 2>&1; then
     grafana_ready=true
     echo "Grafana is ready."
