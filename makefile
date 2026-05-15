@@ -1,4 +1,5 @@
 install:
+	npm install
 	@for dir in ./gateways/*; do \
 		if [ -d $$dir ]; then \
 			echo "Installing $$dir"; \
