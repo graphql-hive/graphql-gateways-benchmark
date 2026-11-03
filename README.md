@@ -57,6 +57,7 @@ The benchmark process is orchestrated by a `Makefile` and a series of bash scrip
 - [Rust](https://www.rust-lang.org/tools/install)
 - [k6](https://k6.io/docs/getting-started/installation/)
 - A running instance of the subgraphs.
+- For the `hotchocolate` gateway: the [.NET SDK](https://dotnet.microsoft.com/download) 10 (its `install.sh` installs one into `gateways/hotchocolate/.dotnet` when it is missing).
 
 ## System Requirements
 
@@ -91,7 +92,7 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
         ```bash
         make test gateway=<gateway_name> mode=<constant|stress>
         ```
-        Replace `<gateway_name>` with one of: `apollo-gateway`, `apollo-router`, `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-router-runtime`, or `hive-router`.
+        Replace `<gateway_name>` with one of: `apollo-gateway`, `apollo-router`, `apollo-router-v3`, `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-router-runtime`, `hive-router`, or `hotchocolate`.
 
         Examples:
         ```bash

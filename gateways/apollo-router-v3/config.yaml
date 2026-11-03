@@ -1,0 +1,6 @@
+supergraph:
+    path: /graphql
+    listen: 0.0.0.0:4000
+traffic_shaping:
+    all:
+        deduplicate_query: true
