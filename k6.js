@@ -11,6 +11,12 @@ const duration = __ENV.BENCH_OVER_TIME || "60s";
 
 const successRate = new Rate("success_rate");
 
+// Failed responses are sampled (a few per VU, truncated) and logged as
+// "ERRSAMPLE|<json>" lines; test.sh collects them into error_responses.jsonl.
+const CAPTURE_MAX_PER_VU = parseInt(__ENV.CAPTURE_MAX_PER_VU || "5", 10);
+const CAPTURE_BODY_BYTES = parseInt(__ENV.CAPTURE_BODY_BYTES || "1024", 10);
+let capturedThisVU = 0;
+
 const summaryTrendStats = [
   "avg",
   "min",
@@ -211,6 +217,19 @@ function makeGraphQLRequest() {
   });
 
   successRate.add(ok);
+
+  if (!ok && __ENV.SUMMARY_PATH && capturedThisVU < CAPTURE_MAX_PER_VU) {
+    capturedThisVU++;
+    console.log(
+      "ERRSAMPLE|" +
+        JSON.stringify({
+          vu: __VU,
+          iter: __ITER,
+          status: res.status,
+          body: String(res.body || "").slice(0, CAPTURE_BODY_BYTES),
+        })
+    );
+  }
 }
 
 function checkResponseStructure(x) {

@@ -21,6 +21,8 @@ After the workflow is done, create a Pull Request from `update-results` to `main
 
 > Be careful about running this workflow manually, as it uses the hosted runners in this case which have limited resources. If you run into issues, consider running the benchmarks locally by following the instructions in the [README.md](README.md).
 
+> A manual (`workflow_dispatch`) run measures every gateway 5 times per scenario (plus a warmup) with a CPU cooldown before each run and reports the median run; pull requests use 3 runs and no cooldown. Expect a full manual run to take several hours.
+
 > And within the PR you create, it will also trigger a regular workflow without hosted runners which might have different results in the PR comment. Just ignore them, and take the results in the updated `.md` files account.
 
 ## How to deploy the updated website?

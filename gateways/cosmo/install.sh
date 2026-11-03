@@ -150,3 +150,4 @@ downloader() {
 }
 
 download_binary "$@" || exit 1
+echo "$DOWNLOAD_VERSION" > version.txt

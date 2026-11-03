@@ -22,3 +22,4 @@ mv "$tmp/dist/router" ./router
 chmod +x ./router
 rm -rf "$tmp"
 ./router --version
+echo "$VERSION" > version.txt
