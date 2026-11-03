@@ -54,6 +54,44 @@ function notEmpty<TValue>(value: TValue | null | undefined): value is TValue {
   return value !== null && value !== undefined;
 }
 
+// Written by `cargo run -p toolkit aggregate` (see test.sh).
+type RunsReport = {
+  measured_runs: number;
+  median_run: number;
+  median_rps: number;
+  best_rps: number;
+  worst_rps: number;
+  cv_pct: number;
+  version: string | null;
+  runs: Array<{ run: number; rps: number; p95: number; p99_9: number }>;
+};
+
+// Written by `cargo run -p toolkit report`.
+type GatewayStats = {
+  mem_max: number; // MB
+  cpu_max: number; // %
+  rps: number;
+};
+
+function readOptionalJson<T>(filePath: string): T | null {
+  if (!existsSync(filePath)) {
+    return null;
+  }
+  try {
+    return JSON.parse(readFileSync(filePath, "utf8")) as T;
+  } catch (e) {
+    console.warn(`Could not parse ${filePath}: ${e}`);
+    return null;
+  }
+}
+
+function formatMemoryPerRequest(memMaxMb: number, rps: number) {
+  if (!rps) {
+    return "-";
+  }
+  return `${((memMaxMb * 1024) / rps).toFixed(1)} KB`;
+}
+
 function formatSummary(title: string, content: string) {
   return `<details>
   <summary>${title}</summary>
@@ -132,6 +170,12 @@ async function generateReport(artifactsRootPath: string) {
 
       const jsonSummary = JSON.parse(readFileSync(jsonSummaryFilePath, "utf8"));
 
+      // runs.json (median/best/worst/CV across measured runs, gateway version) and
+      // stats.json (peak RSS of the median run) are written by `toolkit aggregate`
+      // and `toolkit report`; both are optional so older artifacts still work.
+      const runs = readOptionalJson<RunsReport>(join(fullPath, "./runs.json"));
+      const stats = readOptionalJson<GatewayStats>(join(fullPath, "./stats.json"));
+
       return {
         name: dirName.replace(process.env.SCENARIO_ARTIFACTS_PREFIX!, ""),
         path: fullPath,
@@ -143,6 +187,8 @@ async function generateReport(artifactsRootPath: string) {
         /* containersImageUrl, */
         vus: jsonSummary.vus,
         duration: jsonSummary.duration,
+        runs,
+        stats,
       };
     })
   );
@@ -204,6 +250,15 @@ async function generateReport(artifactsRootPath: string) {
     NEWLINE,
     `This scenario was running ${validReportsData[0].vus} VUs over ${validReportsData[0].duration}`,
     NEWLINE,
+    (() => {
+      const measuredRuns = Math.max(
+        ...validReportsData.map((v) => v.runs?.measured_runs ?? 1)
+      );
+      return measuredRuns > 1
+        ? `**Methodology:** each gateway ran one warmup (discarded) and ${measuredRuns} measured runs. Gateways are ranked by the **median run's RPS**; best, worst and CV% (standard deviation of the per-run RPS, relative to the median) show how stable the runs were. Peak memory is the gateway's maximum RSS during the median run; memory per request divides it by the median RPS.`
+        : `Each gateway ran one warmup (discarded) and a single measured run. Peak memory is the gateway's maximum RSS during the run; memory per request divides it by the RPS.`;
+    })(),
+    NEWLINE,
     "### Comparison",
     NEWLINE,
     reportChartUrl
@@ -249,24 +304,38 @@ async function generateReport(artifactsRootPath: string) {
           );
         }
 
+        const multiRun = (v.runs?.measured_runs ?? 1) > 1;
+
         return {
           gw: v.name,
+          version: v.runs?.version ?? "-",
           rps: Math.round(v.rps),
+          best: multiRun ? Math.round(v.runs!.best_rps) : "-",
+          worst: multiRun ? Math.round(v.runs!.worst_rps) : "-",
+          cv: multiRun ? `${v.runs!.cv_pct.toFixed(1)}%` : "-",
           requests: `${v.jsonSummary.metrics.http_reqs.values.count} total, ${v.jsonSummary.metrics.http_req_failed.values.passes} failed`,
           duration: `avg: ${Math.round(
             v.jsonSummary.metrics.http_req_duration.values.avg
           )}ms, p95: ${Math.round(
             v.jsonSummary.metrics.http_req_duration.values["p(95)"]
           )}ms`,
+          mem: v.stats ? `${v.stats.mem_max} MB` : "-",
+          memPerReq: v.stats ? formatMemoryPerRequest(v.stats.mem_max, v.rps) : "-",
           notes: notes.length === 0 ? "✅" : "❌ " + notes.join(", "),
         };
       }),
       {
         columns: [
           { name: "Gateway" },
+          { name: "Version" },
           { name: "RPS ⬇️", align: "center" },
+          { name: "Best RPS", align: "center" },
+          { name: "Worst RPS", align: "center" },
+          { name: "CV%", align: "center" },
           { name: "Requests", align: "center" },
           { name: "Duration", align: "center" },
+          { name: "Peak Memory", align: "center" },
+          { name: "Memory / Request", align: "center" },
           { name: "Notes", align: "left" },
         ],
       }
@@ -277,7 +346,30 @@ async function generateReport(artifactsRootPath: string) {
         formatSummary(
           `Summary for: ${info.name}`,
           [
-            "**K6 Output**",
+            ...(info.runs && info.runs.measured_runs > 1
+              ? [
+                  `**Measured runs** (median run: ${info.runs.median_run})`,
+                  NEWLINE,
+                  tablemark(
+                    info.runs.runs.map((r) => ({
+                      run: r.run,
+                      rps: Math.round(r.rps),
+                      p95: `${Math.round(r.p95)}ms`,
+                      p999: `${Math.round(r.p99_9)}ms`,
+                    })),
+                    {
+                      columns: [
+                        { name: "Run" },
+                        { name: "RPS", align: "center" },
+                        { name: "p95", align: "center" },
+                        { name: "p99.9", align: "center" },
+                      ],
+                    }
+                  ),
+                  NEWLINE,
+                ]
+              : []),
+            "**K6 Output** (median run)",
             NEWLINE,
             NEWLINE,
             "```",

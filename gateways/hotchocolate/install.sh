@@ -27,3 +27,6 @@ npx -y "@chillicream/nitro@$NITRO_VERSION" fusion compose \
   -a gateway.far
 
 DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1 dotnet publish Gateway.csproj -c Release -o out
+
+# Record the benchmarked version for the report.
+grep -o 'HotChocolate.Fusion.AspNetCore" Version="[^"]*"' Gateway.csproj | sed 's/.*Version="//; s/"$//' > version.txt

@@ -33,6 +33,14 @@ on:
         required: true
       waitForUrl:
         type: string
+      runs:
+        description: Measured runs per gateway (one warmup run is always added); the median run is reported.
+        type: number
+        default: 1
+      cooldownMaxSeconds:
+        description: Wait for the CPU to cool to 45C before each measured run, for at most this many seconds (0 disables).
+        type: number
+        default: 0
 
 jobs:
   test:
@@ -98,6 +106,8 @@ jobs:
           CPU_LIMIT: ${{ inputs.cpuLimit }}
           FORK: ${{ inputs.fork }}
           WAIT_FOR_URL: ${{ inputs.waitForUrl }}
+          BENCH_RUNS: ${{ inputs.runs }}
+          BENCH_COOLDOWN_MAX_S: ${{ inputs.cooldownMaxSeconds }}
 
       - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7
         if: always()
@@ -110,3 +120,7 @@ jobs:
             gateways/${{ inputs.gateway }}/*.png
             gateways/${{ inputs.gateway }}/data.csv
             gateways/${{ inputs.gateway }}/stats.json
+            gateways/${{ inputs.gateway }}/runs.json
+            gateways/${{ inputs.gateway }}/version.txt
+            gateways/${{ inputs.gateway }}/error_responses.jsonl
+            gateways/${{ inputs.gateway }}/runs/

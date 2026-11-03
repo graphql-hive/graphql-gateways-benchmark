@@ -4,6 +4,8 @@ supergraph:
 log:
   level: info
 traffic_shaping:
+  # One HTTP client per worker thread instead of a shared one.
+  http_client_mode: per_worker
   router:
     dedupe:
       enabled: true

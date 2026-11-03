@@ -14,3 +14,7 @@ gateways/hotchocolate/obj
 gateways/hotchocolate/out
 gateways/hotchocolate/.dotnet
 gateways/hotchocolate/gateway.far
+version.txt
+runs.json
+error_responses.jsonl
+gateways/*/runs/

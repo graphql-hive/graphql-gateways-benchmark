@@ -50,5 +50,6 @@ curl --fail --location --progress-bar --output "$exe" "$gateway_uri" ||
 chmod +x "$exe" ||
     error 'Failed to set permissions on grafbase gateway executable'
 
+echo "$VERSION" > version.txt
 
 echo "success"
