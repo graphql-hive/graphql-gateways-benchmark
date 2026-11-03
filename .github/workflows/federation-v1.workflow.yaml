@@ -21,11 +21,13 @@ jobs:
         directory:
           - apollo-gateway
           - apollo-router
+          - apollo-router-v3
           - hive-gateway
           - hive-gateway-router-runtime
           - hive-router
           - cosmo
           - grafbase
+          - hotchocolate
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}
@@ -123,11 +125,13 @@ jobs:
         directory:
           - apollo-gateway
           - apollo-router
+          - apollo-router-v3
           - hive-gateway
           - hive-gateway-router-runtime
           - hive-router
           - cosmo
           - grafbase
+          - hotchocolate
     uses: ./.github/workflows/benchmark.template.yaml
     with:
       gateway: ${{ matrix.directory }}

@@ -14,7 +14,7 @@ path = "lib.rs"
 [dependencies]
 async-graphql = "7.0.17"
 async-graphql-axum = "7.0.17"
-axum = "0.8.4"
-lazy_static = "1.5.0"
-rand = "0.10.1"
-tokio = { version = "1.45.1", features = ["macros", "rt-multi-thread"] }
+axum = "0.8.9"
+lazy_static = "1.5.1"
+rand = "0.10.3"
+tokio = { version = "1.54.1", features = ["macros", "rt-multi-thread"] }
