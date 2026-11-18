@@ -1,0 +1,59 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  viewCount: Int
+  purchaseCount: Int
+  conversionRate: Float
+}
+
+type Category @key(fields: "id") {
+  id: ID!
+  popularity: Float
+}

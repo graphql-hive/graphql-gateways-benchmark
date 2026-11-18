@@ -1,0 +1,59 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  salePriceCents: Int
+  onSale: Boolean
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  onSale: Boolean
+  listPriceCents: Int! @external
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  onSale: Boolean
+  listPriceCents: Int! @external
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  onSale: Boolean
+  listPriceCents: Int! @external
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  onSale: Boolean
+  listPriceCents: Int! @external
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  onSale: Boolean
+  listPriceCents: Int! @external
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  onSale: Boolean
+  listPriceCents: Int! @external
+}
+
+type Variant @key(fields: "id") {
+  id: ID!
+  salePriceCents: Int @requires(fields: "listPriceCents")
+  listPriceCents: Int! @external
+}

@@ -1,0 +1,16 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type GiftCardProduct @key(fields: "id") {
+  id: ID!
+  customMessageAllowed: Boolean
+  expiryMonths: Int
+}
+
+type GiftCardBalance @key(fields: "id") {
+  id: ID!
+  cardNumberLast4: String
+}

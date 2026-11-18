@@ -195,3 +195,44 @@ jobs:
     secrets: inherit
     with:
       scenarioName: query-planning
+
+  query-planning-large:
+    needs:
+      - decide-runner
+    strategy:
+      fail-fast: false
+      matrix:
+        directory:
+          - apollo-gateway
+          - apollo-router
+          - apollo-router-v3
+          - apollo-router-v3-incremental
+          - hive-gateway
+          - hive-gateway-router-runtime
+          - hive-router
+          - cosmo
+          - grafbase
+    uses: ./.github/workflows/benchmark.template.yaml
+    with:
+      gateway: ${{ matrix.directory }}
+      # Planning runs a single VU for a fixed number of iterations;
+      # vu and time are not used in this mode.
+      vu: 1
+      time: 0s
+      scenarioName: query-planning-large
+      runner: ${{ needs.decide-runner.outputs.runner }}
+      cpuLimit: 3
+      fork: 2
+      memoryLimit: 6gb
+      mode: planning-large
+      waitForUrl: ${{ startsWith(matrix.directory, 'hive-gateway') && 'http://localhost:4000/healthcheck' || '' }}
+
+  query-planning-large-report:
+    # The report template comments on the PR and commits results.
+    permissions: write-all
+    needs: query-planning-large
+    uses: ./.github/workflows/planning-report.template.yaml
+    secrets: inherit
+    with:
+      scenarioName: query-planning-large
+      planningScenario: large

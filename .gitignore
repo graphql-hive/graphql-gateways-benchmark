@@ -12,3 +12,6 @@ k6_metrics.json
 k6_planning_summary.json
 k6_planning_summary.txt
 planning_stats.json
+k6_planning_large_summary.json
+k6_planning_large_summary.txt
+planning_large_stats.json

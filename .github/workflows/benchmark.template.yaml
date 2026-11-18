@@ -113,3 +113,6 @@ jobs:
             gateways/${{ inputs.gateway }}/k6_planning_summary.json
             gateways/${{ inputs.gateway }}/k6_planning_summary.txt
             gateways/${{ inputs.gateway }}/planning_stats.json
+            gateways/${{ inputs.gateway }}/k6_planning_large_summary.json
+            gateways/${{ inputs.gateway }}/k6_planning_large_summary.txt
+            gateways/${{ inputs.gateway }}/planning_large_stats.json

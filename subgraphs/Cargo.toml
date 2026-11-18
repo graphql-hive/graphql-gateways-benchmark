@@ -12,7 +12,7 @@ name = "subgraphs"
 path = "lib.rs"
 
 [dependencies]
-async-graphql = "7.0.17"
+async-graphql = { version = "7.0.17", features = ["dynamic-schema"] }
 async-graphql-axum = "7.0.17"
 axum = "0.8.4"
 lazy_static = "1.5.0"

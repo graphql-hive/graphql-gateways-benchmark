@@ -8,8 +8,9 @@ set -Eeuo pipefail
 #   WAIT_FOR_URL="http://127.0.0.1:4000/health"  # healthcheck URL
 #   WARMUP_SECONDS=15
 #   MEASURE_SECONDS=60
-#   LOAD_MODE="constant"        # "constant", "stress" or "planning"
-#   PLANNING_ITERATIONS=1000    # planning mode: measured iterations per query tier
+#   LOAD_MODE="constant"        # "constant", "stress", "planning" or "planning-large"
+#   PLANNING_ITERATIONS=1000    # planning modes: measured iterations per query tier
+#                               # (default: 1000, or 200 for planning-large)
 
 command -v realpath >/dev/null || { echo "realpath required"; exit 1; }
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
@@ -34,6 +35,18 @@ LOAD_MODE="$2"
 GATEWAY_DIR="$SCRIPT_DIR/gateways/$GATEWAY_NAME"
 [[ -d "$GATEWAY_DIR" ]] || { echo "Error: Gateway '$GATEWAY_NAME' not found at '$GATEWAY_DIR'."; exit 1; }
 [[ -x "$GATEWAY_DIR/run.sh" ]] || { echo "Error: '$GATEWAY_DIR/run.sh' missing or not executable. It should 'exec' the binary."; exit 1; }
+
+# planning-large is the planning benchmark pointed at the generated ecommerce
+# supergraph (~80 subgraphs, see scripts/generate-large-graph.ts). Gateways
+# pick the supergraph up from these variables in their run.sh.
+PLANNING_SCENARIO="default"
+if [[ "$LOAD_MODE" == "planning-large" ]]; then
+  LOAD_MODE="planning"
+  PLANNING_SCENARIO="large"
+  export SUPERGRAPH_PATH="$SCRIPT_DIR/large-graph/supergraph.graphql"
+  export COSMO_CONFIG_PATH="$SCRIPT_DIR/large-graph/cosmo-config.json"
+  [[ -f "$SUPERGRAPH_PATH" ]] || { echo "Error: '$SUPERGRAPH_PATH' not found. Run 'npm run generate-large-graph'."; exit 1; }
+fi
 
 # Defaults
 WARMUP_SECONDS="${WARMUP_SECONDS:-15}"
@@ -220,10 +233,11 @@ if [[ "$LOAD_MODE" == "planning" ]]; then
   done
 
   echo "Query planning benchmark ..."
-  maybe_taskset "${LOAD_CPUSET}" k6 run -e SUMMARY_PATH="$(pwd)" "$SCRIPT_DIR/k6-planning.js"
+  maybe_taskset "${LOAD_CPUSET}" k6 run -e SUMMARY_PATH="$(pwd)" \
+    -e PLANNING_SCENARIO="$PLANNING_SCENARIO" "$SCRIPT_DIR/k6-planning.js"
 
   echo "Summary:"
-  cargo run -p toolkit planning-report "$(pwd)"
+  cargo run -p toolkit planning-report "$(pwd)" "$PLANNING_SCENARIO"
 
   echo "Planning test for gateway '$GATEWAY_NAME' completed successfully."
   exit 0

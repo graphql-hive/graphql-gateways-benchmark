@@ -51,6 +51,8 @@ The benchmark process is orchestrated by a `Makefile` and a series of bash scrip
 - `subgraphs/`: Contains the Rust source for the GraphQL subgraphs used for testing.
 - `k6.js`: The k6 script for load testing.
 - `k6-planning.js`: The k6 script for the query planning benchmark.
+- `large-graph/`: The generated ~80 subgraph ecommerce supergraph used by `mode=planning-large` (subgraph SDLs, composed supergraph, Cosmo config and queries).
+- `scripts/generate-large-graph.ts`: Generates `large-graph/`.
 - `monitor.sh`: Script to monitor CPU and memory usage of a process.
 - `test.sh`: Script to run the benchmark for a single gateway.
 - `Makefile`: Provides convenience commands to run the benchmarks.
@@ -88,11 +90,11 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
     This command will block, so run it in a separate terminal.
 
 3.  **Run Benchmarks**:
-    You can test a single gateway or all of them. You must specify a testing mode: `constant`, `stress` or `planning`.
+    You can test a single gateway or all of them. You must specify a testing mode: `constant`, `stress`, `planning` or `planning-large`.
 
     *   **Test a single gateway:**
         ```bash
-        make test gateway=<gateway_name> mode=<constant|stress|planning>
+        make test gateway=<gateway_name> mode=<constant|stress|planning|planning-large>
         ```
         Replace `<gateway_name>` with one of: `apollo-gateway`, `apollo-router`, `apollo-router-v3`, `apollo-router-v3-incremental`, `cosmo`, `grafbase`, `hive-gateway`, `hive-gateway-router-runtime`, or `hive-router`.
 
@@ -106,7 +108,7 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
     *   **Test all gateways:**
         This will run the test for every gateway in the `gateways` directory and then print a summary table.
         ```bash
-        make test-all mode=<constant|stress|planning>
+        make test-all mode=<constant|stress|planning|planning-large>
         ```
 
         Examples:
@@ -121,6 +123,7 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
     ```bash
     cargo run -p toolkit summary
     cargo run -p toolkit planning-summary   # query planning results
+    cargo run -p toolkit planning-summary gateways large   # planning-large results
     ```
 
     The summary output will look something like this:
@@ -146,6 +149,8 @@ The benchmark uses Unix-specific tools and commands that are not available on Wi
 
 - **Planning Mode** (`mode=planning`): Measures query planning cost. See [Query Planning Benchmark](#query-planning-benchmark).
 
+- **Planning Large Mode** (`mode=planning-large`): The planning benchmark against a generated ecommerce supergraph with ~80 subgraphs. See [Large supergraph](#large-supergraph).
+
 ## Query Planning Benchmark
 
 Gateways cache the result of parsing, validating and planning an operation, so the throughput benchmarks above (which send the same query over and over) almost never plan anything. The planning benchmark (`k6-planning.js`) measures what the first request for a new operation costs.
@@ -166,6 +171,55 @@ Query tiers:
 | `complex` | 6 root fields with overlapping selections and deep chains of entity jumps across all subgraphs |
 
 Results are written to `gateways/<gateway>/planning_stats.json` and summarized with `cargo run -p toolkit planning-summary`.
+
+### Plan quality
+
+A planner that answers quickly can still hand back a worse plan, so the benchmark also reports what each gateway's plan costs to execute. Before measuring, the k6 script asks the subgraph server to record every request it receives while each query runs once (`POST /_trace/start` and `POST /_trace/stop`), and reports per query:
+
+- **Sequential steps**: the longest chain of subgraph fetches that each had to wait for the previous one. This is how many subgraph round trips a client waits for, so it sets the latency of the query when subgraphs aren't instant.
+- **Subgraph fetches**: how many requests the gateway sent in total.
+- **Subgraphs**: how many distinct subgraphs those requests went to.
+
+The plan is observed from the subgraphs rather than read from each gateway's own plan output, so the numbers mean the same thing for every gateway. Two things to keep in mind when reading them:
+
+- Steps are inferred from timing. Every traced request is delayed by `PLAN_TRACE_DELAY_MS` (default `50`), a fetch counts as waiting on another one only if it arrived after that one's response was sent, and the shallowest of `PLAN_TRACE_RUNS` (default `3`) executions is reported.
+- Fetch counts depend on the mock data as well as the plan. Gateways skip entity fetches for types that aren't in the response, and the mock subgraphs return two items per list.
+
+### Large supergraph
+
+The 4 subgraph schema above is too small to make a query planner work hard. `mode=planning-large` runs the same benchmark against a generated ecommerce supergraph with 80 subgraphs (`large-graph/`), modelled on a store whose graph grew one team at a time:
+
+- **Wide entities**: `Product`, `Variant`, `Customer`, `Order` and `Cart` each get a couple of fields from dozens of subgraphs (`Product` has fields from 29 of them), so a single page fans out across most of the graph.
+- **Interfaces and unions**: `Product` (6 implementations), `Promotion` (5) and `PaymentMethod` (5) are interfaces whose implementations are entities extended across subgraphs, next to the `SearchResult` (10 members) and `ContentBlock` (6 members) unions. Planners have to expand every selection per concrete type.
+- **`@requires` chains**: computed fields that depend on fields computed by other subgraphs, several hops deep. For example `Cart.pointsToEarn` requires `grandTotalCents` (checkout), which requires `taxTotalCents` (tax), which requires `shippingTotalCents` (shipping-rates), which requires `discountTotalCents` (discounts), which requires `subtotalCents` (cart-totals).
+- `@provides` and a second `@key` (`Variant.sku`, the only key the inventory subgraph knows).
+
+Query tiers:
+
+| Tier | Description |
+| --- | --- |
+| `product_page` | Product detail page: every field of the `Product` interface across all of its implementations, plus variants, reviews, promotions and recommendations |
+| `search` | Search results page: the `SearchResult` union, the `ContentBlock` union of the landing page and product listings nested under them |
+| `checkout` | Checkout page: cart and line item totals computed through `@requires` chains 5 subgraphs deep, with products, promotions and payment methods around them |
+| `order_history` | Account page: customer, orders, line items, shipments and payment methods, with ranked products (the product `@requires` chain) 4 entity hops deep |
+
+Everything in `large-graph/` is generated by `scripts/generate-large-graph.ts` and committed, so running the benchmark needs no extra steps:
+
+```bash
+make test gateway=hive-router mode=planning-large
+make test-all mode=planning-large
+```
+
+`PLANNING_ITERATIONS` defaults to `200` in this mode, because planning one of these operations takes some gateways hundreds of milliseconds. Results are written to `gateways/<gateway>/planning_large_stats.json`.
+
+To change the schema or the queries, edit the generator and run it again. It composes the supergraph with `@apollo/composition`, builds the Cosmo router config with `wgc`, and validates the queries against the composed schema:
+
+```bash
+npm run generate-large-graph
+SUBGRAPHS=60 npm run generate-large-graph   # fewer subgraphs (38 to 80)
+```
+
+The subgraphs themselves are mocks: the `subgraphs` binary turns every SDL file in `large-graph/subgraphs` into a schema that answers with deterministic fake data (`subgraphs/ecommerce.rs`), served under `http://localhost:4200/ecommerce/<name>`. That is enough here, because the warm and the cold request do identical subgraph work and only their difference is reported.
 
 ### Apollo Router v3 incremental planner
 

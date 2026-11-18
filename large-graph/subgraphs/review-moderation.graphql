@@ -1,0 +1,12 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Review @key(fields: "id") {
+  id: ID!
+  verifiedPurchase: Boolean
+  helpfulCount: Int
+  moderationStatus: String
+}

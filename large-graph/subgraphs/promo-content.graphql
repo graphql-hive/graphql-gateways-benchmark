@@ -1,0 +1,41 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Promotion {
+  id: ID!
+  bannerText: String
+  termsUrl: String
+}
+
+type PercentageDiscount implements Promotion @key(fields: "id") {
+  id: ID!
+  bannerText: String
+  termsUrl: String
+}
+
+type FixedAmountDiscount implements Promotion @key(fields: "id") {
+  id: ID!
+  bannerText: String
+  termsUrl: String
+}
+
+type BuyXGetYDeal implements Promotion @key(fields: "id") {
+  id: ID!
+  bannerText: String
+  termsUrl: String
+}
+
+type FreeShippingOffer implements Promotion @key(fields: "id") {
+  id: ID!
+  bannerText: String
+  termsUrl: String
+}
+
+type BundleDeal implements Promotion @key(fields: "id") {
+  id: ID!
+  bannerText: String
+  termsUrl: String
+}

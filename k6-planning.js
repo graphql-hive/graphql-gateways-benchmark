@@ -17,16 +17,36 @@
 //
 // A single VU runs everything sequentially so planning work never queues
 // behind other requests.
+//
+// Before measuring, setup() also looks at the plan each gateway came up with:
+// it asks the subgraph server to record every request it receives while one
+// query executes, and reports how many subgraph fetches the plan needed and
+// how many of them had to run one after another (see tracePlan below).
 
 import http from "k6/http";
 import exec from "k6/execution";
 import { check } from "k6";
 import { Rate, Trend } from "k6/metrics";
 import { textSummary } from "https://jslib.k6.io/k6-summary/0.0.1/index.js";
+import { QUERIES as LARGE_QUERIES } from "./large-graph/queries.js";
+
+// "large" runs the queries generated for the ~80 subgraph ecommerce supergraph
+// (scripts/generate-large-graph.ts) instead of the 4 subgraph ones below.
+const scenario = __ENV.PLANNING_SCENARIO || "default";
+const summaryName =
+  scenario === "large" ? "k6_planning_large_summary" : "k6_planning_summary";
 
 const endpoint = __ENV.GATEWAY_ENDPOINT || "http://0.0.0.0:4000/graphql";
-const iterations = parseInt(__ENV.PLANNING_ITERATIONS || "1000");
+const iterations = parseInt(
+  __ENV.PLANNING_ITERATIONS || (scenario === "large" ? "200" : "1000")
+);
 const warmupIterations = parseInt(__ENV.PLANNING_WARMUP_ITERATIONS || "50");
+const subgraphsEndpoint = __ENV.SUBGRAPHS_ENDPOINT || "http://0.0.0.0:4200";
+// Delay added to every subgraph request while a plan is traced. It has to be
+// long enough that fetches sent in parallel can't be mistaken for fetches
+// that waited on one another.
+const traceDelayMs = parseInt(__ENV.PLAN_TRACE_DELAY_MS || "50");
+const traceRuns = parseInt(__ENV.PLAN_TRACE_RUNS || "3");
 // Unique per k6 run, so re-running against an already running gateway still
 // produces never-seen-before operations.
 const runNonce = Date.now().toString(36);
@@ -53,7 +73,7 @@ const reviewFragment = `fragment Review on Review {
 
 // `__ID__` is replaced with a fixed value for warm requests and with a unique
 // value for cold requests.
-const QUERIES = {
+const SMALL_QUERIES = {
   // Single subgraph, no entity fetches.
   simple: `query Simple__ID__ {
   top__ID__: topProducts {
@@ -229,6 +249,7 @@ query Complex__ID__ {
 }`,
 };
 
+const QUERIES = scenario === "large" ? LARGE_QUERIES : SMALL_QUERIES;
 const TIERS = Object.keys(QUERIES);
 
 const trends = {};
@@ -294,6 +315,58 @@ function send(tier, id) {
   return ok ? res.timings.duration : null;
 }
 
+// Shape of the plan the gateway executes for a query, observed from the
+// subgraphs' side:
+//   - fetches: subgraph requests sent
+//   - subgraphs: distinct subgraphs they went to
+//   - depth: the longest chain of fetches that each started only after the
+//     previous one had finished, i.e. how many subgraph round trips a client
+//     waits for. Every traced request is delayed by `traceDelayMs`, so only
+//     fetches that really waited for an earlier response count.
+// Fetch counts depend on the mock data as well as on the plan: gateways skip
+// entity fetches for types that aren't in the response.
+function tracePlan(tier) {
+  let best = null;
+  for (let run = 0; run < traceRuns; run++) {
+    const started = http.post(
+      `${subgraphsEndpoint}/_trace/start?delay_ms=${traceDelayMs}`
+    );
+    if (started.status !== 200) {
+      return null;
+    }
+    const duration = send(tier, "_warm");
+    const stopped = http.post(`${subgraphsEndpoint}/_trace/stop`);
+    if (duration === null || stopped.status !== 200) {
+      return null;
+    }
+
+    const fetches = stopped.json().sort((a, b) => a.start - b.start);
+    const depths = [];
+    let depth = 0;
+    for (let i = 0; i < fetches.length; i++) {
+      let d = 1;
+      for (let j = 0; j < i; j++) {
+        if (fetches[j].end <= fetches[i].start && depths[j] + 1 > d) {
+          d = depths[j] + 1;
+        }
+      }
+      depths.push(d);
+      depth = Math.max(depth, d);
+    }
+
+    const plan = {
+      fetches: fetches.length,
+      subgraphs: new Set(fetches.map((f) => f.subgraph)).size,
+      depth,
+    };
+    // Scheduling hiccups can only make a plan look deeper than it is.
+    if (best === null || plan.depth < best.depth) {
+      best = plan;
+    }
+  }
+  return best;
+}
+
 export function setup() {
   // Warm up the gateway: populate caches for the warm documents (several
   // times, in case the gateway runs multiple workers) and exercise the
@@ -304,6 +377,17 @@ export function setup() {
       send(tier, `_setup_${runNonce}_${i}`);
     }
   }
+
+  const plans = {};
+  for (const tier of TIERS) {
+    const plan = tracePlan(tier);
+    if (plan === null) {
+      console.log(`⚠️ could not trace the ${tier} plan`);
+      continue;
+    }
+    plans[tier] = plan;
+  }
+  return { plans };
 }
 
 export default function () {
@@ -338,10 +422,14 @@ export function handleSummary(data) {
   };
 
   if (__ENV.SUMMARY_PATH) {
-    out[`${__ENV.SUMMARY_PATH}/k6_planning_summary.json`] = JSON.stringify(
-      Object.assign(data, { tiers: TIERS, iterations })
+    out[`${__ENV.SUMMARY_PATH}/${summaryName}.json`] = JSON.stringify(
+      Object.assign(data, {
+        tiers: TIERS,
+        iterations,
+        plans: (data.setup_data && data.setup_data.plans) || {},
+      })
     );
-    out[`${__ENV.SUMMARY_PATH}/k6_planning_summary.txt`] = textSummary(data, {
+    out[`${__ENV.SUMMARY_PATH}/${summaryName}.txt`] = textSummary(data, {
       indent: " ",
       enableColors: false,
     });

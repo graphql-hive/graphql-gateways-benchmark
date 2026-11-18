@@ -2,7 +2,7 @@
   "name": "hive-gateway",
   "version": "0.0.0",
   "scripts": {
-    "start": "hive-gateway supergraph supergraph.graphql --jit"
+    "start": "hive-gateway supergraph ${SUPERGRAPH_PATH:-supergraph.graphql} --jit"
   },
   "dependencies": {
     "@graphql-hive/gateway": "2.15.2",

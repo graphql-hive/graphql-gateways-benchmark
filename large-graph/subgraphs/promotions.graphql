@@ -1,0 +1,109 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  promotions: [Promotion!]!
+}
+
+interface Promotion {
+  id: ID!
+  code: String!
+  title: String!
+  startsAt: String
+  endsAt: String
+  stackable: Boolean
+}
+
+interface Product {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  promotions: [Promotion!]!
+}
+
+type PercentageDiscount implements Promotion @key(fields: "id") {
+  id: ID!
+  code: String!
+  title: String!
+  startsAt: String
+  endsAt: String
+  stackable: Boolean
+  percentOff: Int!
+}
+
+type FixedAmountDiscount implements Promotion @key(fields: "id") {
+  id: ID!
+  code: String!
+  title: String!
+  startsAt: String
+  endsAt: String
+  stackable: Boolean
+  amountOffCents: Int!
+}
+
+type BuyXGetYDeal implements Promotion @key(fields: "id") {
+  id: ID!
+  code: String!
+  title: String!
+  startsAt: String
+  endsAt: String
+  stackable: Boolean
+  buyQuantity: Int!
+  getQuantity: Int!
+}
+
+type FreeShippingOffer implements Promotion @key(fields: "id") {
+  id: ID!
+  code: String!
+  title: String!
+  startsAt: String
+  endsAt: String
+  stackable: Boolean
+  minimumSpendCents: Int
+}
+
+type BundleDeal implements Promotion @key(fields: "id") {
+  id: ID!
+  code: String!
+  title: String!
+  startsAt: String
+  endsAt: String
+  stackable: Boolean
+  requiredItems: Int!
+}
+
+type Cart @key(fields: "id") {
+  id: ID!
+  appliedPromotions: [Promotion!]!
+}

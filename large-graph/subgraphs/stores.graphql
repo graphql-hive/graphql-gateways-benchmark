@@ -1,0 +1,19 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  stores: [Store!]!
+}
+
+type Store @key(fields: "id") {
+  id: ID!
+  name: String!
+  city: String
+  countryCode: String
+  latitude: Float
+  longitude: Float
+  openingHours: String
+}

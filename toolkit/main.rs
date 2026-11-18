@@ -32,6 +32,17 @@ struct Percentiles {
     max: f64,
 }
 
+/// Shape of the plan the gateway executed, observed from the subgraphs.
+#[derive(Serialize, Deserialize, Clone, Copy)]
+struct PlanShape {
+    /// Subgraph requests sent.
+    fetches: u64,
+    /// Distinct subgraphs they went to.
+    subgraphs: u64,
+    /// Longest chain of fetches that had to wait for one another.
+    depth: u64,
+}
+
 #[derive(Serialize, Deserialize)]
 struct PlanningTierStats {
     tier: String,
@@ -39,6 +50,8 @@ struct PlanningTierStats {
     overhead: Percentiles,
     cold: Percentiles,
     warm: Percentiles,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    plan: Option<PlanShape>,
 }
 
 #[derive(Serialize, Deserialize)]
@@ -57,15 +70,18 @@ fn main() {
     } else if &args[1] == "data" {
         data();
     } else if &args[1] == "planning-report" {
-        planning_report(&args[2]);
+        planning_report(&args[2], PlanningScenario::from_arg(args.get(3)));
     } else if &args[1] == "planning-summary" {
-        planning_summary(args.get(2).map(|s| s.as_str()).unwrap_or("gateways"));
+        planning_summary(
+            args.get(2).map(|s| s.as_str()).unwrap_or("gateways"),
+            PlanningScenario::from_arg(args.get(3)),
+        );
     } else {
         eprintln!("Usage: cargo run -p toolkit report <gateway-dir>");
         eprintln!("Usage: cargo run -p toolkit summary");
         eprintln!("Usage: cargo run -p toolkit data");
-        eprintln!("Usage: cargo run -p toolkit planning-report <gateway-dir>");
-        eprintln!("Usage: cargo run -p toolkit planning-summary [dir]");
+        eprintln!("Usage: cargo run -p toolkit planning-report <gateway-dir> [default|large]");
+        eprintln!("Usage: cargo run -p toolkit planning-summary [dir] [default|large]");
     }
 }
 
@@ -253,10 +269,50 @@ fn report(pwd: &str) {
     .expect("Unable to write stats.json")
 }
 
-fn planning_report(pwd: &str) {
-    let raw = read_file(&format!("{}/k6_planning_summary.json", pwd));
-    let summary: sonic_rs::Value =
-        sonic_rs::from_str(&raw).expect("Unable to parse k6_planning_summary.json");
+/// Which supergraph the planning benchmark ran against. Each scenario keeps
+/// its results in its own files so they can sit side by side.
+#[derive(Clone, Copy, PartialEq)]
+enum PlanningScenario {
+    /// The 4 subgraph supergraph shared with the throughput benchmarks.
+    Default,
+    /// The generated ecommerce supergraph (~80 subgraphs).
+    Large,
+}
+
+impl PlanningScenario {
+    fn from_arg(arg: Option<&String>) -> Self {
+        match arg.map(|s| s.as_str()) {
+            Some("large") => PlanningScenario::Large,
+            _ => PlanningScenario::Default,
+        }
+    }
+
+    fn summary_file(self) -> &'static str {
+        match self {
+            PlanningScenario::Default => "k6_planning_summary.json",
+            PlanningScenario::Large => "k6_planning_large_summary.json",
+        }
+    }
+
+    fn stats_file(self) -> &'static str {
+        match self {
+            PlanningScenario::Default => "planning_stats.json",
+            PlanningScenario::Large => "planning_large_stats.json",
+        }
+    }
+
+    fn title(self) -> &'static str {
+        match self {
+            PlanningScenario::Default => "Query planning",
+            PlanningScenario::Large => "Query planning (large supergraph)",
+        }
+    }
+}
+
+fn planning_report(pwd: &str, scenario: PlanningScenario) {
+    let raw = read_file(&format!("{}/{}", pwd, scenario.summary_file()));
+    let summary: sonic_rs::Value = sonic_rs::from_str(&raw)
+        .unwrap_or_else(|_| panic!("Unable to parse {}", scenario.summary_file()));
     let summary = summary.as_object().unwrap();
     let metrics = summary.get(&"metrics").unwrap().as_object().unwrap();
 
@@ -282,6 +338,15 @@ fn planning_report(pwd: &str) {
         max: metric(name, "max"),
     };
 
+    let plan = |tier: &str| -> Option<PlanShape> {
+        let plan = summary.get(&"plans")?.as_object()?.get(&tier)?.as_object()?;
+        Some(PlanShape {
+            fetches: plan.get(&"fetches")?.as_u64()?,
+            subgraphs: plan.get(&"subgraphs")?.as_u64()?,
+            depth: plan.get(&"depth")?.as_u64()?,
+        })
+    };
+
     let tiers = summary
         .get(&"tiers")
         .unwrap()
@@ -291,6 +356,7 @@ fn planning_report(pwd: &str) {
         .map(|t| {
             let tier = t.as_str().unwrap().to_string();
             PlanningTierStats {
+                plan: plan(&tier),
                 overhead: percentiles(&format!("planning_{}_overhead", tier)),
                 cold: percentiles(&format!("planning_{}_cold", tier)),
                 warm: percentiles(&format!("planning_{}_warm", tier)),
@@ -305,22 +371,23 @@ fn planning_report(pwd: &str) {
     };
 
     std::fs::write(
-        format!("{}/planning_stats.json", pwd),
+        format!("{}/{}", pwd, scenario.stats_file()),
         sonic_rs::to_string_pretty(&stats).unwrap(),
     )
-    .expect("Unable to write planning_stats.json");
+    .unwrap_or_else(|_| panic!("Unable to write {}", scenario.stats_file()));
 
     let name = std::path::Path::new(pwd)
         .file_name()
         .map(|n| n.to_string_lossy().into_owned())
         .unwrap_or_default();
-    print_planning_tables(vec![(name, stats)]);
+    print_planning_tables(vec![(name, stats)], scenario);
 }
 
-/// Collects `<dir>/*/planning_stats.json` and prints one table per query tier.
+/// Collects `<dir>/*/planning_stats.json` (or `planning_large_stats.json`) and
+/// prints one table per query tier.
 /// When `SCENARIO_ARTIFACTS_PREFIX` is set (CI artifacts), it is stripped from
 /// the directory names.
-fn planning_summary(dir: &str) {
+fn planning_summary(dir: &str, scenario: PlanningScenario) {
     let prefix = env::var("SCENARIO_ARTIFACTS_PREFIX").unwrap_or_default();
     let mut reports: Vec<(String, PlanningStats)> = Vec::new();
 
@@ -329,7 +396,7 @@ fn planning_summary(dir: &str) {
             continue;
         }
         let Ok(raw) =
-            std::fs::read_to_string(entry.path().join("planning_stats.json"))
+            std::fs::read_to_string(entry.path().join(scenario.stats_file()))
         else {
             continue;
         };
@@ -339,12 +406,12 @@ fn planning_summary(dir: &str) {
         reports.push((name, stats));
     }
 
-    print_planning_tables(reports);
+    print_planning_tables(reports, scenario);
 }
 
-fn print_planning_tables(reports: Vec<(String, PlanningStats)>) {
+fn print_planning_tables(reports: Vec<(String, PlanningStats)>, scenario: PlanningScenario) {
     let Some((_, first)) = reports.first() else {
-        eprintln!("No planning_stats.json found");
+        eprintln!("No {} found", scenario.stats_file());
         return;
     };
     let tiers: Vec<String> = first.tiers.iter().map(|t| t.tier.clone()).collect();
@@ -362,7 +429,7 @@ fn print_planning_tables(reports: Vec<(String, PlanningStats)>) {
             .collect();
         rows.sort_by(|a, b| a.1.overhead.p50.total_cmp(&b.1.overhead.p50));
 
-        println!("### Query planning: `{}` query", tier);
+        println!("### {}: `{}` query", scenario.title(), tier);
         println!();
         println!("Planning overhead (cold - warm), in ms:");
         println!();
@@ -385,6 +452,36 @@ fn print_planning_tables(reports: Vec<(String, PlanningStats)>) {
                 t.warm.p50,
                 t.warm.p99,
                 success_rate * 100.0
+            );
+        }
+        println!();
+
+        let mut plans: Vec<(&str, PlanShape, f64)> = reports
+            .iter()
+            .filter_map(|(name, stats)| {
+                let t = stats.tiers.iter().find(|t| t.tier == tier)?;
+                Some((name.as_str(), t.plan?, t.overhead.p50))
+            })
+            .collect();
+        if plans.is_empty() {
+            continue;
+        }
+        // Fewest sequential steps first (they set the latency a client sees),
+        // then fewest fetches.
+        plans.sort_by(|a, b| {
+            (a.1.depth, a.1.fetches)
+                .cmp(&(b.1.depth, b.1.fetches))
+                .then(a.2.total_cmp(&b.2))
+        });
+
+        println!("Plan quality (what the subgraphs saw for one execution):");
+        println!();
+        println!("| Gateway | Sequential steps | Subgraph fetches | Subgraphs | Planning overhead p50 (ms) |");
+        println!("| --- | --- | --- | --- | --- |");
+        for (name, plan, overhead) in plans {
+            println!(
+                "| {} | {} | {} | {} | {:.3} |",
+                name, plan.depth, plan.fetches, plan.subgraphs, overhead
             );
         }
         println!();

@@ -1,0 +1,41 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface PaymentMethod {
+  id: ID!
+  verified: Boolean!
+  riskLevel: String
+}
+
+type CreditCard implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  verified: Boolean!
+  riskLevel: String
+}
+
+type PayPalAccount implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  verified: Boolean!
+  riskLevel: String
+}
+
+type BankTransfer implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  verified: Boolean!
+  riskLevel: String
+}
+
+type GiftCardBalance implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  verified: Boolean!
+  riskLevel: String
+}
+
+type BuyNowPayLater implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  verified: Boolean!
+  riskLevel: String
+}

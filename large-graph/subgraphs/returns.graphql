@@ -1,0 +1,18 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Order @key(fields: "id") {
+  id: ID!
+  returnWindowEndsAt: String @requires(fields: "placedAt")
+  placedAt: String! @external
+}
+
+type OrderItem @key(fields: "id") {
+  id: ID!
+  returnEligible: Boolean @requires(fields: "quantity refundableCents")
+  quantity: Int! @external
+  refundableCents: Int! @external
+}

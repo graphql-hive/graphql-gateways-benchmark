@@ -4,6 +4,10 @@ on:
       scenarioName:
         type: string
         required: true
+      # "default" (4 subgraphs) or "large" (generated ~80 subgraph supergraph)
+      planningScenario:
+        type: string
+        default: default
 
 jobs:
   report:
@@ -34,12 +38,20 @@ jobs:
       - name: generate report
         run: |
           {
-            echo "## Query planning"
+            if [ "${{ inputs.planningScenario }}" = "large" ]; then
+              echo "## Query planning (large supergraph)"
+              echo
+              echo "The planning benchmark against a generated ecommerce supergraph with ~80 subgraphs: wide entities, interfaces and unions spread across subgraphs and \`@requires\` chains several subgraphs deep."
+            else
+              echo "## Query planning"
+            fi
             echo
             echo "Each query is sent twice per iteration by a single VU: once with a document the gateway has already cached (warm) and once with a never-seen-before document (unique operation name and aliases, cold)."
             echo "**Planning overhead** is the paired \`cold - warm\` latency: the time spent parsing, validating, normalizing and query planning a new operation."
             echo
-            cargo run -q -p toolkit planning-summary ${{ steps.download.outputs.download-path }}
+            echo "**Plan quality** is what the subgraphs saw while the query ran once: the subgraph fetches the gateway sent, and the longest chain of fetches that had to wait for one another (sequential steps)."
+            echo
+            cargo run -q -p toolkit planning-summary ${{ steps.download.outputs.download-path }} ${{ inputs.planningScenario }}
           } > result.md
         env:
           SCENARIO_ARTIFACTS_PREFIX: ${{ inputs.scenarioName }}_

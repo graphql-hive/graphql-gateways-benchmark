@@ -1,0 +1,23 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Customer @key(fields: "id") {
+  id: ID!
+  addresses: [Address!]!
+}
+
+type Order @key(fields: "id") {
+  id: ID!
+  shippingCity: String
+  shippingCountryCode: String
+}
+
+type Address {
+  line1: String!
+  city: String!
+  postalCode: String
+  countryCode: String!
+}

@@ -1,0 +1,17 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Variant @key(fields: "id") {
+  id: ID!
+  shippingWeightGrams: Int
+  shippingClass: String
+}
+
+type CartItem @key(fields: "id") {
+  id: ID!
+  shippingWeightGrams: Int! @requires(fields: "quantity")
+  quantity: Int! @external
+}

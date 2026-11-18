@@ -1,0 +1,19 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  me: Customer
+  customer(id: ID!): Customer
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  email: String!
+  displayName: String! @shareable
+  firstName: String
+  lastName: String
+  createdAt: String
+}

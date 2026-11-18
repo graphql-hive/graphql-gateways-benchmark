@@ -1,0 +1,115 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  product(id: ID!): Product
+  products(first: Int = 10): [Product!]!
+}
+
+interface Product {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+  weightGrams: Int
+  material: String
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+  downloadSizeMb: Int
+  fileFormat: String
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+  bundleItems: [Product!]!
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+  denominations: [Int!]!
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+  billingInterval: String
+  trialDays: Int
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  sku: String!
+  name: String!
+  slug: String!
+  description: String
+  brand: Brand
+  categories: [Category!]!
+  variants: [Variant!]!
+  createdAt: String
+  optionNames: [String!]!
+}
+
+type Variant @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Category @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Brand @key(fields: "id", resolvable: false) {
+  id: ID!
+}

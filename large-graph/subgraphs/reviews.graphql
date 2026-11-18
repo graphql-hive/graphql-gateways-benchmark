@@ -1,0 +1,70 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  reviews(first: Int = 5): [Review!]!
+  ratingAverage: Float
+  reviewCount: Int
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  reviews: [Review!]!
+  displayName: String! @external
+}
+
+type Review @key(fields: "id") {
+  id: ID!
+  rating: Int!
+  title: String
+  body: String
+  createdAt: String
+  author: Customer! @provides(fields: "displayName")
+  product: Product!
+}

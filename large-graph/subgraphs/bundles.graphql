@@ -1,0 +1,11 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type BundleProduct @key(fields: "id") {
+  id: ID!
+  bundleSavingsCents: Int
+  bundleSize: Int
+}
