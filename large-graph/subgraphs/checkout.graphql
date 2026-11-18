@@ -1,0 +1,25 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Cart @key(fields: "id") {
+  id: ID!
+  grandTotalCents: Int! @requires(fields: "subtotalCents discountTotalCents shippingTotalCents taxTotalCents")
+  checkoutUrl: String
+  subtotalCents: Int! @external
+  discountTotalCents: Int! @external
+  shippingTotalCents: Int! @external
+  taxTotalCents: Int! @external
+}
+
+type CartItem @key(fields: "id") {
+  id: ID!
+  totalCents: Int! @requires(fields: "unitPriceCents quantity discountCents shippingCents taxCents")
+  unitPriceCents: Int! @external
+  quantity: Int! @external
+  discountCents: Int! @external
+  shippingCents: Int! @external
+  taxCents: Int! @external
+}

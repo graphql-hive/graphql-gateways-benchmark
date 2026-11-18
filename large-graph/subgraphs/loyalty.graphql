@@ -1,0 +1,22 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Customer @key(fields: "id") {
+  id: ID!
+  loyaltyTier: String
+  loyaltyPoints: Int
+}
+
+type Order @key(fields: "id") {
+  id: ID!
+  pointsEarned: Int
+}
+
+type Cart @key(fields: "id") {
+  id: ID!
+  pointsToEarn: Int! @requires(fields: "grandTotalCents")
+  grandTotalCents: Int! @external
+}

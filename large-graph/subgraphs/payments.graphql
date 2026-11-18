@@ -1,0 +1,68 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface PaymentMethod {
+  id: ID!
+  label: String!
+  isDefault: Boolean!
+  addedAt: String
+}
+
+type CreditCard implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  label: String!
+  isDefault: Boolean!
+  addedAt: String
+  last4: String!
+  cardBrand: String
+  expiryMonth: Int
+  expiryYear: Int
+}
+
+type PayPalAccount implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  label: String!
+  isDefault: Boolean!
+  addedAt: String
+  payerEmail: String
+}
+
+type BankTransfer implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  label: String!
+  isDefault: Boolean!
+  addedAt: String
+  ibanLast4: String
+  bankName: String
+}
+
+type GiftCardBalance implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  label: String!
+  isDefault: Boolean!
+  addedAt: String
+  balanceCents: Int!
+}
+
+type BuyNowPayLater implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  label: String!
+  isDefault: Boolean!
+  addedAt: String
+  installments: Int!
+  provider: String
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  paymentMethods: [PaymentMethod!]!
+}
+
+type Order @key(fields: "id") {
+  id: ID!
+  paymentMethod: PaymentMethod
+  paymentStatus: String
+}

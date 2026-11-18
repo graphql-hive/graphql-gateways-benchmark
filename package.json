@@ -3,6 +3,7 @@
   "private": true,
   "scripts": {
     "generate-report": "tsx scripts/generate-report.ts",
+    "generate-large-graph": "tsx scripts/generate-large-graph.ts",
     "install-chrome": "./scripts/install-chrome.sh",
     "postinstall": "npm run install-chrome && npx patch-package"
   },

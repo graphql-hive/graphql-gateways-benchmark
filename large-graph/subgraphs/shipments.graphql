@@ -1,0 +1,24 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Order @key(fields: "id") {
+  id: ID!
+  shipments: [Shipment!]!
+}
+
+type Warehouse @key(fields: "id") {
+  id: ID!
+  code: String! @external
+}
+
+type Shipment @key(fields: "id") {
+  id: ID!
+  trackingNumber: String
+  carrier: String
+  status: String
+  shippedAt: String
+  warehouse: Warehouse @provides(fields: "code")
+}

@@ -1,0 +1,114 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  page(slug: String!): Page
+}
+
+interface Product {
+  id: ID!
+}
+
+interface Promotion {
+  id: ID!
+}
+
+type PhysicalProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type DigitalProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type BundleProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type GiftCardProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type SubscriptionProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type ConfigurableProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type PercentageDiscount implements Promotion @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type FixedAmountDiscount implements Promotion @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type BuyXGetYDeal implements Promotion @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type FreeShippingOffer implements Promotion @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type BundleDeal implements Promotion @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Category @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Brand @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Page {
+  slug: String!
+  title: String
+  blocks: [ContentBlock!]!
+}
+
+union ContentBlock =
+  | HeroBanner
+  | ProductCarousel
+  | CategoryGrid
+  | PromoBanner
+  | BrandSpotlight
+  | RichText
+
+type HeroBanner {
+  headline: String
+  imageUrl: String
+  linkUrl: String
+}
+
+type ProductCarousel {
+  heading: String
+  products: [Product!]!
+}
+
+type CategoryGrid {
+  heading: String
+  categories: [Category!]!
+}
+
+type PromoBanner {
+  text: String
+  promotion: Promotion
+}
+
+type BrandSpotlight {
+  tagline: String
+  brand: Brand
+  products: [Product!]!
+}
+
+type RichText {
+  html: String
+}

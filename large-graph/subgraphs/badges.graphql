@@ -1,0 +1,52 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  badges: [String!]!
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  badges: [String!]! @requires(fields: "rankScore onSale")
+  rankScore: Float @external
+  onSale: Boolean @external
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  badges: [String!]! @requires(fields: "rankScore onSale")
+  rankScore: Float @external
+  onSale: Boolean @external
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  badges: [String!]! @requires(fields: "rankScore onSale")
+  rankScore: Float @external
+  onSale: Boolean @external
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  badges: [String!]! @requires(fields: "rankScore onSale")
+  rankScore: Float @external
+  onSale: Boolean @external
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  badges: [String!]! @requires(fields: "rankScore onSale")
+  rankScore: Float @external
+  onSale: Boolean @external
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  badges: [String!]! @requires(fields: "rankScore onSale")
+  rankScore: Float @external
+  onSale: Boolean @external
+}

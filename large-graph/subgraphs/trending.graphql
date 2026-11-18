@@ -1,0 +1,44 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  trending(first: Int = 10): [Product!]!
+}
+
+interface Product {
+  id: ID!
+  trendingRank: Int
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  trendingRank: Int
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  trendingRank: Int
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  trendingRank: Int
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  trendingRank: Int
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  trendingRank: Int
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  trendingRank: Int
+}

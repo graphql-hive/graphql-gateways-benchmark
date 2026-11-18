@@ -1,0 +1,72 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  order(id: ID!): Order
+}
+
+interface Product {
+  id: ID!
+}
+
+type PhysicalProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type DigitalProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type BundleProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type GiftCardProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type SubscriptionProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type ConfigurableProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Variant @key(fields: "id") {
+  id: ID!
+  title: String! @external
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  orders(first: Int = 5): [Order!]!
+}
+
+type Order @key(fields: "id") {
+  id: ID!
+  number: String!
+  status: OrderStatus!
+  placedAt: String!
+  customer: Customer!
+  items: [OrderItem!]!
+}
+
+type OrderItem @key(fields: "id") {
+  id: ID!
+  quantity: Int!
+  unitPriceCents: Int!
+  variant: Variant! @provides(fields: "title")
+  product: Product!
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}

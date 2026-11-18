@@ -1,0 +1,11 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Cart @key(fields: "id") {
+  id: ID!
+  subtotalCents: Int!
+  itemCount: Int!
+}

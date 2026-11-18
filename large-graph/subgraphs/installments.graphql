@@ -1,0 +1,17 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Cart @key(fields: "id") {
+  id: ID!
+  installmentPlans: [InstallmentPlan!]! @requires(fields: "grandTotalCents")
+  grandTotalCents: Int! @external
+}
+
+type InstallmentPlan {
+  months: Int!
+  monthlyCents: Int!
+  aprPercent: Float
+}

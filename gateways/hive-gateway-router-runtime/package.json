@@ -2,11 +2,11 @@
   "name": "hive-gateway-router-runtime",
   "version": "0.0.0",
   "scripts": {
-    "start": "hive-gateway supergraph supergraph.graphql"
+    "start": "hive-gateway supergraph ${SUPERGRAPH_PATH:-supergraph.graphql}"
   },
   "dependencies": {
-    "@graphql-hive/gateway": "2.7.2",
-    "@graphql-hive/router-runtime": "1.4.7",
+    "@graphql-hive/gateway": "2.15.2",
+    "@graphql-hive/router-runtime": "1.6.5",
     "graphql": "16.14.0"
   }
 }

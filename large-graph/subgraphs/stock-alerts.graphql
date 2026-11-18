@@ -1,0 +1,15 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Variant @key(fields: "id") {
+  id: ID!
+  backInStockSubscribers: Int
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  stockAlerts: [Variant!]!
+}

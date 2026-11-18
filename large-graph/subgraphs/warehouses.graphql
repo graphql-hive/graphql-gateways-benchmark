@@ -1,0 +1,13 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Warehouse @key(fields: "id") {
+  id: ID!
+  code: String! @shareable
+  name: String
+  region: String
+  countryCode: String
+}

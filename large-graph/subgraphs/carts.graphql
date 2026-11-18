@@ -1,0 +1,62 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  cart(id: ID!): Cart
+}
+
+interface Product {
+  id: ID!
+}
+
+type PhysicalProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type DigitalProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type BundleProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type GiftCardProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type SubscriptionProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type ConfigurableProduct implements Product @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Variant @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  cart: Cart
+}
+
+type Cart @key(fields: "id") {
+  id: ID!
+  currency: String!
+  updatedAt: String
+  customer: Customer
+  items: [CartItem!]!
+}
+
+type CartItem @key(fields: "id") {
+  id: ID!
+  quantity: Int!
+  addedAt: String
+  variant: Variant!
+  product: Product!
+}

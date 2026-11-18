@@ -1,0 +1,57 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  deliveryEstimateDays: Int
+  expressEligible: Boolean
+}
+
+type CartItem @key(fields: "id") {
+  id: ID!
+  estimatedDelivery: String
+}
+
+type Shipment @key(fields: "id") {
+  id: ID!
+  estimatedArrival: String
+}
