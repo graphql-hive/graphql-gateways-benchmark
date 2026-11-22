@@ -23,9 +23,16 @@ After the workflow is done, create a Pull Request from `update-results` to `main
 
 > And within the PR you create, it will also trigger a regular workflow without hosted runners which might have different results in the PR comment. Just ignore them, and take the results in the updated `.md` files account.
 
-## How to deploy the updated website?
+## How does the website get updated?
 
-After merging the updated results to `main`, you can deploy the updated website by running [website Action](https://github.com/graphql-hive/graphql-gateways-benchmark/actions/workflows/website.yaml) on `main` branch. Go to that action, click `Run workflow`, select the `main` branch and run it. This will update the website at [the-guild.dev/graphql/hive/federation-gateway-performance](http://the-guild.dev/graphql/hive/federation-gateway-performance).
+Merging the updated results to `main` updates
+[the-guild.dev/graphql/hive/federation-gateway-performance](https://the-guild.dev/graphql/hive/federation-gateway-performance)
+on its own: the `notify-website` workflow asks
+[the-guild-org/website](https://github.com/the-guild-org/website) to rebuild, and the website
+renders `website/stress-data.csv` and `website/constant-data.csv` from `main` (see
+[website/README.md](website/README.md)).
 
-> The steps above will only update the numbers in the website but it won't update the commentary or other texts in general.
-> Make sure the content is up to date according the new results.
+> The figures in the page text follow the new results, but the comparisons between gateways are
+> written by hand. Check that they still hold, and update them in
+> `website/src/pages/graphql/hive/federation-gateway-performance.astro` in the website repository
+> if not.

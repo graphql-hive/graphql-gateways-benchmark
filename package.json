@@ -25,8 +25,7 @@
     "@types/node": "25.8.0"
   },
   "workspaces": [
-    "gateways/*",
-    "website"
+    "gateways/*"
   ],
   "packageManager": "npm@11.14.1",
   "overrides": {
