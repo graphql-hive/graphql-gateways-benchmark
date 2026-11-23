@@ -357,14 +357,14 @@ function Intro(props: {
         </Table>
       </CardContent>
       <CardFooter className="text-sm py-6 block space-y-2 text-muted-foreground">
-        <div className="text-lg font-semibold text-white">Environment</div>
+        <h2 className="text-lg font-semibold text-white">Environment</h2>
         <p>
           Azure's <strong>Standard D4s v4</strong> VM - <strong>4 vCPUs</strong>
           , <strong>16 GiB memory</strong>,{" "}
           <strong>Linux (Ubuntu 24.04)</strong> - ensuring consistency and
           reproducibility of results.
         </p>
-        <p className="font-semibold mt-4">Phase 1 - Warm‑up</p>
+        <h3 className="font-semibold mt-4">Phase 1 - Warm‑up</h3>
         <ul className="list-disc list-inside pl-2">
           <li>
             Generate a preliminary load with <strong>k6</strong> for{" "}
@@ -376,7 +376,7 @@ function Intro(props: {
             moderate load.
           </li>
         </ul>
-        <p className="font-semibold mt-4">Phase 2 - Measurement</p>
+        <h3 className="font-semibold mt-4">Phase 2 - Measurement</h3>
         <ul className="list-disc list-inside pl-2">
           <li>
             <strong>Load generation:</strong> {props.loadGeneration}

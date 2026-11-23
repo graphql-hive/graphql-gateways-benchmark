@@ -17,7 +17,6 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { SuccessChart } from "./components/success-chart";
 import { type GatewayName, type TestName } from "@/lib/data";
@@ -75,12 +74,15 @@ function MetricChart(props: {
     <Card className="py-4 sm:py-0 w-full gap-0">
       <CardHeader className="flex flex-col items-stretch border-b !p-0 sm:flex-row">
         <div className="flex flex-1 flex-col justify-center gap-1 px-6 sm:pb-0">
-          <CardTitle className="pt-6 flex items-center gap-2">
+          <h2
+            data-slot="card-title"
+            className="leading-none font-semibold pt-6 flex items-center gap-2"
+          >
             {props.icon}{" "}
             <a className="scroll-mt-6" id={props.anchor}>
               {props.title}
             </a>
-          </CardTitle>
+          </h2>
           <CardDescription className="pb-6 pt-2">
             {props.description}
           </CardDescription>
@@ -134,18 +136,9 @@ export default function App() {
   const [isSticky, setSticky] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
-  const [test, setTest] = useState<TestName>(() => {
-    const hash = window.location.hash;
-    if (hash === "#/stress") {
-      return "stress";
-    }
-
-    if (hash === "#/constant") {
-      return "constant";
-    }
-
-    return "stress";
-  });
+  // The page is prerendered at build time (scripts/prerender.mjs) with the
+  // stress test showing; a #/constant link switches after hydration.
+  const [test, setTest] = useState<TestName>("stress");
 
   const handleTestChange = useCallback(
     (value: TestName) => {
@@ -161,6 +154,7 @@ export default function App() {
       setTest(hash === "#/constant" ? "constant" : "stress");
     };
 
+    onHashChange();
     window.addEventListener("hashchange", onHashChange);
     return () => window.removeEventListener("hashchange", onHashChange);
   }, []);
