@@ -17,7 +17,7 @@
 # Chrome-for-Testing CDN.
 set -euo pipefail
 
-BUILD_ID="$(node -p "require('puppeteer-core/lib/cjs/puppeteer/revisions.js').PUPPETEER_REVISIONS.chrome")"
+BUILD_ID="$(node -p "require('puppeteer-core/internal/revisions.js').PUPPETEER_REVISIONS.chrome")"
 PLATFORM="linux64"
 CACHE_DIR="${PUPPETEER_CACHE_DIR:-$HOME/.cache/puppeteer}/chrome"
 INSTALL_ROOT="$CACHE_DIR/linux-$BUILD_ID"

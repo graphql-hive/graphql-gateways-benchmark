@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <InvariantGlobalization>true</InvariantGlobalization>
+    <ServerGarbageCollection>true</ServerGarbageCollection>
+    <TieredPGO>true</TieredPGO>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The subgraph schemas are only used by `nitro fusion compose` in install.sh. -->
+    <Content Remove="subgraphs/**" />
+    <None Include="subgraphs/**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- https://www.nuget.org/packages/HotChocolate.Fusion.AspNetCore -->
+    <PackageReference Include="HotChocolate.Fusion.AspNetCore" Version="16.7.3" />
+  </ItemGroup>
+
+</Project>

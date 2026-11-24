@@ -9,3 +9,8 @@ stats.json
 node_modules
 gateway_log.txt
 k6_metrics.json
+gateways/hotchocolate/bin
+gateways/hotchocolate/obj
+gateways/hotchocolate/out
+gateways/hotchocolate/.dotnet
+gateways/hotchocolate/gateway.far

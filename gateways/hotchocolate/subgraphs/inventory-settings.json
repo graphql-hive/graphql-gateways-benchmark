@@ -1,0 +1,8 @@
+{
+  "name": "inventory",
+  "transports": {
+    "http": {
+      "url": "http://localhost:4200/inventory"
+    }
+  }
+}
