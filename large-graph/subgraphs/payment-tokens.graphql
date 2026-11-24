@@ -1,0 +1,41 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface PaymentMethod {
+  id: ID!
+  tokenProvider: String
+  lastUsedAt: String
+}
+
+type CreditCard implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  tokenProvider: String
+  lastUsedAt: String
+}
+
+type PayPalAccount implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  tokenProvider: String
+  lastUsedAt: String
+}
+
+type BankTransfer implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  tokenProvider: String
+  lastUsedAt: String
+}
+
+type GiftCardBalance implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  tokenProvider: String
+  lastUsedAt: String
+}
+
+type BuyNowPayLater implements PaymentMethod @key(fields: "id") {
+  id: ID!
+  tokenProvider: String
+  lastUsedAt: String
+}

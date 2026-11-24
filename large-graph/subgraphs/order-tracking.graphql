@@ -1,0 +1,22 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Order @key(fields: "id") {
+  id: ID!
+  trackingUrl: String
+  estimatedDelivery: String
+}
+
+type Shipment @key(fields: "id") {
+  id: ID!
+  events: [TrackingEvent!]!
+}
+
+type TrackingEvent {
+  status: String!
+  location: String
+  occurredAt: String
+}

@@ -15,18 +15,18 @@ run-subgraphs:
 
 test:
 	@if [ -z "$(gateway)" ]; then \
-		echo "Usage: make test gateway=<gateway_name> mode=<constant|stress>"; \
+		echo "Usage: make test gateway=<gateway_name> mode=<constant|stress|planning|planning-large>"; \
 		exit 1; \
 	fi
 	@if [ -z "$(mode)" ]; then \
-	    echo "Usage: make test gateway=<gateway_name> mode=<constant|stress>"; \
+	    echo "Usage: make test gateway=<gateway_name> mode=<constant|stress|planning|planning-large>"; \
 		exit 1; \
 	fi
 	@./test.sh $(gateway) $(mode)
 
 test-all:
 	@if [ -z "$(mode)" ]; then \
-		echo "Usage: make test-all mode=<constant|stress>"; \
+		echo "Usage: make test-all mode=<constant|stress|planning|planning-large>"; \
 		exit 1; \
 	fi
 	@for gateway in $(shell ls ./gateways); do \
@@ -36,5 +36,10 @@ test-all:
 			echo "\n"; \
 		fi; \
 	done
-	cargo run -p toolkit summary
-	cargo run -p toolkit data
+	@if [ "$(mode)" = "planning" ]; then \
+		cargo run -p toolkit planning-summary; \
+	elif [ "$(mode)" = "planning-large" ]; then \
+		cargo run -p toolkit planning-summary gateways large; \
+	else \
+		cargo run -p toolkit summary && cargo run -p toolkit data; \
+	fi

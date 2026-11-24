@@ -1,0 +1,12 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Customer @key(fields: "id") {
+  id: ID!
+  locale: String
+  currency: String
+  marketingOptIn: Boolean
+}

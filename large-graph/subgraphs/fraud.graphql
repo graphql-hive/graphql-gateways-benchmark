@@ -1,0 +1,22 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Customer @key(fields: "id") {
+  id: ID!
+  trustLevel: String
+}
+
+type Order @key(fields: "id") {
+  id: ID!
+  riskScore: Float
+}
+
+type Cart @key(fields: "id") {
+  id: ID!
+  riskScore: Float! @requires(fields: "grandTotalCents itemCount")
+  grandTotalCents: Int! @external
+  itemCount: Int! @external
+}

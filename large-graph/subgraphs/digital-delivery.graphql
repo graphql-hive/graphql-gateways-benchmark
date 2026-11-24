@@ -1,0 +1,16 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type DigitalProduct @key(fields: "id") {
+  id: ID!
+  licenseType: String
+  drmProtected: Boolean
+}
+
+type OrderItem @key(fields: "id") {
+  id: ID!
+  downloadUrl: String
+}

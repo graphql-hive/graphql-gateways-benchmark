@@ -1,0 +1,12 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Shipment @key(fields: "id") {
+  id: ID!
+  carrierName: String
+  carrierLogoUrl: String
+  serviceLevel: String
+}

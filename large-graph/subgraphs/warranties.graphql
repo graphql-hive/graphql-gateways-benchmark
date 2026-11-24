@@ -1,0 +1,52 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  warrantyMonths: Int
+  extendedWarrantyAvailable: Boolean
+}
+
+type OrderItem @key(fields: "id") {
+  id: ID!
+  warrantyExpiresAt: String
+}

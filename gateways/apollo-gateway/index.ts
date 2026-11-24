@@ -15,7 +15,9 @@ async function main() {
       cluster.fork();
     }
   } else {
-    const supergraphSdl = readFileSync("./supergraph.graphql").toString();
+    const supergraphSdl = readFileSync(
+      process.env.SUPERGRAPH_PATH || "./supergraph.graphql"
+    ).toString();
     const gateway = new ApolloGateway({ supergraphSdl });
     const server = new ApolloServer({ gateway });
 

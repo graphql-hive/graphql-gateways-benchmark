@@ -1,0 +1,46 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  lowestPrice30dCents: Int
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  lowestPrice30dCents: Int @requires(fields: "salePriceCents")
+  salePriceCents: Int @external
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  lowestPrice30dCents: Int @requires(fields: "salePriceCents")
+  salePriceCents: Int @external
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  lowestPrice30dCents: Int @requires(fields: "salePriceCents")
+  salePriceCents: Int @external
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  lowestPrice30dCents: Int @requires(fields: "salePriceCents")
+  salePriceCents: Int @external
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  lowestPrice30dCents: Int @requires(fields: "salePriceCents")
+  salePriceCents: Int @external
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  lowestPrice30dCents: Int @requires(fields: "salePriceCents")
+  salePriceCents: Int @external
+}

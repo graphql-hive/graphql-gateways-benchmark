@@ -1,0 +1,61 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+type Query {
+  search(term: String!, first: Int = 10): [SearchResult!]!
+}
+
+type PhysicalProduct @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type DigitalProduct @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type BundleProduct @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type GiftCardProduct @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type SubscriptionProduct @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type ConfigurableProduct @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Category @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Brand @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Seller @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+type Store @key(fields: "id", resolvable: false) {
+  id: ID!
+}
+
+union SearchResult =
+  | PhysicalProduct
+  | DigitalProduct
+  | BundleProduct
+  | GiftCardProduct
+  | SubscriptionProduct
+  | ConfigurableProduct
+  | Category
+  | Brand
+  | Seller
+  | Store

@@ -1,0 +1,11 @@
+supergraph:
+    path: /graphql
+    listen: 0.0.0.0:4000
+    query_planning:
+        # Incremental (BULB) query planner, new in Router v3.
+        # Defaults: beam_width 16, fuel 5000, no timeout.
+        incremental_planner:
+            enabled: true
+traffic_shaping:
+    all:
+        deduplicate_query: true

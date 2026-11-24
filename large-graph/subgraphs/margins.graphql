@@ -1,0 +1,52 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  marginPercent: Float
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  marginPercent: Float @requires(fields: "salePriceCents costCents")
+  salePriceCents: Int @external
+  costCents: Int @external
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  marginPercent: Float @requires(fields: "salePriceCents costCents")
+  salePriceCents: Int @external
+  costCents: Int @external
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  marginPercent: Float @requires(fields: "salePriceCents costCents")
+  salePriceCents: Int @external
+  costCents: Int @external
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  marginPercent: Float @requires(fields: "salePriceCents costCents")
+  salePriceCents: Int @external
+  costCents: Int @external
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  marginPercent: Float @requires(fields: "salePriceCents costCents")
+  salePriceCents: Int @external
+  costCents: Int @external
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  marginPercent: Float @requires(fields: "salePriceCents costCents")
+  salePriceCents: Int @external
+  costCents: Int @external
+}

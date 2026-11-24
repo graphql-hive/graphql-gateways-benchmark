@@ -1,0 +1,57 @@
+extend schema
+  @link(
+    url: "https://specs.apollo.dev/federation/v2.3"
+    import: ["@key", "@shareable", "@external", "@requires", "@provides"]
+  )
+
+interface Product {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type PhysicalProduct implements Product @key(fields: "id") {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type DigitalProduct implements Product @key(fields: "id") {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type BundleProduct implements Product @key(fields: "id") {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type GiftCardProduct implements Product @key(fields: "id") {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type SubscriptionProduct implements Product @key(fields: "id") {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type ConfigurableProduct implements Product @key(fields: "id") {
+  id: ID!
+  related: [Product!]!
+  frequentlyBoughtWith: [Product!]!
+}
+
+type Customer @key(fields: "id") {
+  id: ID!
+  recommended: [Product!]!
+}
+
+type Cart @key(fields: "id") {
+  id: ID!
+  upsells: [Product!]!
+}

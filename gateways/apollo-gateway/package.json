@@ -9,6 +9,6 @@
     "typescript": "6.0.3",
     "graphql": "16.14.0",
     "@apollo/server": "5.5.1",
-    "@apollo/gateway": "2.14.0"
+    "@apollo/gateway": "2.14.4"
   }
 }
